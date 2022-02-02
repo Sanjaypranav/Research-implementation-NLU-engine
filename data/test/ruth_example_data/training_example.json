@@ -1,0 +1,10 @@
+[
+  {
+    "intent": "greet",
+    "text": "hi"
+  },
+  {
+    "intent": "greet",
+    "text": "hello"
+  }
+]
