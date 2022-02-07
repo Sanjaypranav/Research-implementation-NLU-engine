@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
@@ -10,5 +11,9 @@ def test_collections_positive(example_data_path: Path):
         example_data = json.load(f)
     for data in example_data:
         messages.append(RuthData(data))
+
+    training_data = TrainData(messages)
+
+    assert len(messages) == len(training_data)
 
 

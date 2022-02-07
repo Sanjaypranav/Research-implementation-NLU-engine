@@ -1,8 +1,7 @@
 import json
 from pathlib import Path
 
-import pytest
-
+from ruth.constants import INTENT, TEXT
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
@@ -11,7 +10,7 @@ def test_ruth_data(example_data_path: Path):
         example_data = json.load(file_pointer)
 
     for example in example_data:
-        data = RuthData.build(example)
+        data = RuthData.build(intent=example[INTENT], text=example[TEXT])
         break
 
     assert data.intent == "greet"
