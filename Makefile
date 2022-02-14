@@ -38,7 +38,7 @@ bootstrap-user-mac: check-py3 install-system-deps-user
 .PHONY: poetry-setup
 poetry-setup:
 	poetry config virtualenvs.in-project true
-	poetry run pip install pip==20.0.2
+	poetry run pip install pip
 	poetry install --no-root
 	poetry run pip install azure-keyvault-secrets azure.identity
 	poetry install
@@ -69,14 +69,14 @@ conda-env-setup:
 .PHONY: format
 format:
 	# calling make _format within poetry make it so that we only init poetry once
-	poetry run isort -rc -y src/my_package tests
-	poetry run black src/my_package tests
+	poetry run isort -rc -y src/ruth tests
+	poetry run black src/ruth tests
 
 
 # Flake8 to check code formatting
 .PHONY: lint
 lint:
-	poetry run flake8 src/my_package tests
+	poetry run flake8 src/ruth tests
 
 N_THREADS=1
 # Run tests
