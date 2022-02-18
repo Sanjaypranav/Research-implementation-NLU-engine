@@ -19,8 +19,8 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
         messages.append(RuthData(data))
     training_data = TrainData(messages)
 
-    featurizer = CountVectorFeaturizer(training_data)
-    featurizer.train()
+    featurizer = CountVectorFeaturizer()
+    featurizer.train(training_data)
     test_message = RuthData.build(text=count_featurizer_example[TEXT])
     featurized_text = featurizer.parse(test_message)
 

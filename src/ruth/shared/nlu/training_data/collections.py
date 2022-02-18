@@ -7,8 +7,8 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 class TrainData:
-    def __init__(self, training_examples: List[RuthData]):
-        self.training_examples = training_examples
+    def __init__(self, training_examples: List[RuthData] = None):
+        self.training_examples = training_examples or []
 
     def __len__(self) -> int:
         return len(self.training_examples)
@@ -23,6 +23,10 @@ class TrainData:
                 RuthData.build(intent=message.get(INTENT), text=message.get(TEXT))
             )
         return cls(training_examples)
+
+    def add_example(self, data: RuthData) -> List[RuthData]:
+        self.training_examples.append(data)
+        return self.training_examples
 
     def get_text_list(self) -> List[Text]:
         return [example.text for example in self.training_examples]

@@ -19,3 +19,8 @@ def count_featurizer_example() -> Dict[Text, Any]:
         FEATURE: [[0, 0]],
         PATH: Path("data/test/ruth_example_data/training_example.json"),
     }
+
+
+@pytest.fixture
+def example_classifier_data() -> Path:
+    return Path("data/test/ruth_example_data/training_example.json")
