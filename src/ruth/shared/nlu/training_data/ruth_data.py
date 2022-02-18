@@ -6,7 +6,9 @@ from ruth.shared.nlu.training_data.features import Features
 
 class RuthData:
     def __init__(
-        self, features: Optional[List[Features]] = None, data: Dict[Text, Any] = None
+        self,
+        features: Optional[List[Features]] = None,
+        data: Dict[Text, Any] = None,
     ):
         self.intent: Text = data.get(INTENT, "__mis__")
         self.text: Text = data.get(TEXT, "__mis__")
@@ -21,4 +23,5 @@ class RuthData:
             self.features.append(feature)
 
     def get_sparse_features(self):
-        pass
+        sparse_features = [feature for feature in self.features if feature.is_sparse()]
+        return sparse_features
