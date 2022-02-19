@@ -27,10 +27,6 @@ jobs:
         make bootstrap
         make install
 
-  test:
-
-    runs-on: ubuntu-latest
-    steps:
     - name: Test with pytest
       run: |
         make test
