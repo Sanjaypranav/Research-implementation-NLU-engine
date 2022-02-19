@@ -14,4 +14,5 @@ class NaiveBayesClassifier(Classifier):
         x = [
             message.get_sparse_features() for message in training_data.training_examples
         ]
+
         return x
