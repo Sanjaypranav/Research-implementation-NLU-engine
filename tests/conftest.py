@@ -5,6 +5,7 @@ import pytest
 from ruth.constants import PATH, TEXT
 
 FEATURE = "feature"
+TOKEN = "token"
 
 
 @pytest.fixture
@@ -30,7 +31,7 @@ def example_classifier_data() -> Path:
 def bert_tokenizer_example() -> Dict[Text, Any]:
     return {
         TEXT: "He lived HapPily",
-        FEATURE: [[0, 0, 0]],
+        TOKEN: [[0, 0, 0]],
         PATH: Path("data/test/ruth_example_data/training_example.json"),
     }
 
