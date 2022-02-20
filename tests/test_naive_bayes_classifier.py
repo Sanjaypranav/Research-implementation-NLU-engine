@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 import pytest
-from ruth.constants import TEXT
+from ruth.constants import INTENT, TEXT
 from ruth.nlu.classifiers.naive_bayes_classifier import NaiveBayesClassifier
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
@@ -34,4 +34,5 @@ def test_naive_bayes_classifier(
     message = RuthData({TEXT: "hello"})
     ftr.parse(message)
     classifier.parse(message)
-    print("hello")
+    assert message.get(INTENT)["name"] == "ham"
+    assert message.get(INTENT)["accuracy"] == 1.0
