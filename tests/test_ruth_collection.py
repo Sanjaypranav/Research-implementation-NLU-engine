@@ -17,7 +17,7 @@ def test_collections_positive(example_data: List[Dict[Text, Any]]):
     messages = []
 
     for data in example_data:
-        messages.append(RuthData(data))
+        messages.append(RuthData(data=data))
 
     training_data = TrainData(messages)
 

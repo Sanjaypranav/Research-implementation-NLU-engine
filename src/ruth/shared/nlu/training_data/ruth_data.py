@@ -13,6 +13,7 @@ class RuthData:
             attention_masks: Optional[List[Tokens]] = None,
             data: Dict[Text, Any] = None,
     ):
+        data = data or {}
         self.intent: Text = data.get(INTENT, "__mis__")
         self.text: Text = data.get(TEXT, "__mis__")
         self.features = features or []
@@ -23,7 +24,7 @@ class RuthData:
     def build(cls, intent: Text = None, text: Text = None) -> "RuthData":
         return cls(data={INTENT: intent, TEXT: text})
 
-    def add_features(self, feature) -> None:
+    def add_features(self, feature: Features) -> None:
         if feature is not None:
             self.features.append(feature)
 

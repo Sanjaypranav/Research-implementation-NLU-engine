@@ -16,7 +16,7 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
     with open(count_featurizer_example[PATH], "r") as f:
         example_data = json.load(f)
     for data in example_data:
-        messages.append(RuthData(data))
+        messages.append(RuthData(data=data))
     training_data = TrainData(messages)
 
     featurizer = CountVectorFeaturizer()

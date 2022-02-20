@@ -28,5 +28,6 @@ class TrainData:
         self.training_examples.append(data)
         return self.training_examples
 
-    def get_text_list(self) -> List[Text]:
-        return [example.text for example in self.training_examples]
+    @staticmethod
+    def get_text_list(training_examples: List[RuthData]) -> List[Text]:
+        return [example.text for example in training_examples]

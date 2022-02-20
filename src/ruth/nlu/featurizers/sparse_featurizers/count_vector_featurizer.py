@@ -1,5 +1,9 @@
-from typing import List, Optional
+import logging
+from typing import Any, Dict, List, Optional, Text
 
+from ruth.nlu.featurizers.sparse_featurizers.constants import (
+    CLASS_FEATURIZER_UNIQUE_NAME,
+)
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
@@ -7,14 +11,66 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
+logger = logging.getLogger(__name__)
+
 
 class CountVectorFeaturizer(SparseFeaturizer):
-    def __init__(self, vectorizer: Optional["CountVectorizer"] = None):
-        super(CountVectorFeaturizer, self).__init__()
-        self.vectorizer = vectorizer or {}
+    defaults = {
+        "analyzer": "word",
+        "stop_words": None,
+        "min_df": 1,
+        "max_df": 1.0,
+        "min_ngram": 1,
+        "max_ngram": 1,
+        "lowercase": True,
+        "max_features": None,
+        "use_lemma": True,
+    }
 
-    def _build_vectorizer(self) -> CountVectorizer:
-        return CountVectorizer()
+    def _load_params(self):
+        self.analyzer = self.element_config["analyzer"]
+        self.stop_words = self.element_config["stop_words"]
+        self.min_df = self.element_config["min_df"]
+        self.max_df = self.element_config["max_df"]
+        self.min_ngram = self.element_config["min_ngram"]
+        self.max_ngram = self.element_config["max_ngram"]
+        self.lowercase = self.element_config["lowercase"]
+        self.use_lemma = self.element_config["use_lemma"]
+
+    def _verify_analyzer(self) -> None:
+        if self.analyzer != "word":
+            if self.stop_words is not None:
+                logger.warning(
+                    "You specified the character wise analyzer."
+                    " So stop words will be ignored."
+                )
+            if self.max_ngram == 1:
+                logger.warning(
+                    "You specified the character wise analyzer"
+                    " but max n-gram is set to 1."
+                    " So, the vocabulary will only contain"
+                    " the single characters. "
+                )
+
+    def __init__(
+        self,
+        element_config: Optional[Dict[Text, Any]] = None,
+        vectorizer: Optional["CountVectorizer"] = None,
+    ):
+        super(CountVectorFeaturizer, self).__init__(element_config)
+        self.vectorizer = vectorizer or {}
+        self._load_params()
+        self._verify_analyzer()
+
+    def _build_vectorizer(self, parameters: Dict[Text, Any]) -> CountVectorizer:
+        return CountVectorizer(
+            analyzer=parameters["analyzer"],
+            stop_words=parameters["stop_words"],
+            min_df=parameters["min_df"],
+            max_df=parameters["max_df"],
+            ngram_range=(parameters["min_ngram"], parameters["max_ngram"]),
+            lowercase=parameters["lowercase"],
+        )
 
     def _check_attribute_vocabulary(self) -> bool:
         """Checks if trained vocabulary exists in attribute's count vectorizer."""
@@ -26,7 +82,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
     def create_vectors(self, examples: List[RuthData]) -> List[sparse.spmatrix]:
         features = []
         for message in examples:
-            features.append(self.vectorizer.transform(message.text))
+            features.append(self.vectorizer.transform([message.text]))
         return features
 
     def _get_featurizer_data(self, training_data: TrainData) -> List[sparse.spmatrix]:
@@ -35,15 +91,26 @@ class CountVectorFeaturizer(SparseFeaturizer):
         else:
             return []
 
-    @staticmethod
     def _add_features_to_data(
-        training_examples: List[RuthData], features: List[sparse.spmatrix]
+        self, training_examples: List[RuthData], features: List[sparse.spmatrix]
     ):
         for message, feature in zip(training_examples, features):
-            message.add_features(Features(feature))
+            message.add_features(
+                Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+            )
 
     def train(self, training_data: TrainData) -> CountVectorizer:
-        self.vectorizer = self._build_vectorizer()
+        self.vectorizer = self._build_vectorizer(
+            parameters={
+                "analyzer": self.analyzer,
+                "stop_words": self.stop_words,
+                "min_df": self.min_df,
+                "max_df": self.max_df,
+                "min_ngram": self.min_ngram,
+                "max_ngram": self.max_ngram,
+                "lowercase": self.lowercase,
+            }
+        )
         self.vectorizer.fit(self.get_data(training_data))
         features = self._get_featurizer_data(training_data)
         self._add_features_to_data(training_data.training_examples, features)
