@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import pytest
+from ruth.constants import TEXT
 from ruth.nlu.classifiers.naive_bayes_classifier import NaiveBayesClassifier
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
@@ -29,6 +30,8 @@ def test_naive_bayes_classifier(
     ftr.train(classifier_data)
 
     classifier = NaiveBayesClassifier({})
-    x, y = classifier.train(training_data=classifier_data)
-
-    classifier.parse
+    classifier.train(training_data=classifier_data)
+    message = RuthData({TEXT: "hello"})
+    ftr.parse(message)
+    classifier.parse(message)
+    print("hello")

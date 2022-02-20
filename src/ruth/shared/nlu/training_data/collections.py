@@ -30,7 +30,7 @@ class TrainData:
 
     @staticmethod
     def get_text_list(training_examples: List[RuthData]) -> List[Text]:
-        return [example.text for example in training_examples]
+        return [example.get(TEXT) for example in training_examples]
 
     @property
     def intent_examples(self) -> List[RuthData]:

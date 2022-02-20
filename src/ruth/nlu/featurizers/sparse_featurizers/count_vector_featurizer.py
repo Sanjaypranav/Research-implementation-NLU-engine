@@ -1,6 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional, Text
 
+from ruth.constants import TEXT
 from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
 )
@@ -82,7 +83,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
     def create_vectors(self, examples: List[RuthData]) -> List[sparse.spmatrix]:
         features = []
         for message in examples:
-            features.append(self.vectorizer.transform([message.text]))
+            features.append(self.vectorizer.transform([message.get(TEXT)]))
         return features
 
     def _get_featurizer_data(self, training_data: TrainData) -> List[sparse.spmatrix]:
@@ -116,6 +117,8 @@ class CountVectorFeaturizer(SparseFeaturizer):
         self._add_features_to_data(training_data.training_examples, features)
         return self.vectorizer
 
-    def parse(self, message: RuthData) -> sparse.coo_matrix:
-        sentence_vec = self.vectorizer.transform([message.text])
-        return sentence_vec.tocoo()
+    def parse(self, message: RuthData):
+        feature = self.vectorizer.transform([message.get(TEXT)])
+        message.add_features(
+            Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+        )
