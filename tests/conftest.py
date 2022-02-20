@@ -23,4 +23,4 @@ def count_featurizer_example() -> Dict[Text, Any]:
 
 @pytest.fixture
 def example_classifier_data() -> Path:
-    return Path("data/test/ruth_example_data/training_example.json")
+    return Path("data/test/classification/classification_data.json")
