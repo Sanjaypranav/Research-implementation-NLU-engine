@@ -22,6 +22,9 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
     featurizer = CountVectorFeaturizer()
     featurizer.train(training_data)
     test_message = RuthData.build(text=count_featurizer_example[TEXT])
-    featurized_text = featurizer.parse(test_message)
+    featurizer.parse(test_message)
 
-    assert count_featurizer_example[FEATURE] == featurized_text.toarray().tolist()
+    assert (
+        count_featurizer_example[FEATURE]
+        == test_message.get_sparse_features().feature.toarray().tolist()
+    )
