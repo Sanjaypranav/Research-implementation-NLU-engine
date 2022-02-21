@@ -1,7 +1,6 @@
 # Bert Classifier
-epochs = 4
-batch_size = 32
-max_length = 60
-model_name = 'bert-base-cased'
-
+EPOCHS = 4
+BATCH_SIZE = 1  # TODO: Change to 32
+MAX_LENGTH = 60
+MODEL_NAME = 'bert-base-uncased'
 

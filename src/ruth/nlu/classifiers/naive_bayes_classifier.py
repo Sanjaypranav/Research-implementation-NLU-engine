@@ -46,7 +46,7 @@ class NaiveBayesClassifier(Classifier):
         if len(set(intents)) < 2:
             logger.warning(
                 "There are no enough intent. "
-                "Atleast two unique intent are needed to train the model"
+                "At least two unique intent are needed to train the model"
             )
             return
 

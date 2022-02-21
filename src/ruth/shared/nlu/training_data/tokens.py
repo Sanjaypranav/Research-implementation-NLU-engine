@@ -1,4 +1,4 @@
-from typing import Text
+from typing import Text, List
 
 import torch
 

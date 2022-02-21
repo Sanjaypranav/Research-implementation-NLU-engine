@@ -17,8 +17,8 @@ class Tokenizer(Element):
         super().__init__(element_config)
 
     # @abstractmethod
-    def _build_tokenizer(self
-                         # parameters: Dict[Text, Any]
+    def _build_tokenizer(self,
+                         parameters: Dict[Text, Any]
                          ):
         raise NotImplementedError
 
