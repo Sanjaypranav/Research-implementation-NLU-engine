@@ -42,4 +42,3 @@ class RuthData:
 
     # def get_tokens(self):
     #     tokens = [token for token in self.tokens if token.is_token()]
-

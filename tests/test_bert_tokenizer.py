@@ -1,13 +1,12 @@
 import json
-from typing import Dict, Text, Any, Tuple
+from typing import Dict, Text, Any
 
-import torch
+from transformers import BertTokenizer
 
 from ruth.constants import PATH
 from ruth.nlu.tokenizer.bert_tokenizer import TokenizerBert
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
-from tests.conftest import bert_tokenizer_example, TOKEN
 
 
 def test_bert_tokenizer(bert_tokenizer_example: Dict[Text, Any]):
@@ -19,9 +18,6 @@ def test_bert_tokenizer(bert_tokenizer_example: Dict[Text, Any]):
     training_data = TrainData(messages)
 
     tokenizer = TokenizerBert()
-    tokenizer.train(training_data)
+    s = tokenizer.train(training_data)
 
-    assert type(bert_tokenizer_example[TOKEN]) == Tuple[torch.Tensor, torch.Tensor]
-
-
-
+    assert isinstance(type(s), type(BertTokenizer))

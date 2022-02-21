@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict, List, Optional, Text
 
-from ruth.nlu.featurizers.sparse_featurizers.constants import (
-    CLASS_FEATURIZER_UNIQUE_NAME,
+from ruth.nlu.constants import (
+    ELEMENT_UNIQUE_NAME,
 )
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -96,7 +96,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
     ):
         for message, feature in zip(training_examples, features):
             message.add_features(
-                Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+                Features(feature, self.element_config[ELEMENT_UNIQUE_NAME])
             )
 
     def train(self, training_data: TrainData) -> CountVectorizer:

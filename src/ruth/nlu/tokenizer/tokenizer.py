@@ -2,21 +2,24 @@ from abc import ABC, abstractmethod
 from typing import Dict, Text, Any, Optional
 
 from ruth.nlu.element import Element
-from ruth.nlu.tokenizer.constants import CLASS_TOKENIZER_UNIQUE_NAME
+from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
 from ruth.shared.nlu.training_data.collections import TrainData
 
 
 class Tokenizer(Element):
 
     def __init__(self, element_config):
-        self.element_config = element_config or {}
-        self.element_config.setdefault(
-            CLASS_TOKENIZER_UNIQUE_NAME, self.create_unique_name
+        element_config = element_config or {}
+        self.element_config = element_config
+        element_config.setdefault(
+            ELEMENT_UNIQUE_NAME, self.create_unique_name()
         )
         super().__init__(element_config)
 
     # @abstractmethod
-    def _build_tokenizer(self):
+    def _build_tokenizer(self
+                         # parameters: Dict[Text, Any]
+                         ):
         raise NotImplementedError
 
     # @abstractmethod
@@ -25,7 +28,7 @@ class Tokenizer(Element):
 
     @staticmethod
     def get_data(training_data: TrainData):
-        return training_data.get_text_list()
+        return training_data.get_text_list(training_examples=training_data.training_examples)
 
     # def train(self):
     #   raise NotImplementedError
