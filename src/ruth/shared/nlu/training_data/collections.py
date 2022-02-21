@@ -7,8 +7,8 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 class TrainData:
-    def __init__(self, training_examples: List[RuthData]):
-        self.training_examples = training_examples
+    def __init__(self, training_examples: List[RuthData] = None):
+        self.training_examples = training_examples or []
 
     def __len__(self) -> int:
         return len(self.training_examples)
@@ -24,5 +24,15 @@ class TrainData:
             )
         return cls(training_examples)
 
-    def get_text_list(self) -> List[Text]:
-        return [example.text for example in self.training_examples]
+    def add_example(self, data: RuthData) -> List[RuthData]:
+        self.training_examples.append(data)
+        return self.training_examples
+
+    @staticmethod
+    def get_text_list(training_examples: List[RuthData]) -> List[Text]:
+        return [example.get(TEXT) for example in training_examples]
+
+    @property
+    def intent_examples(self) -> List[RuthData]:
+        """Returns the list of examples that have intent."""
+        return [ex for ex in self.training_examples if ex.get(INTENT)]

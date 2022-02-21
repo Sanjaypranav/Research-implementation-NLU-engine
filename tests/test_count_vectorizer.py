@@ -16,12 +16,15 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
     with open(count_featurizer_example[PATH], "r") as f:
         example_data = json.load(f)
     for data in example_data:
-        messages.append(RuthData(data))
+        messages.append(RuthData(data=data))
     training_data = TrainData(messages)
 
-    featurizer = CountVectorFeaturizer(training_data)
-    featurizer.train()
+    featurizer = CountVectorFeaturizer()
+    featurizer.train(training_data)
     test_message = RuthData.build(text=count_featurizer_example[TEXT])
-    featurized_text = featurizer.parse(test_message)
+    featurizer.parse(test_message)
 
-    assert count_featurizer_example[FEATURE] == featurized_text.toarray().tolist()
+    assert (
+        count_featurizer_example[FEATURE]
+        == test_message.get_sparse_features().feature.toarray().tolist()
+    )
