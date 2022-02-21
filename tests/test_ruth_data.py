@@ -20,5 +20,5 @@ def test_ruth_data(example_data: List[Dict[Text, Any]]):
         data = RuthData.build(intent=example[INTENT], text=example[TEXT])
         break
 
-    assert data.intent == "greet"
-    assert data.text == "hi"
+    assert data.get(INTENT) == "greet"
+    assert data.get(TEXT) == "hi"

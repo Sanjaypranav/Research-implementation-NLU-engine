@@ -32,7 +32,7 @@ setuptools.setup(
     author_email='prakashr7d@gmail.com; vinithkac@gmail.com',
     version=VERSION,
     install_requires=core_requirements,
-    python_requires='>=3.7,<3.9',
+    python_requires='>=3.8,<3.9',
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
     include_package_data=True,

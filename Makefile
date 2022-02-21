@@ -4,7 +4,7 @@ SYSTEM_DEPENDENCIES := poetry==1.1.3 pre-commit coveralls flake8
 
 .PHONY: check-py3
 check-py3:
-	./utility-scripts/check_python37.sh
+	./utility-scripts/check_python38.sh
 
 .PHONY: install-system-deps
 install-system-deps:

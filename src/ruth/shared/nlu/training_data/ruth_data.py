@@ -1,24 +1,18 @@
+import copy
 from typing import Any, Dict, List, Optional, Text
 
 from ruth.constants import INTENT, TEXT
 from ruth.shared.nlu.training_data.features import Features
-from ruth.shared.nlu.training_data.tokens import Tokens
 
 
 class RuthData:
     def __init__(
-            self,
-            features: Optional[List[Features]] = None,
-            tokens: Optional[List[Tokens]] = None,
-            attention_masks: Optional[List[Tokens]] = None,
-            data: Dict[Text, Any] = None,
+        self,
+        data: Dict[Text, Any] = None,
+        features: Optional[List[Features]] = None,
     ):
-        data = data or {}
-        self.intent: Text = data.get(INTENT, "__mis__")
-        self.text: Text = data.get(TEXT, "__mis__")
         self.features = features or []
-        self.tokens = tokens or []
-        self.attention_masks = attention_masks or []
+        self.data = data or {}
 
     @classmethod
     def build(cls, intent: Text = None, text: Text = None) -> "RuthData":
@@ -28,17 +22,27 @@ class RuthData:
         if feature is not None:
             self.features.append(feature)
 
-    def add_tokens(self, token) -> None:
-        if token is not None:
-            self.tokens.append(token)
+    def set(self, key: Text, value: Any):
+        self.data[key] = value
 
-    def add_attention_masks(self, attention_mask) -> None:
-        if attention_mask is not None:
-            self.attention_masks.append(attention_mask)
+    def get(self, key: Text, default: Any = None):
+        return self.data.get(key, default)
 
-    def get_sparse_features(self):
-        sparse_features = [feature for feature in self.features if feature.is_sparse()]
-        return sparse_features
+    @staticmethod
+    def _combine_features(
+        features: List[Features], featurizers: List[Text]
+    ) -> Features:
 
-    # def get_tokens(self):
-    #     tokens = [token for token in self.tokens if token.is_token()]
+        combined_features = None
+
+        for feature in features:
+            if not combined_features:
+                combined_features = copy.deepcopy(feature)
+                combined_features.origin = featurizers
+            else:
+                combined_features.combine_with_features(feature)
+        return combined_features
+
+    def get_sparse_features(self, featurizers: List[Text] = None) -> Features:
+        combined_features = self._combine_features(self.features, featurizers)
+        return combined_features
