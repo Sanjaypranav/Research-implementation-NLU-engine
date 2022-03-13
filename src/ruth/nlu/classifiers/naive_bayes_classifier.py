@@ -20,13 +20,11 @@ class NaiveBayesClassifier(Classifier):
     def __init__(
         self,
         element_config: Dict[Text, Any],
-        config: Dict[Text, Any] = None,
         le: LabelEncoder = None,
         clf: "sklearn.model_selection.GridSearchCV" = None,
     ):
         super(NaiveBayesClassifier, self).__init__(element_config=element_config)
 
-        self.config = config or {}
         self.le = le or LabelEncoder()
         self.clf = clf
 
