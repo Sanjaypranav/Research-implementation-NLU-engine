@@ -8,7 +8,7 @@ authors = ["Prakash R <prakashr7d@gmail.com>, Kasi Viswanathan <vinithkac@gmail.
 [tool.poetry.dependencies]
 python = ">=3.8,<3.9"
 click = "^8.0.1"
-rich = "^10.7.0"
+rich = "^12.0.0"
 PyYAML = "^6.0"
 scipy = "1.5.4"
 scikit-learn = "^1.0.2"

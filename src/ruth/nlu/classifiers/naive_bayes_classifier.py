@@ -10,6 +10,7 @@ from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from scipy import sparse
 from sklearn.preprocessing import LabelEncoder
+from ruth.shared.utils import json_pickle
 
 logger = logging.getLogger(__name__)
 
@@ -21,12 +22,12 @@ class NaiveBayesClassifier(Classifier):
         self,
         element_config: Dict[Text, Any],
         le: LabelEncoder = None,
-        clf: "sklearn.model_selection.GridSearchCV" = None,
+        model: "sklearn.naive_bayes.GaussianNB" = None,
     ):
         super(NaiveBayesClassifier, self).__init__(element_config=element_config)
 
         self.le = le or LabelEncoder()
-        self.clf = clf
+        self.model = model
 
     def encode_the_str_to_int(self, labels: List[Text]) -> ndarray:
         return self.le.fit_transform(labels)
@@ -55,8 +56,8 @@ class NaiveBayesClassifier(Classifier):
         y = self.encode_the_str_to_int(intents)
 
         X = reshape(X, (len(X), -1))
-        self.clf = self._create_classifier()
-        self.clf.fit(X, y)
+        self.model = self._create_classifier()
+        self.model.fit(X, y)
 
     def _predict(self, x: ndarray) -> Tuple[ndarray, ndarray]:
         predictions = self.predict_probabilities(x)
@@ -64,7 +65,7 @@ class NaiveBayesClassifier(Classifier):
         return sorted_index, predictions[:, sorted_index]
 
     def predict_probabilities(self, x: ndarray) -> ndarray:
-        return self.clf.predict_proba(x.reshape(1, -1))
+        return self.model.predict_proba(x.reshape(1, -1))
 
     def _change_int_to_text(self, prediction: ndarray) -> ndarray:
 
@@ -97,3 +98,14 @@ class NaiveBayesClassifier(Classifier):
             intent_rankings = []
         message.set(INTENT, intent)
         message.set(INTENT_RANKING, intent_rankings)
+
+    def persist(self, file_name: Text, model_dir: Text):
+        classifier_file_name = file_name + "_classifier.pkl"
+        encoder_file_name = file_name+"_encoder.pkl"
+
+        if self.model and self.le:
+            json_pickle(classifier_file_name, self.model)
+            json_pickle(encoder_file_name, self.le)
+
+        return {"file_name": file_name}
+

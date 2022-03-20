@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Any, Dict, Text
 
 import yaml
-from ruth.nlu.element import Element
+from ruth.nlu.ruth_elements import Element
 from ruth.nlu.registry import registered_classes
 
 

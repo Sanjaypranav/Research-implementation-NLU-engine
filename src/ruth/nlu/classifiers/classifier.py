@@ -1,6 +1,6 @@
 from typing import Any, Dict, Text
 
-from ruth.nlu.element import Element
+import ruth.nlu.ruth_elements
 
 
 class Classifier(Element):
