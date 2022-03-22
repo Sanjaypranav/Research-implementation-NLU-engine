@@ -3,9 +3,7 @@ from typing import Any, Dict, List, Text
 
 import click
 from rich.console import Console
-from ruth import VERSION
 from ruth.cli.utills import get_config
-from ruth.nlu.model import Trainer
 from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig

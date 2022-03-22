@@ -2,7 +2,7 @@ import copy
 from typing import Any, Dict, List, Text
 
 from ruth.nlu.constants import INDEX
-from ruth.shared.constants import ELEMENT_INDEX, KEY_LANGUAGE, KEY_PIPELINE
+from ruth.shared.constants import ELEMENT_INDEX, KEY_LANGUAGE
 
 
 @property
@@ -30,7 +30,9 @@ class RuthConfig:
             for index, element in enumerate(pipeline)
         ]
 
-    def get_element(self, index: int, default: Dict[Text, Any] = None) -> Dict[Text, Any]:
+    def get_element(
+        self, index: int, default: Dict[Text, Any] = None
+    ) -> Dict[Text, Any]:
         try:
             component = copy.deepcopy(self.pipeline[index])
             component[INDEX] = index

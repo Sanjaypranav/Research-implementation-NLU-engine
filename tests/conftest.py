@@ -34,4 +34,3 @@ def bert_tokenizer_example() -> Dict[Text, Any]:
         TOKEN: [[0, 0, 0]],
         PATH: Path("data/test/ruth_example_data/training_example.json"),
     }
-

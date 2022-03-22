@@ -140,4 +140,3 @@ class CountVectorFeaturizer(SparseFeaturizer):
             json_pickle(featurizer_path, vocab)
 
         return {"file_name": file_name}
-

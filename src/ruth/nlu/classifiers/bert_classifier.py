@@ -2,7 +2,6 @@ import logging
 from abc import ABC
 from typing import Any, Dict, List, Text, Tuple
 
-import numpy as np
 import torch
 from numpy import argsort, fliplr, ndarray
 from ruth.constants import INTENT, INTENT_RANKING
