@@ -5,17 +5,17 @@ import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.classifier import Classifier
+from ruth.nlu.classifiers.classifier import IntentClassifier
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.shared.utils import json_pickle
 from scipy import sparse
 from sklearn.preprocessing import LabelEncoder
-from ruth.shared.utils import json_pickle
 
 logger = logging.getLogger(__name__)
 
 
-class NaiveBayesClassifier(Classifier):
+class NaiveBayesClassifier(IntentClassifier):
     defaults = {"priors": None, "var_smoothing": 1e-9}
 
     def __init__(
@@ -101,11 +101,10 @@ class NaiveBayesClassifier(Classifier):
 
     def persist(self, file_name: Text, model_dir: Text):
         classifier_file_name = file_name + "_classifier.pkl"
-        encoder_file_name = file_name+"_encoder.pkl"
+        encoder_file_name = file_name + "_encoder.pkl"
 
         if self.model and self.le:
             json_pickle(classifier_file_name, self.model)
             json_pickle(encoder_file_name, self.le)
 
         return {"file_name": file_name}
-

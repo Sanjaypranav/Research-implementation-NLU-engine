@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Dict, Text
 
-from ruth.nlu.registry import registered_classes
 from ruth.shared.constants import ELEMENT_INDEX, KEY_NAME
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
@@ -42,18 +41,3 @@ class Element(metaclass=ElementMetaClass):
     @classmethod
     def build(cls, element_config: Dict[Text, Any]):
         return cls(element_config)
-
-
-class ElementBuilder:
-    def __init__(self, use_cache: bool = True):
-        self.use_cache = use_cache
-
-        self.element_cache = {}
-
-    @staticmethod
-    def create_element(name: Text, element_config: Dict[Text, Any]):
-        if name not in registered_classes:
-            logger.error(f"Given {name} element is not an registered element. We won't support custom element now.")
-        else:
-            return registered_classes[name].build(element_config)
-

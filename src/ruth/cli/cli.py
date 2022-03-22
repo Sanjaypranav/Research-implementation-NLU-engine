@@ -4,8 +4,9 @@ from typing import Any, Dict, List, Text
 import click
 from rich.console import Console
 from ruth import VERSION
-from ruth.cli.utills import create_component, get_config
+from ruth.cli.utills import get_config
 from ruth.nlu.model import Trainer
+from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 
@@ -18,32 +19,31 @@ class RichGroup(click.Group):
         ...
 
 
-@click.group(cls=RichGroup)
-@click.version_option(VERSION)
-def entrypoint():
-    pass
-
-
-@entrypoint.command(name="train")
-@click.option(
-    "-d",
-    "--data",
-    type=click.Path(exists=True, dir_okay=False),
-    required=True,
-    help="Data for training as json",
-)
-@click.option(
-    "-p",
-    "--pipeline",
-    type=click.Path(exists=True, dir_okay=False),
-    required=True,
-    help="pipeline for training as yaml",
-)
+# @click.group(cls=RichGroup)
+# @click.version_option(VERSION)
+# def entrypoint():
+#     pass
+#
+#
+# @entrypoint.command(name="train")
+# @click.option(
+#     "-d",
+#     "--data",
+#     type=click.Path(exists=True, dir_okay=False),
+#     required=True,
+#     help="Data for training as json",
+# )
+# @click.option(
+#     "-p",
+#     "--pipeline",
+#     type=click.Path(exists=True, dir_okay=False),
+#     required=True,
+#     help="pipeline for training as yaml",
+# )
 def train(data: Path, pipeline: Path):
     config = get_config(pipeline)
-    pipeline: List[Dict[Text, Any]] = pipeline["pipeline"]
+    pipeline: List[Dict[Text, Any]] = config["pipeline"]
     training_data = TrainData.build(data)
 
     config = RuthConfig(config)
-    trainer = Trainer(config)
-    trainer.train(training_data)
+    train_pipeline(config, training_data)

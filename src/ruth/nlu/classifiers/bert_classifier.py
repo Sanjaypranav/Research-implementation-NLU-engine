@@ -1,28 +1,28 @@
 import logging
 from abc import ABC
-from typing import Dict, Text, Any, List, Tuple
+from typing import Any, Dict, List, Text, Tuple
 
 import numpy as np
 import torch
-from numpy import ndarray, fliplr, argsort
-from sklearn.metrics import accuracy_score
-from sklearn.preprocessing import LabelEncoder
-from tqdm.notebook import tqdm
-from torch.utils.data import DataLoader, Dataset
-from transformers import (AutoConfig,
-                          AutoModelForSequenceClassification,
-                          AdamW,
-                          get_linear_schedule_with_warmup,
-                          set_seed,
-                          )
-
+from numpy import argsort, fliplr, ndarray
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.classifier import Classifier
-from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME, BATCH_SIZE
+from ruth.nlu.classifiers.classifier import IntentClassifier
+from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
 from ruth.shared.constants import TOKENS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
+from torch.utils.data import DataLoader, Dataset
+from tqdm.notebook import tqdm
+from transformers import (
+    AdamW,
+    AutoConfig,
+    AutoModelForSequenceClassification,
+    get_linear_schedule_with_warmup,
+    set_seed,
+)
 
 set_seed(42)
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def train_model(dataloader, optimizer_, scheduler_, device_):
     model.train()
 
     for batch in tqdm(dataloader, total=len(dataloader)):
-        true_labels += batch['labels'].numpy().flatten().tolist()
+        true_labels += batch["labels"].numpy().flatten().tolist()
         batch = {k: v.type(torch.long).to(device_) for k, v in batch.items()}
         model.zero_grad()
         outputs = model(**batch)
@@ -73,7 +73,7 @@ def validation(dataloader, device_):
     model.eval()
 
     for batch in tqdm(dataloader, total=len(dataloader)):
-        true_labels += batch['labels'].numpy().flatten().tolist()
+        true_labels += batch["labels"].numpy().flatten().tolist()
 
         batch = {k: v.type(torch.long).to(device_) for k, v in batch.items()}
 
@@ -90,11 +90,12 @@ def validation(dataloader, device_):
 
 
 def _create_classifier(n_labels):
-    model_config_ = AutoConfig.from_pretrained(pretrained_model_name_or_path=MODEL_NAME,
-                                               num_labels=n_labels)
+    model_config_ = AutoConfig.from_pretrained(
+        pretrained_model_name_or_path=MODEL_NAME, num_labels=n_labels
+    )
     transformer_model = AutoModelForSequenceClassification.from_pretrained(
-        pretrained_model_name_or_path=MODEL_NAME,
-        config=model_config_)
+        pretrained_model_name_or_path=MODEL_NAME, config=model_config_
+    )
     return transformer_model
 
 
@@ -103,7 +104,6 @@ def get_tokens(message: RuthData) -> List[torch.Tensor]:
 
 
 class CreateData(Dataset, ABC):
-
     def __init__(self, training_data: TrainData, le: LabelEncoder = None):
         self.training_data = training_data
         intents = [message.get(INTENT) for message in training_data.intent_examples]
@@ -128,53 +128,52 @@ class CreateData(Dataset, ABC):
         return token_ids, label_encoded
 
 
-class BertClassifier(Classifier):
-
-    def __init__(self,
-                 element_config: Dict[Text, Any] = None,
-                 le: LabelEncoder = None):
+class BertClassifier(IntentClassifier):
+    def __init__(self, element_config: Dict[Text, Any] = None, le: LabelEncoder = None):
         super(BertClassifier, self).__init__(element_config=element_config)
         self.le = le or LabelEncoder()
-        self.optimizer = AdamW(model.parameters(),
-                               lr=2e-5,  # args.learning_rate - default is 5e-5, our notebook had 2e-5
-                               eps=1e-8  # args.adam_epsilon  - default is 1e-8.
-                               )
+        self.optimizer = AdamW(
+            model.parameters(),
+            lr=2e-5,  # args.learning_rate - default is 5e-5, our notebook had 2e-5
+            eps=1e-8,  # args.adam_epsilon  - default is 1e-8.
+        )
         self.total_steps = len(self.train_dataloader) * EPOCHS
-        self.scheduler = get_linear_schedule_with_warmup(self.optimizer,
-                                                         num_warmup_steps=0,
-                                                         num_training_steps=self.total_steps)
+        self.scheduler = get_linear_schedule_with_warmup(
+            self.optimizer, num_warmup_steps=0, num_training_steps=self.total_steps
+        )
 
     def encode_the_str_to_int(self, labels: List[Text]) -> ndarray:
         return self.le.fit_transform(labels)
 
     def train(self, training_data: TrainData):
-        all_loss = {'train_loss': [], 'val_loss': []}
-        all_acc = {'train_acc': [], 'val_acc': []}
+        all_loss = {"train_loss": [], "val_loss": []}
+        all_acc = {"train_acc": [], "val_acc": []}
 
         for epoch in tqdm(range(EPOCHS)):
-            train_labels, train_predict, train_loss = train_model(self.train_dataloader, self.optimizer, self.scheduler,
-                                                                  device)
+            train_labels, train_predict, train_loss = train_model(
+                self.train_dataloader, self.optimizer, self.scheduler, device
+            )
             train_acc = accuracy_score(train_labels, train_predict)
 
-            valid_labels, valid_predict, val_loss = validation(self.valid_dataloader, device)
+            valid_labels, valid_predict, val_loss = validation(
+                self.valid_dataloader, device
+            )
             val_acc = accuracy_score(valid_labels, valid_predict)
 
-            all_loss['train_loss'].append(train_loss)
-            all_loss['val_loss'].append(val_loss)
-            all_acc['train_acc'].append(train_acc)
-            all_acc['val_acc'].append(val_acc)
+            all_loss["train_loss"].append(train_loss)
+            all_loss["val_loss"].append(val_loss)
+            all_acc["train_acc"].append(train_acc)
+            all_acc["val_acc"].append(val_acc)
 
     def _loader(self, training_data: TrainData, valid_data: TrainData):
         train_dataset = CreateData(training_data, self.le)
-        self.train_dataloader = DataLoader(train_dataset,
-                                           batch_size=BATCH_SIZE,
-                                           shuffle=True
-                                           )
+        self.train_dataloader = DataLoader(
+            train_dataset, batch_size=BATCH_SIZE, shuffle=True
+        )
         valid_dataset = CreateData(valid_data)
-        self.valid_dataloader = DataLoader(valid_dataset,
-                                           batch_size=BATCH_SIZE,
-                                           shuffle=False
-                                           )
+        self.valid_dataloader = DataLoader(
+            valid_dataset, batch_size=BATCH_SIZE, shuffle=False
+        )
 
     @staticmethod
     def _predict(x: torch.Tensor) -> Tuple[ndarray, ndarray]:
@@ -194,8 +193,8 @@ class BertClassifier(Classifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                      :LABEL_RANKING_LIMIT
-                      ]
+                :LABEL_RANKING_LIMIT
+            ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking

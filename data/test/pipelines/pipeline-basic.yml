@@ -1,5 +1,5 @@
 task:
 pipeline:
   - name: CountVectorFeaturizer
-    analyzer: "charWB"
+    analyzer: "char_wb"
   - name: NaiveBayesClassifier
