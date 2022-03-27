@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
 
 from ruth.constants import TEXT
@@ -9,6 +10,7 @@ from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeat
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.shared.utils import json_pickle
 from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -55,11 +57,11 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
     def __init__(
         self,
-        element_config: Optional[Dict[Text, Any]] = None,
+        element_config: Optional[Dict[Text, Any]],
         vectorizer: Optional["CountVectorizer"] = None,
     ):
         super(CountVectorFeaturizer, self).__init__(element_config)
-        self.vectorizer = vectorizer or {}
+        self.vectorizer = vectorizer
         self._load_params()
         self._verify_analyzer()
 
@@ -122,3 +124,20 @@ class CountVectorFeaturizer(SparseFeaturizer):
         message.add_features(
             Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
         )
+
+    def get_vocablary_from_vectorizer(self):
+        if self.vectorizer.vocabulary_:
+            return self.vectorizer.vocabulary_
+        else:
+            raise "CountVectorizer not got trained. Please check the training data and retrain the model"
+
+    def persist(self, file_name: Text, model_dir: Text):
+        file_name = file_name + ".pkl"
+        if self.vectorizer:
+            vocab = self.vectorizer.vocabulary_
+
+            featurizer_path = Path(model_dir) / file_name
+            json_pickle(featurizer_path, vocab)
+
+        return {"file_name": file_name}
+

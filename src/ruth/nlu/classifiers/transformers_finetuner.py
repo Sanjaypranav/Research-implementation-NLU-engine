@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Text, Any
 
-from ruth.nlu.classifiers.classifier import Classifier
+from ruth.nlu.classifiers.ruth_classifier import Classifier
 from ruth.nlu.classifiers.constants import EPOCHS
 from ruth.shared.nlu.training_data.collections import TrainData
 
@@ -29,5 +29,5 @@ class TransformerClassifier:
         return cls(config)
 
     def train(self, training_data: TrainData):
-        model_data = self.preprocess_train_data(training_data)
+        self.preprocess_train_data(training_data)
 

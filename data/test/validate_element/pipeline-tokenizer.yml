@@ -2,4 +2,4 @@ task:
 pipeline:
   - name: CountVectorFeaturizer
     analyzer: "charWB"
-  - name: NaiveBayesClassifier
+  - name: HFFeaturizer

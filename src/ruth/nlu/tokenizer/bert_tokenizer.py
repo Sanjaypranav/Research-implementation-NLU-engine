@@ -1,10 +1,9 @@
-from typing import List, Dict, Text, Any, Optional, Tuple
+from typing import List, Dict, Text, Any, Optional
 
 import torch
 from transformers import BertTokenizer
 
 from ruth.constants import TEXT
-from ruth.nlu.classifiers.constants import MODEL_NAME
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
 from ruth.nlu.tokenizer.constants import max_length_for_padding
 from ruth.nlu.tokenizer.tokenizer import Tokenizer

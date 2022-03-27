@@ -1,9 +1,13 @@
 from pathlib import Path
+from typing import Any, Dict, List, Text
 
 import click
 from rich.console import Console
 from ruth import VERSION
+from ruth.cli.utills import create_component, get_config
+from ruth.nlu.model import Trainer
 from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 
 console = Console()
 
@@ -36,6 +40,10 @@ def entrypoint():
     help="pipeline for training as yaml",
 )
 def train(data: Path, pipeline: Path):
+    config = get_config(pipeline)
+    pipeline: List[Dict[Text, Any]] = pipeline["pipeline"]
     training_data = TrainData.build(data)
-    print(training_data)
-    print(pipeline)
+
+    config = RuthConfig(config)
+    trainer = Trainer(config)
+    trainer.train(training_data)
