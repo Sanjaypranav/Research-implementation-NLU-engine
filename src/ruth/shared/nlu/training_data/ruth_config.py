@@ -43,3 +43,6 @@ class RuthConfig:
             else:
                 default = {INDEX: index}
             return default
+
+    def __getitem__(self, key: Text) -> Any:
+        return self.config[key]

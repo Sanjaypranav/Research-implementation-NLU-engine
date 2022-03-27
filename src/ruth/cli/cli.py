@@ -40,8 +40,8 @@ class RichGroup(click.Group):
 # )
 def train(data: Path, pipeline: Path):
     config = get_config(pipeline)
-    pipeline: List[Dict[Text, Any]] = config["pipeline"]
     training_data = TrainData.build(data)
 
     config = RuthConfig(config)
     train_pipeline(config, training_data)
+

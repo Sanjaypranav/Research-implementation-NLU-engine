@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple
 
 import sklearn
@@ -99,12 +100,16 @@ class NaiveBayesClassifier(IntentClassifier):
         message.set(INTENT, intent)
         message.set(INTENT_RANKING, intent_rankings)
 
-    def persist(self, file_name: Text, model_dir: Text):
+    def persist(self, file_name: Text, model_dir: Path):
         classifier_file_name = file_name + "_classifier.pkl"
         encoder_file_name = file_name + "_encoder.pkl"
 
-        if self.model and self.le:
-            json_pickle(classifier_file_name, self.model)
-            json_pickle(encoder_file_name, self.le)
+        classifier_path = model_dir / classifier_file_name
+        encoder_path = model_dir / encoder_file_name
 
-        return {"file_name": file_name}
+        if self.model and self.le:
+            json_pickle(classifier_path, self.model)
+            json_pickle(encoder_path, self.le)
+
+        return {"classifier": classifier_file_name,
+                "encoder": encoder_file_name}

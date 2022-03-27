@@ -1,10 +1,16 @@
 import copy
 import logging
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, Text
 
+import ruth
+from ruth.nlu.constants import RUTH
 from ruth.nlu.registry import registered_classes
+from ruth.nlu.utils import module_path_from_object
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
+from ruth.shared.utils import json_pickle
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +29,26 @@ class ElementBuilder:
             )
         else:
             return registered_classes[name].build(element_config)
+
+
+class MetaData:
+    def __init__(self, metadata: Dict[Text, Any]):
+        self.metadata = metadata
+
+    def get(self, prop: Text, defaults: Any = None):
+        return self.metadata.get(prop, defaults)
+
+    def persist(self, model_dir: Path):
+        metadata = self.metadata.copy()
+
+        metadata.update(
+            {
+                "Training completed at": datetime.now(),
+                "ruth_version": ruth.VERSION
+            }
+        )
+        filename = model_dir / "metadata.json"
+        json_pickle(filename, metadata, indent=4)
 
 
 class Trainer:
@@ -46,10 +72,13 @@ class Trainer:
 
         return pipeline
 
+    @staticmethod
+    def get_filename(index, name):
+        return f"element_{index}_{name}"
+
     def train(self, data: TrainData):
         self.training_data = data
 
-        # context = kwargs
         working_data: TrainData = copy.deepcopy(data)
 
         for i, component in enumerate(self.pipeline):
@@ -57,5 +86,25 @@ class Trainer:
             # component.prepare_partial_processing(self.pipeline[:i], context)
             component.train(working_data)
             logger.info("Finished training element.")
-
         # return Interpreter(self.pipeline, context)
+
+    def persist(self, path: Path):
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+        model_name = RUTH + timestamp
+        metadata = {"language": self.config.language, "pipeline": []}
+
+        model_dir = path.absolute() / model_name
+        model_dir.mkdir(exist_ok=True)
+
+        for index, element in enumerate(self.pipeline):
+            file_name = self.get_filename(index, name=element.name)
+            custom_meta = element.persist(file_name, model_dir)
+            element_meta = element.element_config
+            if element_meta:
+                element_meta.update(custom_meta)
+            element_meta["class"] = module_path_from_object(element)
+
+            metadata["pipeline"].append(element_meta)
+
+        MetaData(metadata).persist(model_dir)

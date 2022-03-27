@@ -41,3 +41,6 @@ class Element(metaclass=ElementMetaClass):
     @classmethod
     def build(cls, element_config: Dict[Text, Any]):
         return cls(element_config)
+
+    def persist(self, file_name: Text, model_dir: Text):
+        pass
