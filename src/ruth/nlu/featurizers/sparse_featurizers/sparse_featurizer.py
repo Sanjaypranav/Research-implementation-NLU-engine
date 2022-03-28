@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Text
 
 from ruth.shared.nlu.ruth_elements import Element
+from ruth.nlu.elements import Element
 from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
 )

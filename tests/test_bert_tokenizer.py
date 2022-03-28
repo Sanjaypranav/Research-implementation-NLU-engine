@@ -1,12 +1,11 @@
 import json
-from typing import Dict, Text, Any
-
-from transformers import BertTokenizer
+from typing import Any, Dict, Text
 
 from ruth.constants import PATH
 from ruth.nlu.tokenizer.bert_tokenizer import TokenizerBert
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from transformers import BertTokenizer
 
 
 def test_bert_tokenizer(bert_tokenizer_example: Dict[Text, Any]):

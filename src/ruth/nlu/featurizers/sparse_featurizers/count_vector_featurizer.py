@@ -7,6 +7,7 @@ from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
 )
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
+from ruth.nlu.model import MetaData
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
@@ -141,3 +142,37 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
         return {"file_name": file_name}
 
+    # @classmethod
+    # def load(
+    #         cls,
+    #         meta: Dict[Text, Any],
+    #         model_dir: Path,
+    #         **kwargs: Any
+    # ) -> "CountVectorsFeaturizer":
+    #     """Loads trained component (see parent class for full docstring)."""
+    #     file_name = meta.get("file")
+    #     featurizer_file = model_dir / file_name
+    #
+    #     if not featurizer_file.exists():
+    #         return cls(meta)
+    #
+    #     vocabulary = io_utils.json_unpickle(featurizer_file)
+    #
+    #     share_vocabulary = meta["use_shared_vocab"]
+    #
+    #     if share_vocabulary:
+    #         vectorizers = cls._create_shared_vocab_vectorizers(
+    #             meta, vocabulary=vocabulary
+    #         )
+    #     else:
+    #         vectorizers = cls._create_independent_vocab_vectorizers(
+    #             meta, vocabulary=vocabulary
+    #         )
+    #
+    #     ftr = cls(meta, vectorizers, should_finetune)
+    #
+    #     # make sure the vocabulary has been loaded correctly
+    #     for attribute in vectorizers:
+    #         ftr.vectorizers[attribute]._validate_vocabulary()
+    #
+    #     return ftr
