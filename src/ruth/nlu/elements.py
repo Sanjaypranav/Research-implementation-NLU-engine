@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Any, Dict, Text
 
 from ruth.shared.constants import ELEMENT_INDEX, KEY_NAME
@@ -44,3 +45,7 @@ class Element(metaclass=ElementMetaClass):
 
     def persist(self, file_name: Text, model_dir: Text):
         pass
+
+    @classmethod
+    def load(cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any):
+        return cls(meta)

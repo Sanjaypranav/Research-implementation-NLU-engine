@@ -13,4 +13,3 @@ def train_pipeline(config: RuthConfig, training_data: TrainData):
     model_dir = Path(DEFAULT_MODEL_NAME)
     model_dir.mkdir(exist_ok=True)
     trainer.persist(model_dir)
-

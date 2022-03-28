@@ -16,7 +16,7 @@ core_requirements = [
     "coloredlogs~=14.0.0",
     "rich~=11.1.0",
     "aiohttp~=3.6.3",
-    "numpy~=1.16.5",
+    "numpy~=1.16.1",
     "requests~=2.23.0",
     "pandas~=1.2.5"
 ]

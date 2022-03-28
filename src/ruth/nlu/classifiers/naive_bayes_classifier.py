@@ -111,5 +111,4 @@ class NaiveBayesClassifier(IntentClassifier):
             json_pickle(classifier_path, self.model)
             json_pickle(encoder_path, self.le)
 
-        return {"classifier": classifier_file_name,
-                "encoder": encoder_file_name}
+        return {"classifier": classifier_file_name, "encoder": encoder_file_name}
