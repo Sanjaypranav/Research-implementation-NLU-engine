@@ -1,4 +1,4 @@
-from typing import Text, Any
+from typing import Text
 
 from ruth.nlu.elements import Element
 
