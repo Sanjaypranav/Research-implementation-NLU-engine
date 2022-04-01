@@ -35,13 +35,13 @@ class ElementBuilder:
             return registered_classes[name].build(element_config)
 
     @staticmethod
-    def load_element(name: Text, element_config: Dict[Text, Any]):
+    def load_element(name: Text, element_config: Dict[Text, Any], model_dir: Path):
         if name not in registered_classes:
             logger.error(
                 f"Given {name} element is not an registered element. We won't support custom element now."
             )
         else:
-            return registered_classes[name].load(element_config)
+            return registered_classes[name].load(element_config, model_dir=model_dir)
 
 
 class MetaData:
@@ -98,7 +98,7 @@ class Trainer:
             logger.info("Finished training element.")
         # return Interpreter(self.pipeline, context)
 
-    def persist(self, path: Path):
+    def persist(self, path: Path) -> Path:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
         model_name = RUTH + "_" + timestamp
@@ -118,20 +118,21 @@ class Trainer:
             metadata["pipeline"].append(element_meta)
 
         MetaData(metadata).persist(model_dir)
+        return model_dir
 
 
 class Interpreter:
     def __init__(
-        self,
-        pipeline: List[Element],
-        model_metadata: Optional[MetaData] = None,
+            self,
+            pipeline: List[Element],
+            model_metadata: Optional[MetaData] = None,
     ) -> None:
         self.pipeline = pipeline
         self.model_metadata = model_metadata
 
     def parse(
-        self,
-        text: Text,
+            self,
+            text: Text,
     ) -> Dict[Text, Any]:
         """Parse the input text, classify it and return pipeline result.
 

@@ -18,7 +18,7 @@ def load_json_data(path: Path) -> Dict[Text, Any]:
 
 
 def build_pipeline_from_metadata(
-    metadata: Dict[Text, Any], element_builder: ElementBuilder = None
+    metadata: Dict[Text, Any], model_dir: Path, element_builder: ElementBuilder = None,
 ):
     pipeline_element = []
     if not element_builder:
@@ -27,8 +27,9 @@ def build_pipeline_from_metadata(
     pipeline: List[Dict[Text, Any]] = metadata["pipeline"]
     for element in pipeline:
         pipeline_element.append(
-            element_builder.create_element(element["name"], element)
+            element_builder.load_element(element["name"], element, model_dir=model_dir)
         )
+    return pipeline_element
 
 
 def get_metadata_from_model(model_path: Path) -> Dict[Text, Any]:

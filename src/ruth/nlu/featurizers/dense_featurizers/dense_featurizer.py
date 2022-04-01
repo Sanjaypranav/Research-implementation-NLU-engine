@@ -1,10 +1,10 @@
 from abc import ABC
 
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
-from ruth.nlu.element import Element
+from ruth.nlu.elements import Element
 
 
-class DenseFeaturizer(Element, ABC):
+class DenseFeaturizer(Element):
 
     def __init__(self, element_config):
         element_config = element_config or {}
