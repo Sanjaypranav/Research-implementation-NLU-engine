@@ -10,7 +10,7 @@ from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeat
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
-from ruth.shared.utils import json_pickle
+from ruth.shared.utils import json_pickle, json_unpickle
 from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -65,7 +65,9 @@ class CountVectorFeaturizer(SparseFeaturizer):
         self._load_params()
         self._verify_analyzer()
 
-    def _build_vectorizer(self, parameters: Dict[Text, Any]) -> CountVectorizer:
+    def _build_vectorizer(
+        self, parameters: Dict[Text, Any], vacabulary=None
+    ) -> CountVectorizer:
         return CountVectorizer(
             analyzer=parameters["analyzer"],
             stop_words=parameters["stop_words"],
@@ -73,6 +75,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
             max_df=parameters["max_df"],
             ngram_range=(parameters["min_ngram"], parameters["max_ngram"]),
             lowercase=parameters["lowercase"],
+            vacabulary=vacabulary,
         )
 
     def _check_attribute_vocabulary(self) -> bool:
@@ -140,3 +143,19 @@ class CountVectorFeaturizer(SparseFeaturizer):
             json_pickle(featurizer_path, vocab)
 
         return {"file_name": file_name}
+
+    @classmethod
+    def load(
+        cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
+    ) -> "CountVectorFeaturizer":
+        file_name = meta.get("file_name")
+        featurizer_file = model_dir / file_name
+
+        if not featurizer_file.exists():
+            return cls(meta)
+
+        vocabulary = json_unpickle(featurizer_file)
+
+        vectorizers = cls._build_vectorizer(parameters=meta, vacabulary=vocabulary)
+
+        return cls(meta, vectorizers)

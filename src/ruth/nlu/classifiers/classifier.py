@@ -1,8 +1,8 @@
 from typing import Any, Dict, Text
 
-from ruth.nlu.element import Element
+from ruth.nlu.elements import Element
 
 
-class Classifier(Element):
+class IntentClassifier(Element):
     def __init__(self, element_config: Dict[Text, Any]):
-        super(Classifier, self).__init__(element_config)
+        super(IntentClassifier, self).__init__(element_config)

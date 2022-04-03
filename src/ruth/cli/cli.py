@@ -1,10 +1,18 @@
+import re
 from pathlib import Path
-from typing import Any, Dict, List, Text
+from typing import Text
 
 import click
 from rich.console import Console
 from ruth import VERSION
-from ruth.cli.utills import create_component, get_config
+from ruth.cli.utills import (
+    build_pipeline_from_metadata,
+    get_config,
+    get_metadata_from_model,
+)
+from ruth.constants import INTENT
+from ruth.nlu.model import Interpreter
+from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 
@@ -23,30 +31,59 @@ def entrypoint():
     pass
 
 
+#
+#
+# @entrypoint.command(name="train")
+# @click.option(
+#     "-d",
+#     "--data",
+#     type=click.Path(exists=True, dir_okay=False),
+#     required=True,
+#     help="Data for training as json",
+# )
+# @click.option(
+#     "-p",
+#     "--pipeline",
+#     type=click.Path(exists=True, dir_okay=False),
+#     required=True,
+#     help="pipeline for training as yaml",
+# )
+def train(data: Path, pipeline: Path):
+    config = get_config(pipeline)
+    training_data = TrainData.build(data)
+
+    config = RuthConfig(config)
+    train_pipeline(config, training_data)
+
+
 @entrypoint.command(name="train")
 @click.option(
-    "-d",
-    "--data",
-    type=click.Path(exists=True, dir_okay=False),
+    "-t",
+    "--text",
+    type=click.STRING,
     required=True,
-    help="Data for training as json",
+    help="Data that need to be get parsed",
 )
 @click.option(
     "-p",
-    "--pipeline",
-    type=click.Path(exists=True, dir_okay=False),
-    required=True,
-    help="pipeline for training as yaml",
+    "--path",
+    type=click.STRING,
+    default="models",
+    help="Directory where the model is stored",
 )
-def train(data: Path, pipeline: Path):
-    config = get_config(pipeline)
-    pipeline: List[Dict[Text, Any]] = pipeline["pipeline"]
-    training_data = TrainData.build(data)
-    pipeline_classes = []
-    for element in pipeline:
-        pipeline_classes.append(create_component(element.get("name")))
+def parse(text: Text, model_path: Text):
+    models = [
+        directory
+        for directory in Path(model_path).iterdir()
+        if directory.is_dir() and re.search("ruth", str(directory))
+    ]
+    models.sort()
 
-    config = RuthConfig(config)
-    for element_class, element_config in zip(pipeline_classes, pipeline):
-        e_class = element_class.build(config=config, element_config=element_config)
-        e_class.train(training_data)
+    latest_model = models[-1]
+
+    console.print(f"Latest Model found {latest_model}")
+    metadata = get_metadata_from_model(latest_model.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata)
+    interpreter = Interpreter(pipeline)
+    output = interpreter.parse(text)
+    console.print(f"Predicted intent is {output.get(INTENT)}")
