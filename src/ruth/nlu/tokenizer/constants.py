@@ -1,2 +1,2 @@
 # BertTokenizer
-max_length_for_padding = 64
+MAX_LENGTH_FOR_PADDING = 64

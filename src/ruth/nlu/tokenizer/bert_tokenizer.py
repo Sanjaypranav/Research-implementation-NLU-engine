@@ -23,8 +23,8 @@ class TokenizerBert(Tokenizer):
         super(TokenizerBert, self).__init__(element_config)
         self.tokenizer = tokenizer or {}
 
-    def _build_tokenizer(self, parameters: Dict[Text, Any]) -> BertTokenizer:
-        return BertTokenizer.from_pretrained("bert-base-uncased", do_lower_case=True)
+    def _build_tokenizer(self) -> BertTokenizer:
+        return BertTokenizer.from_pretrained(self.element_config["model_name"], do_lower_case=True)
 
     def _create_tokens(self, examples: List[RuthData]) -> List[torch.Tensor]:
         tokens = []
@@ -55,12 +55,7 @@ class TokenizerBert(Tokenizer):
             # message.set(TOKENS, Tokens(attention_mask, self.element_config[ELEMENT_UNIQUE_NAME]))
 
     def train(self, training_data: TrainData) -> BertTokenizer:
-        self.tokenizer = self._build_tokenizer(
-            parameters={
-                "model_name": self.element_config.get("model_name"),
-                "do_lower_case": self.element_config.get("do_lower_case"),
-            }
-        )
+        self.tokenizer = self._build_tokenizer()
         tokens = self._get_tokenized_data(training_data)
         self._add_tokens_to_data(training_data.training_examples, tokens)
         return self.tokenizer

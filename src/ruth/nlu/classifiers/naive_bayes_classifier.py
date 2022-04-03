@@ -6,10 +6,10 @@ import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.classifier import IntentClassifier
+from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
-from ruth.shared.utils import json_pickle
+from ruth.shared.utils import json_pickle, json_unpickle
 from scipy import sparse
 from sklearn.preprocessing import LabelEncoder
 
@@ -112,3 +112,13 @@ class NaiveBayesClassifier(IntentClassifier):
             json_pickle(encoder_path, self.le)
 
         return {"classifier": classifier_file_name, "encoder": encoder_file_name}
+
+    @classmethod
+    def load(cls, meta: Dict[Text, Any], model_dir: Path):
+        classifier_file_name = model_dir / meta["classifier"]
+        encoder_file_name = model_dir / meta["encoder"]
+
+        model = json_unpickle(Path(classifier_file_name))
+        le = json_unpickle(Path(encoder_file_name))
+
+        return cls(meta, model=model, le=le)

@@ -42,7 +42,7 @@ def read_file(file_name: Union[Text, Path]):
             return f.read()
     except FileNotFoundError:
         raise Exception(
-            f"Failed to read file, " f"'{file_name.absolute()}' does not exist."
+            f"Failed to read file, " f"'{str(file_name.absolute())}' does not exist."
         )
     except UnicodeDecodeError:
         raise Exception(

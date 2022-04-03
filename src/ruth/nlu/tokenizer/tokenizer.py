@@ -1,7 +1,7 @@
-from typing import Any, Dict, Text
+from typing import Dict, Text, Any
 
+from ruth.shared.nlu.ruth_elements import Element
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
-from ruth.nlu.element import Element
 from ruth.shared.nlu.training_data.collections import TrainData
 
 
@@ -13,7 +13,7 @@ class Tokenizer(Element):
         super().__init__(element_config)
 
     # @abstractmethod
-    def _build_tokenizer(self, parameters: Dict[Text, Any]):
+    def _build_tokenizer(self):
         raise NotImplementedError
 
     # @abstractmethod

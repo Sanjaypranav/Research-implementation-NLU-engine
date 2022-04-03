@@ -1,0 +1,5 @@
+task:
+pipeline:
+  - name: CountVectorFeaturizer
+    analyzer: "charWB"
+  - name: HFFeaturizer

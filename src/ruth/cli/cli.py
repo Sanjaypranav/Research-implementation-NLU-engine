@@ -31,32 +31,31 @@ def entrypoint():
     pass
 
 
-#
-#
-# @entrypoint.command(name="train")
-# @click.option(
-#     "-d",
-#     "--data",
-#     type=click.Path(exists=True, dir_okay=False),
-#     required=True,
-#     help="Data for training as json",
-# )
-# @click.option(
-#     "-p",
-#     "--pipeline",
-#     type=click.Path(exists=True, dir_okay=False),
-#     required=True,
-#     help="pipeline for training as yaml",
-# )
+@entrypoint.command(name="train")
+@click.option(
+    "-d",
+    "--data",
+    type=click.Path(exists=True, dir_okay=False),
+    required=True,
+    help="Data for training as json",
+)
+@click.option(
+    "-p",
+    "--pipeline",
+    type=click.Path(exists=True, dir_okay=False),
+    required=True,
+    help="pipeline for training as yaml",
+)
 def train(data: Path, pipeline: Path):
     config = get_config(pipeline)
     training_data = TrainData.build(data)
 
     config = RuthConfig(config)
-    train_pipeline(config, training_data)
+    model_absolute_dir = train_pipeline(config, training_data)
+    console.print(f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow]")
 
 
-@entrypoint.command(name="train")
+@entrypoint.command(name="parse")
 @click.option(
     "-t",
     "--text",
@@ -71,10 +70,10 @@ def train(data: Path, pipeline: Path):
     default="models",
     help="Directory where the model is stored",
 )
-def parse(text: Text, model_path: Text):
+def parse(text: Text, path: Text):
     models = [
         directory
-        for directory in Path(model_path).iterdir()
+        for directory in Path(path).iterdir()
         if directory.is_dir() and re.search("ruth", str(directory))
     ]
     models.sort()
@@ -83,7 +82,7 @@ def parse(text: Text, model_path: Text):
 
     console.print(f"Latest Model found {latest_model}")
     metadata = get_metadata_from_model(latest_model.absolute())
-    pipeline = build_pipeline_from_metadata(metadata=metadata)
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
     console.print(f"Predicted intent is {output.get(INTENT)}")

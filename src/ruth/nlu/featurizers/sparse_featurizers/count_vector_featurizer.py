@@ -56,17 +56,18 @@ class CountVectorFeaturizer(SparseFeaturizer):
                 )
 
     def __init__(
-        self,
-        element_config: Optional[Dict[Text, Any]],
-        vectorizer: Optional["CountVectorizer"] = None,
+            self,
+            element_config: Optional[Dict[Text, Any]],
+            vectorizer: Optional["CountVectorizer"] = None,
     ):
         super(CountVectorFeaturizer, self).__init__(element_config)
         self.vectorizer = vectorizer
         self._load_params()
         self._verify_analyzer()
 
+    @staticmethod
     def _build_vectorizer(
-        self, parameters: Dict[Text, Any], vacabulary=None
+            parameters: Dict[Text, Any], vacabulary=None
     ) -> CountVectorizer:
         return CountVectorizer(
             analyzer=parameters["analyzer"],
@@ -75,7 +76,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
             max_df=parameters["max_df"],
             ngram_range=(parameters["min_ngram"], parameters["max_ngram"]),
             lowercase=parameters["lowercase"],
-            vacabulary=vacabulary,
+            vocabulary=vacabulary,
         )
 
     def _check_attribute_vocabulary(self) -> bool:
@@ -98,7 +99,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
             return []
 
     def _add_features_to_data(
-        self, training_examples: List[RuthData], features: List[sparse.spmatrix]
+            self, training_examples: List[RuthData], features: List[sparse.spmatrix]
     ):
         for message, feature in zip(training_examples, features):
             message.add_features(
@@ -146,7 +147,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
     @classmethod
     def load(
-        cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
+            cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
     ) -> "CountVectorFeaturizer":
         file_name = meta.get("file_name")
         featurizer_file = model_dir / file_name

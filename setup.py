@@ -18,7 +18,8 @@ core_requirements = [
     "aiohttp~=3.6.3",
     "numpy~=1.16.1",
     "requests~=2.23.0",
-    "pandas~=1.2.5"
+    "pandas~=1.2.5",
+    "jsonpickle~=2.1.0"
 ]
 
 
