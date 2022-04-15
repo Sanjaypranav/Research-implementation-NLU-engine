@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from ruth.cli import train
+from cli import train
 
 
 @pytest.mark.parametrize(

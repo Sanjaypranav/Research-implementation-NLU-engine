@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ruth.nlu.featurizers import CountVectorFeaturizer
+from nlu.featurizers import CountVectorFeaturizer
 
 cv = CountVectorFeaturizer.load({
     "analyzer": "char_wb",

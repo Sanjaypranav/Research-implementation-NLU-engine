@@ -69,25 +69,25 @@ conda-env-setup:
 .PHONY: format
 format:
 	# calling make _format within poetry make it so that we only init poetry once
-	poetry run isort -rc -y ruth tests
-	poetry run black ruth tests
+	poetry run isort -rc -y src tests
+	poetry run black src tests
 
 
 # Flake8 to check code formatting
 .PHONY: lint
 lint:
-	poetry run flake8 ruth tests
+	poetry run flake8 src tests
 
 N_THREADS=1
 # Run tests
 .PHONY: test
 test:
-	PYTHONPATH='./ruth/' poetry run pytest tests/ -s -n ${N_THREADS} -vv
+	PYTHONPATH='./src/' poetry run pytest tests/test_on_track/ -s -n ${N_THREADS} -vv
 
 # Run coverage
 .PHONY: coverage
 coverage:
-	PYTHONPATH='./ruth/' poetry run coverage run --concurrency=multiprocessing -m pytest tests/ -s
+	PYTHONPATH='./src/' poetry run coverage run --concurrency=multiprocessing -m pytest tests/ -s
 	poetry run coverage combine
 	poetry run coverage report -m
 

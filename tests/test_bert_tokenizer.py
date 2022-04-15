@@ -1,9 +1,9 @@
 import json
 from typing import Any, Dict, Text
 
-from ruth.constants import PATH
-from ruth.nlu import TokenizerBert
-from ruth.shared import RuthData, TrainData
+from constants import PATH
+from nlu import TokenizerBert
+from shared import RuthData, TrainData
 from transformers import BertTokenizer
 
 

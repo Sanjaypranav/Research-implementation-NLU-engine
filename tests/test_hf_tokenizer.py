@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from ruth.nlu import HFTokenizer
-from ruth.shared import TrainData
+from nlu import HFTokenizer
+from shared import TrainData
 
 
 def test_hf_tokenizer(example_data_path: Path):

@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 
 import pytest
-from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
-from ruth.shared import RuthData, TrainData
+from nlu.tokenizer import HFTokenizer
+from shared import RuthData, TrainData
 
 
 @pytest.fixture
