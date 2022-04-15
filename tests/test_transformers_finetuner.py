@@ -2,10 +2,8 @@ import json
 from pathlib import Path
 
 import pytest
-from transformers import BertTokenizer
-
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
+from ruth.shared import RuthData, TrainData
 
 
 @pytest.fixture
@@ -21,7 +19,7 @@ def classifier_data(example_classifier_data: Path) -> TrainData:
 
 
 def test_transformers_finetuner(
-        classifier_data: TrainData,
+    classifier_data: TrainData,
 ):
     tokenizer = HFTokenizer({})
     tokenizer.train(classifier_data)

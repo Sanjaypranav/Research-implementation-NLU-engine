@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Text
 
 import pytest
 from ruth.constants import INTENT, TEXT
-from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.shared import RuthData
 
 
 @pytest.fixture

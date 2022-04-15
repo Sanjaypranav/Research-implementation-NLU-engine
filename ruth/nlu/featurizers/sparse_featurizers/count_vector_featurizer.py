@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
 
+from rich.console import Console
 from ruth.constants import TEXT
 from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
@@ -15,6 +16,8 @@ from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
 logger = logging.getLogger(__name__)
+
+console = Console()
 
 
 class CountVectorFeaturizer(SparseFeaturizer):
@@ -56,9 +59,9 @@ class CountVectorFeaturizer(SparseFeaturizer):
                 )
 
     def __init__(
-            self,
-            element_config: Optional[Dict[Text, Any]],
-            vectorizer: Optional["CountVectorizer"] = None,
+        self,
+        element_config: Optional[Dict[Text, Any]],
+        vectorizer: Optional["CountVectorizer"] = None,
     ):
         super(CountVectorFeaturizer, self).__init__(element_config)
         self.vectorizer = vectorizer
@@ -67,7 +70,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
     @staticmethod
     def _build_vectorizer(
-            parameters: Dict[Text, Any], vacabulary=None
+        parameters: Dict[Text, Any], vacabulary=None
     ) -> CountVectorizer:
         return CountVectorizer(
             analyzer=parameters["analyzer"],
@@ -99,7 +102,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
             return []
 
     def _add_features_to_data(
-            self, training_examples: List[RuthData], features: List[sparse.spmatrix]
+        self, training_examples: List[RuthData], features: List[sparse.spmatrix]
     ):
         for message, feature in zip(training_examples, features):
             message.add_features(
@@ -147,7 +150,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
     @classmethod
     def load(
-            cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
+        cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
     ) -> "CountVectorFeaturizer":
         file_name = meta.get("file_name")
         featurizer_file = model_dir / file_name

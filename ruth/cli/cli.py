@@ -52,7 +52,9 @@ def train(data: Path, pipeline: Path):
 
     config = RuthConfig(config)
     model_absolute_dir = train_pipeline(config, training_data)
-    console.print(f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow]")
+    console.print(
+        f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow]"
+    )
 
 
 @entrypoint.command(name="parse")

@@ -23,14 +23,6 @@ from transformers import (
     set_seed,
 )
 
-from ruth.constants import INTENT, INTENT_RANKING
-from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.ruth_classifier import Classifier
-from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME, BATCH_SIZE
-from ruth.shared.constants import TOKENS
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
-
 set_seed(42)
 logger = logging.getLogger(__name__)
 

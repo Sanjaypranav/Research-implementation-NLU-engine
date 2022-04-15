@@ -24,7 +24,9 @@ class TokenizerBert(Tokenizer):
         self.tokenizer = tokenizer or {}
 
     def _build_tokenizer(self) -> BertTokenizer:
-        return BertTokenizer.from_pretrained(self.element_config["model_name"], do_lower_case=True)
+        return BertTokenizer.from_pretrained(
+            self.element_config["model_name"], do_lower_case=True
+        )
 
     def _create_tokens(self, examples: List[RuthData]) -> List[torch.Tensor]:
         tokens = []

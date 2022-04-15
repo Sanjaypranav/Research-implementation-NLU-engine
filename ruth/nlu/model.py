@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
 
 import ruth
+from rich.console import Console
 from ruth.constants import INTENT, TEXT
 from ruth.nlu.constants import RUTH
 from ruth.nlu.elements import Element
@@ -17,6 +18,7 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle
 
 logger = logging.getLogger(__name__)
+console = Console()
 
 
 class ElementBuilder:
@@ -29,7 +31,7 @@ class ElementBuilder:
     def create_element(name: Text, element_config: Dict[Text, Any]):
         if name not in registered_classes:
             logger.error(
-                f"Given {name} element is not an registered element. We won't support custom element now."
+                f"Given {name} element is not an registered element. We won't support custom element as of now."
             )
         else:
             return registered_classes[name].build(element_config)
@@ -91,11 +93,11 @@ class Trainer:
 
         working_data: TrainData = copy.deepcopy(data)
 
-        for i, component in enumerate(self.pipeline):
-            logger.info(f"Starting to train element {component.name}")
+        for i, element in enumerate(self.pipeline):
+            console.print(f"Starting to train element {element.name}")
             # component.prepare_partial_processing(self.pipeline[:i], context)
-            component.train(working_data)
-            logger.info("Finished training element.")
+            element.train(working_data)
+            console.print("Finished training element.")
         # return Interpreter(self.pipeline, context)
 
     def persist(self, path: Path) -> Path:
@@ -123,16 +125,16 @@ class Trainer:
 
 class Interpreter:
     def __init__(
-            self,
-            pipeline: List[Element],
-            model_metadata: Optional[MetaData] = None,
+        self,
+        pipeline: List[Element],
+        model_metadata: Optional[MetaData] = None,
     ) -> None:
         self.pipeline = pipeline
         self.model_metadata = model_metadata
 
     def parse(
-            self,
-            text: Text,
+        self,
+        text: Text,
     ) -> Dict[Text, Any]:
         """Parse the input text, classify it and return pipeline result.
 

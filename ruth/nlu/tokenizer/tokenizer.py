@@ -1,7 +1,5 @@
-from typing import Dict, Text, Any
-
-from ruth.shared.nlu.ruth_elements import Element
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
+from ruth.shared.nlu.ruth_elements import Element
 from ruth.shared.nlu.training_data.collections import TrainData
 
 

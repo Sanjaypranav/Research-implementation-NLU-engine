@@ -1,8 +1,6 @@
 import logging
 from typing import Any, Dict, Text
 
-from ruth.nlu.classifiers.ruth_classifier import Classifier
-from ruth.nlu.classifiers.constants import EPOCHS
 from ruth.shared.nlu.training_data.collections import TrainData
 
 logger = logging.getLogger(__name__)

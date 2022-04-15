@@ -1,6 +1,4 @@
-from typing import Dict, Text, Any, Optional, List
-
-from transformers import AutoTokenizer
+from typing import Any, Dict, List, Optional, Text
 
 from ruth.constants import TEXT
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
@@ -10,16 +8,14 @@ from ruth.shared.constants import TOKENS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.nlu.training_data.tokens import Tokens
+from transformers import AutoTokenizer
 
 
 class HFTokenizer(Tokenizer):
     MODEL_NAME = "model_name"
     DO_LOWER_CASE = "do_lower_case"
 
-    defaults = {
-        MODEL_NAME: 'bert-base-uncased',
-        DO_LOWER_CASE: True
-    }
+    defaults = {MODEL_NAME: "bert-base-uncased", DO_LOWER_CASE: True}
 
     def __init__(self, element_config: Optional[Dict[Text, Any]], tokenizer=None):
         super(HFTokenizer, self).__init__(element_config)
@@ -50,9 +46,7 @@ class HFTokenizer(Tokenizer):
         return self._create_tokens(training_data.training_examples)
 
     def _add_tokens_to_data(
-            self,
-            training_examples: List[RuthData],
-            tokens: List[Text]
+        self, training_examples: List[RuthData], tokens: List[Text]
     ):
         for message, token in zip(training_examples, tokens):
             message.set(TOKENS, Tokens(token, self.element_config[ELEMENT_UNIQUE_NAME]))
@@ -71,4 +65,4 @@ class HFTokenizer(Tokenizer):
             return_attention_mask=True,
             return_tensors="pt",
         )
-
+        print(parser_token)

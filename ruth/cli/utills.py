@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Text
 
 import yaml
-
 from ruth.nlu.model import ElementBuilder
 
 
@@ -18,7 +17,9 @@ def load_json_data(path: Path) -> Dict[Text, Any]:
 
 
 def build_pipeline_from_metadata(
-    metadata: Dict[Text, Any], model_dir: Path, element_builder: ElementBuilder = None,
+    metadata: Dict[Text, Any],
+    model_dir: Path,
+    element_builder: ElementBuilder = None,
 ):
     pipeline_element = []
     if not element_builder:

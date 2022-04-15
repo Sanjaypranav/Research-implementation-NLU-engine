@@ -1,4 +1,4 @@
-from typing import Dict, Text, Any
+from typing import Any, Dict, Text
 
 from ruth.nlu.tokenizer.tokenizer import Tokenizer
 

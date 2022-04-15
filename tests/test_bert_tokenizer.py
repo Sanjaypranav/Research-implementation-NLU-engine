@@ -2,9 +2,8 @@ import json
 from typing import Any, Dict, Text
 
 from ruth.constants import PATH
-from ruth.nlu.tokenizer.bert_tokenizer import TokenizerBert
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.nlu import TokenizerBert
+from ruth.shared import RuthData, TrainData
 from transformers import BertTokenizer
 
 

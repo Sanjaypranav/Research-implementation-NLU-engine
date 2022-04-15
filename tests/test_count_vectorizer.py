@@ -2,11 +2,8 @@ import json
 from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
-from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
-    CountVectorFeaturizer,
-)
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.nlu.featurizers import CountVectorFeaturizer
+from ruth.shared import RuthData, TrainData
 
 from tests.conftest import FEATURE
 

@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Text, Any
+from typing import Any, Dict, Optional, Text
 
 
 class RuthModelConfig:

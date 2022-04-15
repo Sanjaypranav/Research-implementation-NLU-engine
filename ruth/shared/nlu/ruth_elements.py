@@ -56,4 +56,3 @@ class Element(metaclass=ElementMetaClass):
 #             logger.error(f"Given {name} element is not an registered element. We won't support custom element now.")
 #         else:
 #             return registered_classes[name].build(element_config)
-

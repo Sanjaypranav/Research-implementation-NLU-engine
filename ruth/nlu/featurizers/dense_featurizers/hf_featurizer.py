@@ -1,7 +1,6 @@
 import logging
-from typing import List, Type, Dict, Text, Any, Optional
+from typing import Any, Dict, List, Optional, Text, Type
 
-from ruth.nlu.config import RuthModelConfig
 from ruth.nlu.featurizers.dense_featurizers.dense_featurizer import DenseFeaturizer
 from ruth.nlu.tokenizer.tokenizer import Tokenizer
 
@@ -36,4 +35,3 @@ class HFFeaturizer(DenseFeaturizer):
             return
         self._load_metadata()
         self._load_model(skip_model_load)
-
