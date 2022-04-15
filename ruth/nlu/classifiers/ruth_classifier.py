@@ -1,6 +1,5 @@
 from typing import Any, Dict, Text
 
-from ruth.nlu.elements import Element
 from ruth.shared.nlu.ruth_elements import Element
 
 
