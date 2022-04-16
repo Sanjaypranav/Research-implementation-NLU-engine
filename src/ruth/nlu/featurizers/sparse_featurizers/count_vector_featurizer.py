@@ -1,6 +1,8 @@
 import logging
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
 
+from rich.console import Console
 from ruth.constants import TEXT
 from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
@@ -9,10 +11,13 @@ from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeat
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.shared.utils import json_pickle, json_unpickle
 from scipy import sparse
 from sklearn.feature_extraction.text import CountVectorizer
 
 logger = logging.getLogger(__name__)
+
+console = Console()
 
 
 class CountVectorFeaturizer(SparseFeaturizer):
@@ -55,15 +60,18 @@ class CountVectorFeaturizer(SparseFeaturizer):
 
     def __init__(
         self,
-        element_config: Optional[Dict[Text, Any]] = None,
+        element_config: Optional[Dict[Text, Any]],
         vectorizer: Optional["CountVectorizer"] = None,
     ):
         super(CountVectorFeaturizer, self).__init__(element_config)
-        self.vectorizer = vectorizer or {}
+        self.vectorizer = vectorizer
         self._load_params()
         self._verify_analyzer()
 
-    def _build_vectorizer(self, parameters: Dict[Text, Any]) -> CountVectorizer:
+    @staticmethod
+    def _build_vectorizer(
+        parameters: Dict[Text, Any], vacabulary=None
+    ) -> CountVectorizer:
         return CountVectorizer(
             analyzer=parameters["analyzer"],
             stop_words=parameters["stop_words"],
@@ -71,6 +79,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
             max_df=parameters["max_df"],
             ngram_range=(parameters["min_ngram"], parameters["max_ngram"]),
             lowercase=parameters["lowercase"],
+            vocabulary=vacabulary,
         )
 
     def _check_attribute_vocabulary(self) -> bool:
@@ -122,3 +131,35 @@ class CountVectorFeaturizer(SparseFeaturizer):
         message.add_features(
             Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
         )
+
+    def get_vocablary_from_vectorizer(self):
+        if self.vectorizer.vocabulary_:
+            return self.vectorizer.vocabulary_
+        else:
+            raise "CountVectorizer not got trained. Please check the training data and retrain the model"
+
+    def persist(self, file_name: Text, model_dir: Text):
+        file_name = file_name + ".pkl"
+        if self.vectorizer:
+            vocab = self.vectorizer.vocabulary_
+
+            featurizer_path = Path(model_dir) / file_name
+            json_pickle(featurizer_path, vocab)
+
+        return {"file_name": file_name}
+
+    @classmethod
+    def load(
+        cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any
+    ) -> "CountVectorFeaturizer":
+        file_name = meta.get("file_name")
+        featurizer_file = model_dir / file_name
+
+        if not featurizer_file.exists():
+            return cls(meta)
+
+        vocabulary = json_unpickle(featurizer_file)
+
+        vectorizers = cls._build_vectorizer(parameters=meta, vacabulary=vocabulary)
+
+        return cls(meta, vectorizers)

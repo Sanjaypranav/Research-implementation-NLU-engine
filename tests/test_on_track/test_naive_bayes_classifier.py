@@ -26,7 +26,7 @@ def classifier_data(example_classifier_data: Path) -> TrainData:
 def test_naive_bayes_classifier(
     classifier_data: TrainData,
 ):
-    ftr = CountVectorFeaturizer()
+    ftr = CountVectorFeaturizer({})
     ftr.train(classifier_data)
 
     classifier = NaiveBayesClassifier({})
