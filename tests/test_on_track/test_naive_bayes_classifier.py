@@ -3,9 +3,12 @@ from pathlib import Path
 
 import pytest
 from ruth.constants import INTENT, TEXT
-from ruth.nlu import NaiveBayesClassifier
-from ruth.nlu.featurizers import CountVectorFeaturizer
-from ruth.shared import RuthData, TrainData
+from ruth.nlu.classifiers.naive_bayes_classifier import NaiveBayesClassifier
+from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
+    CountVectorFeaturizer,
+)
+from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 @pytest.fixture
