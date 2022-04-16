@@ -5,10 +5,9 @@ from ruth.constants import PATH, TEXT
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
 )
-from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.ruth_data import RuthData
+from ruth.shared.nlu.ruth_elements import RuthData, TrainData
 
-from tests.conftest import FEATURE
+from tests.test_on_track.conftest import FEATURE
 
 
 def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
@@ -19,7 +18,7 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
         messages.append(RuthData(data=data))
     training_data = TrainData(messages)
 
-    featurizer = CountVectorFeaturizer()
+    featurizer = CountVectorFeaturizer({})
     featurizer.train(training_data)
     test_message = RuthData.build(text=count_featurizer_example[TEXT])
     featurizer.parse(test_message)

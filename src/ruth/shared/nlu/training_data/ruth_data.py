@@ -46,3 +46,6 @@ class RuthData:
     def get_sparse_features(self, featurizers: List[Text] = None) -> Features:
         combined_features = self._combine_features(self.features, featurizers)
         return combined_features
+
+    def as_dict(self) -> Dict:
+        return {key: value for key, value in self.data.items() if value is not None}
