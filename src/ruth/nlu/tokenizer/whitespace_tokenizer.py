@@ -1,8 +1,8 @@
-from typing import Text
+from typing import Text, List
 
 import regex
 
-from ruth.nlu.tokenizer.tokenizer import Tokenizer
+from ruth.nlu.tokenizer.tokenizer import Tokenizer, Token
 
 
 class WhiteSpaceTokenizer(Tokenizer):
@@ -13,7 +13,7 @@ class WhiteSpaceTokenizer(Tokenizer):
     def process(self):
         pass
 
-    def tokenize(self, text: Text):
+    def tokenize(self, text: Text) -> List[Token]:
         words = regex.sub(
             # there is a space or an end of a string after it
             r"(www\.[^\s]+)|(https?://[^\s]+)|(pic\.twitter\.com/[^\s]+)"

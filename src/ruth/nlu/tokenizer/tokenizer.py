@@ -1,8 +1,9 @@
 from typing import Text, Dict, Any, List
 
-from ruth.constants import TEXT
+from ruth.constants import TEXT, TOKENS
 from ruth.nlu.elements import Element
 from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 class Token:
@@ -21,8 +22,11 @@ class Tokenizer(Element):
         for data in training_data.training_examples:
             text = data.get(TEXT)
             tokens = self.tokenize(text)
+            data.set(TOKENS, tokens)
 
-
+    def parse(self, message: RuthData):
+        tokens = self.tokenize(message.get(TEXT))
+        message.set(TOKENS, tokens)
     @staticmethod
     def _convert_words_to_tokens(words: List[Text], text: Text) -> List[Token]:
         running_offset = 0

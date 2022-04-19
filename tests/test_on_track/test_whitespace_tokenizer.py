@@ -21,5 +21,5 @@ def test_with_ham_spam_with_empty_training_data(whitespace_example: Dict[Text, A
 
     assert (
             whitespace_example[TOKENS]
-            == test_message.tokens
+            == test_message.get(TOKENS)
     )
