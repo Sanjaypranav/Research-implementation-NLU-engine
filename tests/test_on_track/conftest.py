@@ -26,7 +26,9 @@ def count_featurizer_example() -> Dict[Text, Any]:
 def whitespace_example() -> Dict[Text, Any]:
     return {
         TEXT: "I am a developer",
-        TOKENS: ['I', 'am', 'a', 'developer']
+        TOKENS: ['I', 'am', 'a', 'developer'],
+        PATH: Path("data/test/ruth_example_data/training_example.json")
+
     }
 
 
