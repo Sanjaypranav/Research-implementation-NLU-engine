@@ -3,6 +3,7 @@ from typing import Any, Dict, Text
 
 import pytest
 from ruth.constants import PATH, TEXT, TOKENS
+from ruth.nlu.tokenizer.tokenizer import Token
 
 FEATURE = "feature"
 TOKEN = "token"
@@ -26,9 +27,13 @@ def count_featurizer_example() -> Dict[Text, Any]:
 def whitespace_example() -> Dict[Text, Any]:
     return {
         TEXT: "I am a developer",
-        TOKENS: ['I', 'am', 'a', 'developer'],
-        PATH: Path("data/test/ruth_example_data/training_example.json")
-
+        TOKENS: [
+            Token("I", start=0, end=1),
+            Token("am", start=2, end=4),
+            Token("a", start=5, end=6),
+            Token("developer", start=7, end=16),
+        ],
+        PATH: Path("data/test/ruth_example_data/training_example.json"),
     }
 
 
