@@ -1,17 +1,18 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Text, Tuple
+from typing import Any, Dict, Text, Tuple
 
 import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
+from scipy import sparse
+from sklearn.preprocessing import LabelEncoder
+
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
-from scipy import sparse
-from sklearn.preprocessing import LabelEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -20,18 +21,15 @@ class NaiveBayesClassifier(IntentClassifier):
     defaults = {"priors": None, "var_smoothing": 1e-9}
 
     def __init__(
-        self,
-        element_config: Dict[Text, Any],
-        le: LabelEncoder = None,
-        model: "sklearn.naive_bayes.GaussianNB" = None,
+            self,
+            element_config: Dict[Text, Any],
+            le: LabelEncoder = None,
+            model: "sklearn.naive_bayes.GaussianNB" = None,
     ):
         super(NaiveBayesClassifier, self).__init__(element_config=element_config)
 
         self.le = le or LabelEncoder()
         self.model = model
-
-    def encode_the_str_to_int(self, labels: List[Text]) -> ndarray:
-        return self.le.fit_transform(labels)
 
     def _create_classifier(self) -> "sklearn.naive_bayes.GaussianNB":
         from sklearn.naive_bayes import GaussianNB
@@ -77,7 +75,7 @@ class NaiveBayesClassifier(IntentClassifier):
         feature = message.get_sparse_features()
         if feature is not None:
             return feature.feature[0]
-        raise ValueError("There is no sentence. Not able to train in naive bayes")
+        raise ValueError("There is no sentence. Not able to train NaiveBayesClassifier")
 
     def parse(self, message: RuthData):
         x = self.get_features(message).toarray()
@@ -88,8 +86,8 @@ class NaiveBayesClassifier(IntentClassifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                :LABEL_RANKING_LIMIT
-            ]
+                      :LABEL_RANKING_LIMIT
+                      ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking
