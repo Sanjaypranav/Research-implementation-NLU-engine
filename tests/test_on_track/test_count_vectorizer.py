@@ -2,7 +2,7 @@ import json
 from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
-from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
+from ruth.nlu import (
     CountVectorFeaturizer,
 )
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
