@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Text
 
 import pytest
-from ruth.shared.nlu.training_data import TrainData
+from ruth.shared.nlu.training_data.collections import TrainData
+
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 

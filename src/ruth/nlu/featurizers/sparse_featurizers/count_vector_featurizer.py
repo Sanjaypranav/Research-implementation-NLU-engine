@@ -4,10 +4,9 @@ from typing import Any, Dict, List, Optional, Text
 
 from rich.console import Console
 from ruth.constants import TEXT
-from ruth.nlu.featurizers import (
-    CLASS_FEATURIZER_UNIQUE_NAME,
-)
-from ruth.nlu.featurizers import SparseFeaturizer
+from ruth.nlu.featurizers.sparse_featurizers.constants import CLASS_FEATURIZER_UNIQUE_NAME
+from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
+
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
