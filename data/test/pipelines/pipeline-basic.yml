@@ -1,4 +1,5 @@
 task:
 pipeline:
   - name: CountVectorFeaturizer
+    lowercase : False
   - name: NaiveBayesClassifier
