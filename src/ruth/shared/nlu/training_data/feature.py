@@ -3,7 +3,7 @@ from typing import Text
 from scipy import sparse
 
 
-class Features:
+class Feature:
     def __init__(self, feature: sparse.spmatrix, origin: Text):
         self.feature = feature
         self.origin = origin
@@ -14,7 +14,7 @@ class Features:
     def is_dense(self):
         return not self.is_sparse()
 
-    def _combine_sparse_features(self, additional_features: "Features") -> None:
+    def _combine_sparse_features(self, additional_features: "Feature") -> None:
         from scipy.sparse import hstack
 
         if self.feature.shape[0] != additional_features.feature.shape[0]:
@@ -26,7 +26,7 @@ class Features:
 
         self.features = hstack([self.feature, additional_features.feature])
 
-    def combine_with_features(self, additional_features: "Features") -> None:
+    def combine_with_features(self, additional_features: "Feature") -> None:
         if additional_features is None:
             return
 
