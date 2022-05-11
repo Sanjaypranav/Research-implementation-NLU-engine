@@ -3,9 +3,10 @@ from pathlib import Path
 from typing import Dict, Text, Any, List, Tuple
 
 import sklearn
-from neuralspace.constants import INTENT, INTENT_RANKING
 from numpy import reshape, ndarray, fliplr, argsort
 from rich.console import Console
+from ruth.constants import INTENT, INTENT_RANKING
+
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 
 from ruth.shared.utils import json_pickle, json_unpickle
