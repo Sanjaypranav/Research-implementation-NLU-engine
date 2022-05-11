@@ -26,9 +26,8 @@ class NaiveBayesClassifier(IntentClassifier):
             le: LabelEncoder = None,
             model: "sklearn.naive_bayes.GaussianNB" = None,
     ):
-        super(NaiveBayesClassifier, self).__init__(element_config=element_config)
+        super(NaiveBayesClassifier, self).__init__(element_config=element_config, le=le)
 
-        self.le = le or LabelEncoder()
         self.model = model
 
     def _create_classifier(self) -> "sklearn.naive_bayes.GaussianNB":

@@ -3,15 +3,17 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
 
 from rich.console import Console
+from ruth.shared.nlu.training_data.feature import Feature
+from scipy import sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 from ruth.constants import TEXT
 from ruth.nlu.featurizers.sparse_featurizers.constants import CLASS_FEATURIZER_UNIQUE_NAME
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
 from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.features import Features
 from ruth.shared.nlu.training_data.ruth_data import RuthData
-from ruth.shared.utils import json_pickle, json_unpickle
-from scipy import sparse
-from sklearn.feature_extraction.text import TfidfVectorizer
+from ruth.shared.utils import json_pickle
+
 logger = logging.getLogger(__name__)
 
 console = Console()
@@ -104,7 +106,7 @@ class TfidfVectorFeaturizer(SparseFeaturizer):
 
     def parse(self, message: RuthData):
         feature = self.vectorizer.transform([message.get(TEXT)])
-        message.add_features(Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME]))
+        message.add_features(Feature(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME]))
 
     def _check_attribute_vocabulary(self) -> bool:
         """Checks if trained vocabulary exists in attribute's count vectorizer."""
@@ -131,7 +133,7 @@ class TfidfVectorFeaturizer(SparseFeaturizer):
         for message, feature in zip(training_examples, features):
             message.add_features(
 
-                Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+                Feature(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
             )
 
     def persist(self, file_name: Text, model_dir: Text):
