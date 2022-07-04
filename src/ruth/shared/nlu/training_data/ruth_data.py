@@ -19,7 +19,7 @@ class RuthData:
         return cls(data={INTENT: intent, TEXT: text})
 
     def add_features(self, feature: Feature) -> None:
-        if feature is not None:
+        if feature:
             self.features.append(feature)
 
     def set(self, key: Text, value: Any):
