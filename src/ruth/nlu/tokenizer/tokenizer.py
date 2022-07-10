@@ -27,6 +27,7 @@ class Tokenizer(Element):
     def parse(self, message: RuthData):
         tokens = self.tokenize(message.get(TEXT))
         message.set(TOKENS, tokens)
+
     @staticmethod
     def _convert_words_to_tokens(words: List[Text], text: Text) -> List[Token]:
         running_offset = 0
