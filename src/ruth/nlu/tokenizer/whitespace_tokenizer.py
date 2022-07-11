@@ -29,7 +29,3 @@ class WhiteSpaceTokenizer(Tokenizer):
         ).split()
         tokens = self._convert_words_to_tokens(words, text)
         return tokens
-
-
-a = WhiteSpaceTokenizer()
-a.train(TrainData())
