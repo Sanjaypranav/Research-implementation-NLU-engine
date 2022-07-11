@@ -61,9 +61,7 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        return (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
+        return torch.device("cpu")
 
     @property
     def get_params(self):
@@ -159,6 +157,7 @@ class HFClassifier(IntentClassifier):
         probabilities = probabilities.to(torch.device("cpu"))
         probabilities = probabilities.detach().numpy()
         return probabilities
+
 
     def parse(self, message: RuthData):
         input_ids = [message.get(INPUT_IDS)]
