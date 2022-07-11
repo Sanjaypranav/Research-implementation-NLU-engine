@@ -1,4 +1,4 @@
-from typing import Text, Optional
+from typing import Optional, Text
 
 from scipy import sparse
 

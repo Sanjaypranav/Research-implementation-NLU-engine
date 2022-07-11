@@ -3,7 +3,6 @@ from pathlib import Path
 from ruth.constants import TEXT
 from ruth.nlu.classifiers.hf_classifier import HFClassifier
 from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
-from ruth.shared.constants import INPUT_IDS, ATTENTION_MASKS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 

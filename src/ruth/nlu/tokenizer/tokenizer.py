@@ -1,4 +1,4 @@
-from typing import Text, Dict, Any, List
+from typing import Any, Dict, List, Text
 
 from ruth.constants import TEXT, TOKENS
 from ruth.nlu.elements import Element
@@ -42,4 +42,6 @@ class Tokenizer(Element):
         return tokens
 
     def tokenize(self, text: Text):
-        raise NotImplementedError(f"failed to implement the tokenize function in {self.name}")
+        raise NotImplementedError(
+            f"failed to implement the tokenize function in {self.name}"
+        )

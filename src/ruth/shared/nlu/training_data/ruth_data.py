@@ -29,9 +29,7 @@ class RuthData:
         return self.data.get(key, default)
 
     @staticmethod
-    def _combine_features(
-        features: List[Feature], featurizers: List[Text]
-    ) -> Feature:
+    def _combine_features(features: List[Feature], featurizers: List[Text]) -> Feature:
 
         combined_features = None
 
