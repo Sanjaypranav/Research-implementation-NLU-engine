@@ -2,7 +2,6 @@ from typing import List, Text
 
 import regex
 from ruth.nlu.tokenizer.tokenizer import Token, Tokenizer
-from ruth.shared.nlu.training_data.collections import TrainData
 
 
 class WhiteSpaceTokenizer(Tokenizer):

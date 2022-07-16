@@ -1,4 +1,5 @@
 import logging
+from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple
 
@@ -36,9 +37,9 @@ class HFClassifier(IntentClassifier):
         self.model = model
         super().__init__(element_config, le)
 
-    def _build_model(self):
+    def _build_model(self, label_count):
         return AutoModelForSequenceClassification.from_pretrained(
-            self.element_config[MODEL_NAME]
+            self.element_config[MODEL_NAME], num_labels=label_count
         )
 
     @staticmethod
@@ -87,12 +88,14 @@ class HFClassifier(IntentClassifier):
                 for message in training_data.intent_examples
             ],
         }
+
         y = self.encode_the_str_to_int(intents)
+        label_count = len(Counter(y).keys())
 
         loaded_data = HFDatasetLoader(X, y)
         batched_data = DataLoader(loaded_data, batch_size=16, shuffle=True)
 
-        self.model = self._build_model()
+        self.model = self._build_model(label_count)
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
@@ -115,12 +118,14 @@ class HFClassifier(IntentClassifier):
                 loss.backward()
                 optimizer.step()
 
+        print("training_completed")
+
     def persist(self, file_name: Text, model_dir: Path):
         classifier_file_name = file_name + "_classifier"
         encoder_file_name = file_name + "_encoder.pkl"
 
-        classifier_path = model_dir + "/" + classifier_file_name
-        encoder_path = model_dir + "/" + encoder_file_name
+        classifier_path = str(model_dir) + "/" + classifier_file_name
+        encoder_path = str(model_dir) + "/" + encoder_file_name
 
         if self.model and self.le:
             model_to_save = (
@@ -157,7 +162,6 @@ class HFClassifier(IntentClassifier):
         probabilities = probabilities.to(torch.device("cpu"))
         probabilities = probabilities.detach().numpy()
         return probabilities
-
 
     def parse(self, message: RuthData):
         input_ids = [message.get(INPUT_IDS)]

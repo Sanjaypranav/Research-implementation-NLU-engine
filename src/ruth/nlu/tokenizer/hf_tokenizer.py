@@ -60,11 +60,12 @@ class HFTokenizer(Tokenizer):
         self._add_tokens_to_data(
             training_data.training_examples, input_ids, attention_masks
         )
+        print("tokenizer_train completed")
 
     def persist(self, file_name: Text, model_dir: Path):
         tokenizer_file_name = file_name + "_tokenizer"
 
-        tokenizer_path = model_dir + "/" + tokenizer_file_name
+        tokenizer_path = str(model_dir) + "/" + tokenizer_file_name
 
         if self.tokenizer:
             self.tokenizer.save_pretrained(tokenizer_path)
@@ -73,7 +74,7 @@ class HFTokenizer(Tokenizer):
 
     @classmethod
     def load(cls, meta: Dict[Text, Any], model_dir: Path, **kwargs):
-        tokenizer_file_name = model_dir / meta["classifier"]
+        tokenizer_file_name = model_dir / meta["tokenizer"]
 
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_file_name)
 
