@@ -31,6 +31,7 @@ class HFTokenizer(Tokenizer):
             add_special_tokens=True,
             max_length=MAX_LENGTH_FOR_PADDING,
             padding=True,
+            truncation=True,
             return_attention_mask=True,
         )
 
@@ -86,6 +87,7 @@ class HFTokenizer(Tokenizer):
             add_special_tokens=True,
             max_length=MAX_LENGTH_FOR_PADDING,
             padding=True,
+            truncation=True,
             return_attention_mask=True,
         )
         message.set(INPUT_IDS, parser_token["input_ids"])

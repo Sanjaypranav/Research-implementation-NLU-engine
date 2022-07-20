@@ -20,6 +20,7 @@ from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModelForSequenceClassification
 
+torch.cuda.empty_cache()
 logger = logging.getLogger(__name__)
 
 console = Console()
@@ -62,7 +63,9 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        return torch.device("cpu")
+        return (
+            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        )
 
     @property
     def get_params(self):
@@ -99,7 +102,7 @@ class HFClassifier(IntentClassifier):
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-
+        print("device:", device)
         self.model.to(device)
 
         params = self.get_params
