@@ -92,5 +92,3 @@ class HFTokenizer(Tokenizer):
         )
         message.set(INPUT_IDS, parser_token["input_ids"])
         message.set(ATTENTION_MASKS, parser_token["attention_mask"])
-
-        print(message.get(INPUT_IDS))

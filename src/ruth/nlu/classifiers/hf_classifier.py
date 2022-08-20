@@ -63,9 +63,11 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        return (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
+        # return (
+        #     torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        # )
+
+        return torch.device("cpu")
 
     @property
     def get_params(self):
@@ -96,7 +98,7 @@ class HFClassifier(IntentClassifier):
         label_count = len(Counter(y).keys())
 
         loaded_data = HFDatasetLoader(X, y)
-        batched_data = DataLoader(loaded_data, batch_size=16, shuffle=True)
+        batched_data = DataLoader(loaded_data, batch_size=1, shuffle=True)
 
         self.model = self._build_model(label_count)
 
@@ -187,9 +189,6 @@ class HFClassifier(IntentClassifier):
             intent_rankings = []
         message.set(INTENT, intent)
         message.set(INTENT_RANKING, intent_rankings)
-
-        print(intent)
-        print(intent_rankings)
 
 
 class HFDatasetLoader(Dataset):
