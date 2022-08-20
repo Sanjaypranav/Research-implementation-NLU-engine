@@ -1,12 +1,10 @@
-from typing import Text, List
+from typing import List, Text
 
 import regex
-
-from ruth.nlu.tokenizer.tokenizer import Tokenizer, Token
+from ruth.nlu.tokenizer.tokenizer import Token, Tokenizer
 
 
 class WhiteSpaceTokenizer(Tokenizer):
-
     def __init__(self, element_config):
         super().__init__(element_config)
 
@@ -25,6 +23,8 @@ class WhiteSpaceTokenizer(Tokenizer):
             # e.g. 10'000.00 or blabla@gmail.com
             # and not url characters
             r"(?<=[^0-9\s])[^\w._~:/?#\[\]()@!$&*+,;=-]+(?=[^0-9\s])",
-            " ", text).split()
+            " ",
+            text,
+        ).split()
         tokens = self._convert_words_to_tokens(words, text)
         return tokens

@@ -1,7 +1,7 @@
 task:
 pipeline:
   - name: HFTokenizer
-    model_name: bert-base-uncased
+    model_name: xlm-roberta-base
   - name: HFClassifier
-    model_name: bert-base-uncased
+    model_name: xlm-roberta-base
 

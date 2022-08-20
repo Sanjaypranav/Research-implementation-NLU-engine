@@ -1,45 +1,47 @@
 import logging
+from collections import Counter
 from pathlib import Path
-from typing import Dict, Text, Any, List, Tuple
+from typing import Any, Dict, List, Text, Tuple
 
 import torch
 from numpy import argsort, fliplr
 from rich.console import Console
-from sklearn.preprocessing import LabelEncoder
-from torch import nn
-from torch.optim import AdamW
-from torch.utils.data import Dataset, DataLoader
-from transformers import AutoModelForSequenceClassification
-
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.constants import MODEL_NAME, EPOCHS
+from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
-from ruth.shared.constants import INPUT_IDS, ATTENTION_MASKS
+from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
+from sklearn.preprocessing import LabelEncoder
+from torch import nn
+from torch.optim import AdamW
+from torch.utils.data import DataLoader, Dataset
+from transformers import AutoModelForSequenceClassification
 
+torch.cuda.empty_cache()
 logger = logging.getLogger(__name__)
 
 console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {
-        "epochs": 2,
-        MODEL_NAME: "bert-base-uncased"
-    }
+    defaults = {"epochs": 2, MODEL_NAME: "bert-base-uncased"}
 
-    def __init__(self, element_config: Dict[Text, Any],
-                 le: LabelEncoder = None,
-                 model: AutoModelForSequenceClassification = None
-                 ):
+    def __init__(
+        self,
+        element_config: Dict[Text, Any],
+        le: LabelEncoder = None,
+        model: AutoModelForSequenceClassification = None,
+    ):
         self.model = model
         super().__init__(element_config, le)
 
-    def _build_model(self):
-        return AutoModelForSequenceClassification.from_pretrained(self.element_config[MODEL_NAME])
+    def _build_model(self, label_count):
+        return AutoModelForSequenceClassification.from_pretrained(
+            self.element_config[MODEL_NAME], num_labels=label_count
+        )
 
     @staticmethod
     def get_input_ids(message: RuthData) -> Dict[Text, List[int]]:
@@ -61,16 +63,20 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        return torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        # return (
+        #     torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        # )
+
+        return torch.device("cpu")
 
     @property
     def get_params(self):
-        return {
-            "epochs": self.element_config["epochs"]
-        }
+        return {"epochs": self.element_config["epochs"]}
 
     def train(self, training_data: TrainData):
-        intents: List[Text] = [message.get(INTENT) for message in training_data.intent_examples]
+        intents: List[Text] = [
+            message.get(INTENT) for message in training_data.intent_examples
+        ]
         if len(set(intents)) < 2:
             logger.warning(
                 "There are no enough intent. "
@@ -79,20 +85,26 @@ class HFClassifier(IntentClassifier):
             return
 
         X = {
-            'input_ids': [self.get_input_ids(message) for message in training_data.intent_examples],
-            'attention_masks': [self.get_attention_masks(message) for message in training_data.intent_examples]
-
+            "input_ids": [
+                self.get_input_ids(message) for message in training_data.intent_examples
+            ],
+            "attention_masks": [
+                self.get_attention_masks(message)
+                for message in training_data.intent_examples
+            ],
         }
+
         y = self.encode_the_str_to_int(intents)
+        label_count = len(Counter(y).keys())
 
         loaded_data = HFDatasetLoader(X, y)
-        batched_data = DataLoader(loaded_data, batch_size=16, shuffle=True)
+        batched_data = DataLoader(loaded_data, batch_size=1, shuffle=True)
 
-        self.model = self._build_model()
+        self.model = self._build_model(label_count)
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-
+        print("device:", device)
         self.model.to(device)
 
         params = self.get_params
@@ -101,23 +113,29 @@ class HFClassifier(IntentClassifier):
         for epoch in range(params[EPOCHS]):
             for batch in batched_data:
                 optimizer.zero_grad()
-                input_ids = batch['input_ids'].to(device)
-                attention_masks = batch['attention_masks'].to(device)
-                labels = batch['labels'].to(device)
-                outputs = self.model(input_ids, attention_mask=attention_masks, labels=labels)
+                input_ids = batch["input_ids"].to(device)
+                attention_masks = batch["attention_masks"].to(device)
+                labels = batch["labels"].to(device)
+                outputs = self.model(
+                    input_ids, attention_mask=attention_masks, labels=labels
+                )
                 loss = outputs[0]
                 loss.backward()
                 optimizer.step()
+
+        print("training_completed")
 
     def persist(self, file_name: Text, model_dir: Path):
         classifier_file_name = file_name + "_classifier"
         encoder_file_name = file_name + "_encoder.pkl"
 
-        classifier_path = model_dir + '/' + classifier_file_name
-        encoder_path = model_dir + '/' + encoder_file_name
+        classifier_path = str(model_dir) + "/" + classifier_file_name
+        encoder_path = str(model_dir) + "/" + encoder_file_name
 
         if self.model and self.le:
-            model_to_save = self.model.module if hasattr(self.model, 'module') else self.model
+            model_to_save = (
+                self.model.module if hasattr(self.model, "module") else self.model
+            )
             model_to_save.save_pretrained(classifier_path)
             json_pickle(encoder_path, self.le)
 
@@ -128,7 +146,9 @@ class HFClassifier(IntentClassifier):
         classifier_file_name = model_dir / meta["classifier"]
         encoder_file_name = model_dir / meta["encoder"]
 
-        classifier = AutoModelForSequenceClassification.from_pretrained(classifier_file_name)
+        classifier = AutoModelForSequenceClassification.from_pretrained(
+            classifier_file_name
+        )
         le = json_unpickle(Path(encoder_file_name))
 
         return cls(meta, model=classifier, le=le)
@@ -140,7 +160,9 @@ class HFClassifier(IntentClassifier):
 
     def predict_probabilities(self, input_ids, attention_masks):
         self.model.eval()
-        probabilities = self.model(torch.tensor(input_ids), attention_mask=torch.tensor(attention_masks))[0]
+        probabilities = self.model(
+            torch.tensor(input_ids), attention_mask=torch.tensor(attention_masks)
+        )[0]
         probabilities = nn.functional.softmax(probabilities, dim=-1)
         probabilities = probabilities.to(torch.device("cpu"))
         probabilities = probabilities.detach().numpy()
@@ -156,8 +178,8 @@ class HFClassifier(IntentClassifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                      :LABEL_RANKING_LIMIT
-                      ]
+                :LABEL_RANKING_LIMIT
+            ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking
@@ -167,9 +189,6 @@ class HFClassifier(IntentClassifier):
             intent_rankings = []
         message.set(INTENT, intent)
         message.set(INTENT_RANKING, intent_rankings)
-
-        print(intent)
-        print(intent_rankings)
 
 
 class HFDatasetLoader(Dataset):
@@ -182,5 +201,5 @@ class HFDatasetLoader(Dataset):
 
     def __getitem__(self, idx):
         item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-        item['labels'] = torch.tensor(self.labels[idx])
+        item["labels"] = torch.tensor(self.labels[idx])
         return item
