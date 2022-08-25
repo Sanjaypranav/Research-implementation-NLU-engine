@@ -7,7 +7,7 @@ from ruth.nlu.featurizers.tfidf_featurizers.tfidf_vector_featurizer import (
 )
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
 
-from tests.test_on_track.conftest import FEATURE
+from tests.conftest import FEATURE
 
 
 def test_tfidf_vectorizer(tfidf_featurizer_example: Dict[Text, Any]):
