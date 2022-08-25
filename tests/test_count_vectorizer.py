@@ -1,7 +1,7 @@
 import json
 from typing import Any, Dict, Text
 
-from nlu.registry import registered_classes
+from ruth.nlu.registry import registered_classes
 
 from ruth.constants import PATH, TEXT
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import CountVectorFeaturizer
