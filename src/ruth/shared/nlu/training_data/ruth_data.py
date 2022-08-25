@@ -2,14 +2,14 @@ import copy
 from typing import Any, Dict, List, Optional, Text
 
 from ruth.constants import INTENT, TEXT
-from ruth.shared.nlu.training_data.features import Features
+from ruth.shared.nlu.training_data.feature import Feature
 
 
 class RuthData:
     def __init__(
         self,
         data: Dict[Text, Any] = None,
-        features: Optional[List[Features]] = None,
+        features: Optional[List[Feature]] = None,
     ):
         self.features = features or []
         self.data = data or {}
@@ -30,8 +30,8 @@ class RuthData:
 
     @staticmethod
     def _combine_features(
-        features: List[Features], featurizers: List[Text]
-    ) -> Features:
+        features: List[Feature], featurizers: List[Text]
+    ) -> Feature:
 
         combined_features = None
 
@@ -43,7 +43,7 @@ class RuthData:
                 combined_features.combine_with_features(feature)
         return combined_features
 
-    def get_sparse_features(self, featurizers: List[Text] = None) -> Features:
+    def get_sparse_features(self, featurizers: List[Text] = None) -> Feature:
         combined_features = self._combine_features(self.features, featurizers)
         return combined_features
 

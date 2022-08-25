@@ -1,4 +1,6 @@
 task:
 pipeline:
   - name: CountVectorFeaturizer
+    analyzer: word
   - name: NaiveBayesClassifier
+

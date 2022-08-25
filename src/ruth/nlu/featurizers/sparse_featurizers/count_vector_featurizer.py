@@ -4,12 +4,11 @@ from typing import Any, Dict, List, Optional, Text
 
 from rich.console import Console
 from ruth.constants import TEXT
-from ruth.nlu.featurizers.sparse_featurizers.constants import (
-    CLASS_FEATURIZER_UNIQUE_NAME,
-)
+from ruth.nlu.featurizers.sparse_featurizers.constants import CLASS_FEATURIZER_UNIQUE_NAME
 from ruth.nlu.featurizers.sparse_featurizers.sparse_featurizer import SparseFeaturizer
+
 from ruth.shared.nlu.training_data.collections import TrainData
-from ruth.shared.nlu.training_data.features import Features
+from ruth.shared.nlu.training_data.feature import Feature
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
 from scipy import sparse
@@ -106,7 +105,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
     ):
         for message, feature in zip(training_examples, features):
             message.add_features(
-                Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+                Feature(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
             )
 
     def train(self, training_data: TrainData) -> CountVectorizer:
@@ -129,7 +128,7 @@ class CountVectorFeaturizer(SparseFeaturizer):
     def parse(self, message: RuthData):
         feature = self.vectorizer.transform([message.get(TEXT)])
         message.add_features(
-            Features(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
+            Feature(feature, self.element_config[CLASS_FEATURIZER_UNIQUE_NAME])
         )
 
     def get_vocablary_from_vectorizer(self):

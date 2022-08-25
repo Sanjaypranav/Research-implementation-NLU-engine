@@ -34,6 +34,7 @@ class ElementBuilder:
                 f"Given {name} element is not an registered element. We won't support custom element as of now."
             )
         else:
+
             return registered_classes[name].build(element_config)
 
     @staticmethod
