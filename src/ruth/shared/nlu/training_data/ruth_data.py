@@ -18,7 +18,7 @@ class RuthData:
     def build(cls, intent: Text = None, text: Text = None) -> "RuthData":
         return cls(data={INTENT: intent, TEXT: text})
 
-    def add_features(self, feature: Features) -> None:
+    def add_features(self, feature: Feature) -> None:
         if feature:
             self.features.append(feature)
 

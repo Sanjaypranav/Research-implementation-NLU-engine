@@ -6,7 +6,7 @@ from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import Coun
 
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
 
-from tests.test_on_track.conftest import FEATURE
+from tests.conftest import FEATURE
 
 
 def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
