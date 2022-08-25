@@ -82,7 +82,7 @@ N_THREADS=1
 # Run tests
 .PHONY: test
 test:
-	PYTHONPATH='./src/' poetry run pytest tests/test_on_track/ -s -n ${N_THREADS} -vv
+	PYTHONPATH='./src/' poetry run pytest tests/ -s -n ${N_THREADS} -vv
 
 # Run coverage
 .PHONY: coverage
