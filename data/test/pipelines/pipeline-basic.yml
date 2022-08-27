@@ -1,7 +1,4 @@
 task:
 pipeline:
-  - name: HFTokenizer
-    model_name: xlm-roberta-base
-  - name: HFClassifier
-    model_name: xlm-roberta-base
+  - name: WhiteSpaceTokenizer
 
