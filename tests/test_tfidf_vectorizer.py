@@ -3,7 +3,7 @@ from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
 from ruth.nlu.featurizers.tfidf_featurizers.tfidf_vector_featurizer import (
-    TfidfVectorFeaturizer
+    TfidfVectorFeaturizer,
 )
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
 

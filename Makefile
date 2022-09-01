@@ -1,6 +1,6 @@
 # Setup the environment
 
-SYSTEM_DEPENDENCIES := poetry==1.1.3 pre-commit coveralls flake8
+SYSTEM_DEPENDENCIES := poetry==1.1.9 pre-commit coveralls flake8
 
 .PHONY: check-py3
 check-py3:
