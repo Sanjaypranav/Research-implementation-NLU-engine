@@ -1,11 +1,11 @@
 import json
 from typing import Any, Dict, Text
 
-from ruth.nlu.registry import registered_classes
-
 from ruth.constants import PATH, TEXT
-from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import CountVectorFeaturizer
-
+from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
+    CountVectorFeaturizer,
+)
+from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
 
 from tests.conftest import FEATURE
@@ -29,7 +29,8 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
         == test_message.get_sparse_features().feature.toarray().tolist()
     )
 
-def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
+
+def test_count_vectorizer_by_registry(count_featurizer_example: Dict[Text, Any]):
     messages = []
     with open(count_featurizer_example[PATH], "r") as f:
         example_data = json.load(f)

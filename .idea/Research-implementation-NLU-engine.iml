@@ -6,10 +6,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (ruth)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.8 (Research-implementation-NLU-engine)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="TestRunnerService">
-    <option name="PROJECT_TEST_RUNNER" value="py.test" />
   </component>
 </module>

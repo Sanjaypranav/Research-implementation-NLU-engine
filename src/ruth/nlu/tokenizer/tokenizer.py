@@ -1,4 +1,4 @@
-from typing import Text, Dict, Any, List
+from typing import Any, Dict, List, Text
 
 from ruth.constants import TEXT, TOKENS
 from ruth.nlu.elements import Element
@@ -27,6 +27,7 @@ class Tokenizer(Element):
     def parse(self, message: RuthData):
         tokens = self.tokenize(message.get(TEXT))
         message.set(TOKENS, tokens)
+
     @staticmethod
     def _convert_words_to_tokens(words: List[Text], text: Text) -> List[Token]:
         running_offset = 0
@@ -41,4 +42,6 @@ class Tokenizer(Element):
         return tokens
 
     def tokenize(self, text: Text):
-        raise NotImplementedError(f"failed to implement the tokenize function in {self.name}")
+        raise NotImplementedError(
+            f"failed to implement the tokenize function in {self.name}"
+        )
