@@ -7,6 +7,7 @@ from ruth.nlu.classifiers.svm_classifier import SVMClassifier
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
 )
+from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
@@ -26,10 +27,10 @@ def classifier_data(example_classifier_data: Path) -> TrainData:
 def test_svm_classifier(
     classifier_data: TrainData,
 ):
-    ftr = CountVectorFeaturizer({})
+    ftr = registered_classes["CountVectorFeaturizer"].build({})
     ftr.train(classifier_data)
 
-    classifier = SVMClassifier({})
+    classifier = registered_classes["SVMClassifier"].build({})
     classifier.train(training_data=classifier_data)
     message = RuthData({TEXT: "hello"})
     ftr.parse(message)
