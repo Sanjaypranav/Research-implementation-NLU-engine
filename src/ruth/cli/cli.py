@@ -76,10 +76,10 @@ def train(data: Path, pipeline: Path):
     default="models",
     help="Directory where the model is stored",
 )
-def parse(text: Text, path: Text):
+def parse(text: Text, model_path: Text):
     models = [
         directory
-        for directory in Path(path).iterdir()
+        for directory in Path(model_path).iterdir()
         if directory.is_dir() and re.search("ruth", str(directory))
     ]
     models.sort()
@@ -105,11 +105,18 @@ def parse(text: Text, path: Text):
 @click.option(
     "-m",
     "--model_path",
-    type=click.STRING,
-    default="models",
+    type=click.Path(exists=True),
+    default=Path("models"),
     help="Directory where the model is stored",
 )
-def evaluate(data: Path, model_path: Text):
+@click.option(
+    "-o",
+    "--output_folder",
+    type=click.Path(),
+    default=Path("results"),
+    help="Directory where the results is stored",
+)
+def evaluate(data: Path, model_path: Text, output_folder: Text):
     models = [
         directory
         for directory in Path(model_path).iterdir()
@@ -153,7 +160,11 @@ def evaluate(data: Path, model_path: Text):
     plt.ylabel("Actual", fontsize=18)
     plt.title("Confusion Matrix", fontsize=18)
 
-    result_path = Path().absolute() / "results"
+    if output_folder:
+        result_path = Path(output_folder).absolute()
+    else:
+        result_path = Path().absolute() / output_folder
+    result_path.mkdir(exist_ok=True)
     directories = os.listdir(str(result_path))
     indexes = []
     model_name = str(latest_model).split("/")[-1]

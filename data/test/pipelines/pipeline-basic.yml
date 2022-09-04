@@ -1,4 +1,7 @@
 task:
 pipeline:
-  - name: WhiteSpaceTokenizer
+  - name: HFTokenizer
+    model_name: bert-base-uncased
+  - name: HFClassifier
+    model_name: bert-base-uncased
 

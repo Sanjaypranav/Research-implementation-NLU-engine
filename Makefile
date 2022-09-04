@@ -1,6 +1,6 @@
 # Setup the environment
 
-SYSTEM_DEPENDENCIES := poetry==1.1.3 pre-commit coveralls flake8
+SYSTEM_DEPENDENCIES := poetry==1.1.9 pre-commit coveralls flake8
 
 .PHONY: check-py3
 check-py3:
@@ -82,7 +82,7 @@ N_THREADS=1
 # Run tests
 .PHONY: test
 test:
-	PYTHONPATH='./src/' poetry run pytest tests/test_on_track/ -s -n ${N_THREADS} -vv
+	PYTHONPATH='./src/' poetry run pytest tests/ -s -n ${N_THREADS} -vv
 
 # Run coverage
 .PHONY: coverage
