@@ -2,7 +2,6 @@ from pathlib import Path
 
 from ruth.constants import TEXT
 from ruth.nlu.registry import registered_classes
-from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
 from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData

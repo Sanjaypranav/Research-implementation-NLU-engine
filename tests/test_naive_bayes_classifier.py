@@ -2,11 +2,8 @@ import json
 from pathlib import Path
 
 import pytest
+
 from ruth.constants import INTENT, TEXT
-from ruth.nlu.classifiers.naive_bayes_classifier import NaiveBayesClassifier
-from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
-    CountVectorFeaturizer,
-)
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData

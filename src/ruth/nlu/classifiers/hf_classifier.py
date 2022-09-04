@@ -19,9 +19,11 @@ from torch import nn
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
 from transformers import AutoModelForSequenceClassification
+from transformers import logging as transformer_logging
 
 torch.cuda.empty_cache()
 logger = logging.getLogger(__name__)
+transformer_logging.set_verbosity_error()
 
 console = Console()
 

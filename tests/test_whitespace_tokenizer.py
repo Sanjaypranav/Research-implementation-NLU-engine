@@ -3,7 +3,6 @@ from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT, TOKENS
 from ruth.nlu.registry import registered_classes
-from ruth.nlu.tokenizer.whitespace_tokenizer import WhiteSpaceTokenizer
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
