@@ -1,7 +1,7 @@
 import copy
 from typing import Any, Dict, List, Optional, Text
 
-from ruth.constants import INTENT, TEXT
+from ruth.constants import INTENT, TEXT, TOKENS
 from ruth.shared.nlu.training_data.feature import Feature
 
 
@@ -47,3 +47,10 @@ class RuthData:
 
     def as_dict(self) -> Dict:
         return {key: value for key, value in self.data.items() if value is not None}
+
+    def get_tokenized_data(self) -> List[Text]:
+        if self.data.get(TOKENS):
+            tokens = [token.text for token in self.data[TOKENS]]
+            return tokens
+        else:
+            return []
