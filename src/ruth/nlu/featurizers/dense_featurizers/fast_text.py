@@ -1,25 +1,75 @@
 import io
+import os
 from typing import Any, Dict, List, Optional, Text
+from urllib import request
 
 import numpy
+from progressbar import progressbar
 from ruth.nlu.classifiers.constants import MODEL_NAME
-from ruth.nlu.tokenizer.tokenizer import Tokenizer
+from ruth.nlu.featurizers.dense_featurizers.dense_featurizer import DenseFeaturizer
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from tqdm import tqdm
 
+pbar = None
 
-class FastTextFeaturizer(Tokenizer):
+
+class FastTextFeaturizer(DenseFeaturizer):
     DO_LOWER_CASE = "do_lower_case"
 
-    defaults = {MODEL_NAME: "wiki-news-300d-1M.vec", DO_LOWER_CASE: True}
+    defaults = {MODEL_NAME: "wiki_300dimension_word.vec.zip", DO_LOWER_CASE: True}
+    DEFAULT_MODELS_DIR = os.path.join(
+        os.path.expanduser("~"), ".cache", "ruth", "models"
+    )
+
+    MODELS = {
+        "wiki_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
+        "wiki_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
+        "crawl_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "fasttext/vectors-english/crawl-300d-2M.vec.zip",
+        "crawl_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "fasttext/vectors-english/crawl-300d-2M-subword.zip",
+    }
 
     def __init__(self, element_config: Optional[Dict[Text, Any]]):
         super(FastTextFeaturizer, self).__init__(element_config)
         self.vectors = None
         self.featurizer = {}
-        self.file_path = "/home/subash/Downloads/wiki-news-300d-1M.vec"
+        self.file_path = self.download_models(self.element_config[MODEL_NAME])
         self.dimension = 300
+
+    def download_models(self, specific_models=None):
+        os.makedirs(self.DEFAULT_MODELS_DIR, exist_ok=True)
+
+        def show_progress(block_num, block_size, total_size):
+            global pbar
+            if pbar is None:
+                pbar = progressbar.ProgressBar(maxval=total_size)
+                pbar.start()
+
+            downloaded = block_num * block_size
+            if downloaded < total_size:
+                pbar.update(downloaded)
+            else:
+                pbar.finish()
+                pbar = None
+
+        for model_name, url in self.MODELS.items():
+            if specific_models is not None and model_name not in specific_models:
+                continue
+            model_path = os.path.join(self.DEFAULT_MODELS_DIR, model_name)
+            if os.path.exists(model_path):
+                return model_path
+
+            request.urlretrieve(url, model_path, show_progress)
+
+            import zipfile
+
+            with zipfile.ZipFile(model_path, "r") as zip_ref:
+                zip_ref.extractall(self.DEFAULT_MODELS_DIR)
+            return model_path
 
     def train(self, training_data: TrainData):
         self.featurizer = self._build_featurizer()
