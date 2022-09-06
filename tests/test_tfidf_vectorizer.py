@@ -4,6 +4,7 @@ from typing import Any, Dict, Text
 from ruth.constants import PATH, TEXT
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.ruth_elements import RuthData, TrainData
+
 from tests.conftest import FEATURE
 
 

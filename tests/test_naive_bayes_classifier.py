@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from ruth.constants import INTENT, TEXT
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
