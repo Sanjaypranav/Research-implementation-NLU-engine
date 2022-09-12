@@ -18,10 +18,13 @@ from sklearn.preprocessing import LabelEncoder
 from torch import nn
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 from transformers import AutoModelForSequenceClassification
+from transformers import logging as transformer_logging
 
 torch.cuda.empty_cache()
 logger = logging.getLogger(__name__)
+transformer_logging.set_verbosity_error()
 
 console = Console()
 
@@ -63,9 +66,10 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        return (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
+        # return (
+        #     torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        # )
+        return torch.device("cpu")
 
     @property
     def get_params(self):
@@ -102,14 +106,14 @@ class HFClassifier(IntentClassifier):
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-        print("device:", device)
+        print("device:", device, "is used")
         self.model.to(device)
 
         params = self.get_params
 
         self.model.train()
         for epoch in range(params[EPOCHS]):
-            for batch in batched_data:
+            for batch in tqdm(batched_data, desc="epoch " + str(epoch)):
                 optimizer.zero_grad()
                 input_ids = batch["input_ids"].to(device)
                 attention_masks = batch["attention_masks"].to(device)
@@ -120,8 +124,6 @@ class HFClassifier(IntentClassifier):
                 loss = outputs[0]
                 loss.backward()
                 optimizer.step()
-
-        print("training_completed")
 
     def persist(self, file_name: Text, model_dir: Path):
         classifier_file_name = file_name + "_classifier"

@@ -98,7 +98,7 @@ class Trainer:
             console.print(f"Starting to train element {element.name}")
             # component.prepare_partial_processing(self.pipeline[:i], context)
             element.train(working_data)
-            console.print("Finished training element.")
+            console.print(f"Finished training element {element.name}.")
         # return Interpreter(self.pipeline, context)
 
     def persist(self, path: Path) -> Path:
