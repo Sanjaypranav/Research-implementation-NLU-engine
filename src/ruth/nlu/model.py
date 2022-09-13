@@ -114,7 +114,7 @@ class Trainer:
             file_name = self.get_filename(index, name=element.name)
             custom_meta = element.persist(file_name, model_dir)
             element_meta = element.element_config
-            if element_meta:
+            if element_meta and custom_meta:
                 element_meta.update(custom_meta)
             element_meta["class"] = module_path_from_object(element)
 

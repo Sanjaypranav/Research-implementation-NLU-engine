@@ -23,5 +23,5 @@ def test_tfidf_vectorizer(tfidf_featurizer_example: Dict[Text, Any]):
 
     assert (
         tfidf_featurizer_example[FEATURE]
-        == test_message.get_sparse_features().feature.toarray().tolist()
+        == test_message.get_features().feature.toarray().tolist()
     )

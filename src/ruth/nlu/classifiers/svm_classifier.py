@@ -41,7 +41,7 @@ class SVMClassifier(IntentClassifier):
 
     @staticmethod
     def get_features(message: RuthData) -> sparse.spmatrix:
-        feature = message.get_sparse_features()
+        feature = message.get_features()
         if feature is not None:
             return feature.feature[0]
         raise ValueError("There is no sentence. Not able to train SVMClassifier")
