@@ -6,8 +6,10 @@ from urllib import request
 import numpy
 from progressbar import progressbar
 from ruth.nlu.classifiers.constants import MODEL_NAME
+from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
 from ruth.nlu.featurizers.dense_featurizers.dense_featurizer import DenseFeaturizer
 from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.feature import Feature
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from tqdm import tqdm
 
@@ -81,6 +83,11 @@ class FastTextFeaturizer(DenseFeaturizer):
             self.get_vector_list(token_list) for token_list in tokenized_data
         ]
 
+        for message, vector in zip(training_data.training_examples, self.vectors):
+            message.add_features(
+                Feature(vector, self.element_config[ELEMENT_UNIQUE_NAME])
+            )
+
     def _build_featurizer(self):
 
         fasttext_corpus = io.open(
@@ -89,7 +96,7 @@ class FastTextFeaturizer(DenseFeaturizer):
         model = {}
         for line in tqdm(fasttext_corpus, colour="red"):
             tokens = line.strip().split(" ")
-            model[tokens[0]] = numpy.array(list(map(float, tokens[1:])))
+            model[tokens[0]] = numpy.array(list(tokens[1:]))
 
         return model
 

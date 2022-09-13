@@ -41,7 +41,7 @@ class RuthData:
                 combined_features.combine_with_features(feature)
         return combined_features
 
-    def get_sparse_features(self, featurizers: List[Text] = None) -> Feature:
+    def get_features(self, featurizers: List[Text] = None) -> Feature:
         combined_features = self._combine_features(self.features, featurizers)
         return combined_features
 

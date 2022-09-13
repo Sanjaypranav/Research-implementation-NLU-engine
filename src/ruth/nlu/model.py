@@ -110,7 +110,7 @@ class Trainer:
             console.print(f"Starting to train element {element.name}")
             # component.prepare_partial_processing(self.pipeline[:i], context)
             element.train(working_data)
-            console.print("Finished training element.")
+            console.print(f"Finished training element {element.name}.")
         # return Interpreter(self.pipeline, context)
 
     def persist(self, path: Path) -> Path:
@@ -126,7 +126,7 @@ class Trainer:
             file_name = self.get_filename(index, name=element.name)
             custom_meta = element.persist(file_name, model_dir)
             element_meta = element.element_config
-            if element_meta:
+            if element_meta and custom_meta:
                 element_meta.update(custom_meta)
             element_meta["class"] = module_path_from_object(element)
 

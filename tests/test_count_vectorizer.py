@@ -26,7 +26,7 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
 
     assert (
         count_featurizer_example[FEATURE]
-        == test_message.get_sparse_features().feature.toarray().tolist()
+        == test_message.get_features().feature.toarray().tolist()
     )
 
 
@@ -45,5 +45,5 @@ def test_count_vectorizer_by_registry(count_featurizer_example: Dict[Text, Any])
 
     assert (
         count_featurizer_example[FEATURE]
-        == test_message.get_sparse_features().feature.toarray().tolist()
+        == test_message.get_features().feature.toarray().tolist()
     )
