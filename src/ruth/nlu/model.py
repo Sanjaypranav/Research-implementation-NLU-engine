@@ -3,14 +3,13 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Text
-
 import ruth
 from rich.console import Console
 from ruth.constants import INTENT, TEXT
 from ruth.nlu.constants import RUTH
 from ruth.nlu.elements import Element
 from ruth.nlu.registry import registered_classes
-from ruth.nlu.utils import module_path_from_object
+from ruth.nlu.utils import module_path_from_object, check_required_elements
 from ruth.shared.constants import INTENT_NAME_KEY, PREDICTED_CONFIDENCE_KEY
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
@@ -73,6 +72,19 @@ class Trainer:
             element_builder = ElementBuilder()
 
         self.pipeline = self._build_pipeline(config, element_builder)
+
+    def validate_pipeline(self) -> None:
+        missing_element = []
+        for i, element in enumerate(self.pipeline):
+            for required_element in element.required_element():
+                if not check_required_elements(required_element, self.pipeline[:i]):
+                    missing_element.append(required_element)
+                    raise ValueError(f'Missing required elements {" ,".join(missing_element)}')
+
+
+
+
+
 
     @staticmethod
     def _build_pipeline(config: RuthConfig, element_builder: ElementBuilder):

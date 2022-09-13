@@ -10,6 +10,7 @@ from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
+from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
 from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
@@ -37,6 +38,9 @@ class HFClassifier(IntentClassifier):
     ):
         self.model = model
         super().__init__(element_config, le)
+
+    def required_element(self):
+        return [HFTokenizer]
 
     def _build_model(self, label_count):
         return AutoModelForSequenceClassification.from_pretrained(

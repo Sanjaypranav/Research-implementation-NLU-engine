@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Text
 
+from ruth.nlu.featurizers.featurizer import Featurizer
 from ruth.nlu.featurizers.sparse_featurizers.constants import (
     CLASS_FEATURIZER_UNIQUE_NAME,
 )
@@ -7,7 +8,7 @@ from ruth.shared.nlu.ruth_elements import Element
 from ruth.shared.nlu.training_data.collections import TrainData
 
 
-class SparseFeaturizer(Element):
+class SparseFeaturizer(Featurizer):
     def __init__(self, element_config):
         element_config = element_config or {}
         self.element_config = element_config
