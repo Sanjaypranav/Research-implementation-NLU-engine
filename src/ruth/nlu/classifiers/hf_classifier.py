@@ -66,10 +66,9 @@ class HFClassifier(IntentClassifier):
 
     @staticmethod
     def get_device():
-        # return (
-        #     torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        # )
-        return torch.device("cpu")
+        return (
+            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        )
 
     @property
     def get_params(self):
