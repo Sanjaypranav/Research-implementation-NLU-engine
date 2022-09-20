@@ -42,6 +42,8 @@ class RuthData:
         return combined_features
 
     def get_features(self, featurizers: List[Text] = None) -> Feature:
+        if not featurizers and self.features:
+            featurizers = [self.features[0].origin]
         combined_features = self._combine_features(self.features, featurizers)
         return combined_features
 

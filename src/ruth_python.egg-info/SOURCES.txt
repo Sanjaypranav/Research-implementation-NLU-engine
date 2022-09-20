@@ -59,6 +59,7 @@ src/ruth/nlu/classifiers/__pycache__/constants.cpython-38.pyc
 src/ruth/nlu/classifiers/__pycache__/naive_bayes_classifier.cpython-38.pyc
 src/ruth/nlu/classifiers/__pycache__/ruth_classifier.cpython-38.pyc
 src/ruth/nlu/featurizers/__init__.py
+src/ruth/nlu/featurizers/featurizer.py
 src/ruth/nlu/featurizers/dense_featurizers/__init__.py
 src/ruth/nlu/featurizers/dense_featurizers/dense_featurizer.py
 src/ruth/nlu/featurizers/dense_featurizers/fast_text.py
@@ -66,8 +67,7 @@ src/ruth/nlu/featurizers/sparse_featurizers/__init__.py
 src/ruth/nlu/featurizers/sparse_featurizers/constants.py
 src/ruth/nlu/featurizers/sparse_featurizers/count_vector_featurizer.py
 src/ruth/nlu/featurizers/sparse_featurizers/sparse_featurizer.py
-src/ruth/nlu/featurizers/tfidf_featurizers/__init__.py
-src/ruth/nlu/featurizers/tfidf_featurizers/tfidf_vector_featurizer.py
+src/ruth/nlu/featurizers/sparse_featurizers/tfidf_vector_featurizer.py
 src/ruth/nlu/tokenizer/__init__.py
 src/ruth/nlu/tokenizer/constants.py
 src/ruth/nlu/tokenizer/hf_tokenizer.py

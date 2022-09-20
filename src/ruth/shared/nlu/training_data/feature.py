@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Text
+from typing import Any, Dict, Optional, Text, Union
 
 import numpy as np
 from numpy import ndarray
@@ -7,7 +7,7 @@ from scipy import sparse
 
 
 class Feature:
-    def __init__(self, feature: Optional[sparse.spmatrix, ndarray], origin: Text):
+    def __init__(self, feature: Union[sparse.spmatrix, ndarray], origin: Text):
         self.feature = feature
         self.origin = origin
 

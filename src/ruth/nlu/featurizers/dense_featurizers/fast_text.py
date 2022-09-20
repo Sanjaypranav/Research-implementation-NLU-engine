@@ -26,19 +26,24 @@ class FastTextFeaturizer(DenseFeaturizer):
 
     MODELS = {
         "wiki_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-        "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
+                                          "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
         "wiki_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-        "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
+                                              "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
         "crawl_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-        "fasttext/vectors-english/crawl-300d-2M.vec.zip",
+                                           "fasttext/vectors-english/crawl-300d-2M.vec.zip",
         "crawl_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-        "fasttext/vectors-english/crawl-300d-2M-subword.zip",
+                                               "fasttext/vectors-english/crawl-300d-2M-subword.zip",
     }
 
     def __init__(self, element_config: Optional[Dict[Text, Any]]):
         super(FastTextFeaturizer, self).__init__(element_config)
         self.vectors = None
         self.featurizer = {}
+        if self.element_config[MODEL_NAME] not in self.MODELS:
+            raise ValueError(
+                "Model name not found. Please choose from the following: "
+                "{}".format(list(self.MODELS.keys()))
+            )
         self.file_path = self.download_models(self.element_config[MODEL_NAME])
         self.dimension = 300
 
@@ -59,7 +64,7 @@ class FastTextFeaturizer(DenseFeaturizer):
                 pbar = None
 
         for model_name, url in self.MODELS.items():
-            if specific_models is not None and model_name not in specific_models:
+            if specific_models is not None and model_name != specific_models:
                 continue
             model_path = os.path.join(self.DEFAULT_MODELS_DIR, model_name)
             if os.path.exists(model_path):

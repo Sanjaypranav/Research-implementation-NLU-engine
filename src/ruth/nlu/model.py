@@ -72,6 +72,7 @@ class Trainer:
             element_builder = ElementBuilder()
 
         self.pipeline = self._build_pipeline(config, element_builder)
+        self.validate_pipeline()
 
     def validate_pipeline(self) -> None:
         missing_element = []

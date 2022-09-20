@@ -2,17 +2,12 @@ Metadata-Version: 2.1
 Name: ruth-python
 Version: 0.0.5
 Summary: A Python CLI for Ruth NLP
-Home-page: UNKNOWN
+Home-page: 
 Author: Puretalk
 Author-email: info@puretalk.ai
-License: UNKNOWN
-Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Software Development :: Build Tools
 Classifier: Programming Language :: Python :: 3.8
 Requires-Python: >=3.7,<3.9
 Description-Content-Type: text/markdown
-
-UNKNOWN
-

@@ -52,3 +52,4 @@ class Element(metaclass=ElementMetaClass):
 
     def required_element(self) -> List[object]:
         return []
+

@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple
 
+import numpy as np
 import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
 from rich.console import Console
@@ -28,13 +29,14 @@ class SVMClassifier(IntentClassifier):
         "decision_function_shape": ["ovr"],
         "max_cross_validation_folds": 5,
         "scoring": "f1_weighted",
+        'max_length': 30000,
     }
 
     def __init__(
-        self,
-        element_config: Dict[Text, Any],
-        le: LabelEncoder = None,
-        clf: GridSearchCV = None,
+            self,
+            element_config: Dict[Text, Any],
+            le: LabelEncoder = None,
+            clf: GridSearchCV = None,
     ):
         self.clf = clf
         super().__init__(element_config, le)
@@ -82,6 +84,11 @@ class SVMClassifier(IntentClassifier):
             self.get_features(message).toarray()
             for message in training_data.intent_examples
         ]
+        max_length = self.get_max_length(X)
+        self.element_config['max_length'] = max_length
+        if self.check_dense(X[0]):
+            X = [self.ravel_vector(x) for x in X]
+            X = [self.pad_vector(x, max_length) for x in X]
         y = self.encode_the_str_to_int(intents)
 
         X = reshape(X, (len(X), -1))
@@ -123,6 +130,9 @@ class SVMClassifier(IntentClassifier):
 
     def parse(self, message: RuthData):
         x = self.get_features(message).toarray()
+        if self.check_dense(x):
+            x = self.ravel_vector(x)
+            x = self.pad_vector(x,  self.element_config['max_length'])
         index, probabilities = self._predict(x)
 
         intents = self._change_int_to_text(index.flatten())
@@ -130,8 +140,8 @@ class SVMClassifier(IntentClassifier):
 
         if intents.size > 0 and probabilities.size > 0:
             ranking = list(zip(list(intents), list(probabilities)))[
-                :LABEL_RANKING_LIMIT
-            ]
+                      :LABEL_RANKING_LIMIT
+                      ]
             intent = {"name": intents[0], "accuracy": probabilities[0]}
             intent_rankings = [
                 {"name": name, "accuracy": probability} for name, probability in ranking
