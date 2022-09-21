@@ -92,6 +92,7 @@ class FastTextFeaturizer(DenseFeaturizer):
             message.add_features(
                 Feature(vector, self.element_config[ELEMENT_UNIQUE_NAME])
             )
+            print(vector)
 
     def _build_featurizer(self):
 

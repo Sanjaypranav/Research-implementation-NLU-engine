@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple, Union
 
 import sklearn
-from numpy import argsort, fliplr, ndarray, reshape
+from numpy import argsort, fliplr, ndarray
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
@@ -65,7 +65,7 @@ class SVMClassifier(IntentClassifier):
             clf,
             param_grids,
             scoring=self.element_config["scoring"],
-            cv=self.element_config["max_cross_validation_folds"],
+            # cv=self.element_config["max_cross_validation_folds"],
         )
 
     def train(self, training_data: TrainData):
@@ -84,15 +84,14 @@ class SVMClassifier(IntentClassifier):
             max_length = self.get_max_length(X)
             self.element_config["max_length"] = max_length
             X = [self.ravel_vector(x) for x in X]
-            X = [self.pad_vector(x, max_length) for x in X]
+            # X = [self.pad_vector(x, max_length) for x in X]
         else:
             X = [message.toarray() for message in X]
 
         y = self.encode_the_str_to_int(intents)
 
-        X = reshape(X, (len(X), -1))
+        # X = reshape(X, (len(X), -1))
         self.clf = self._create_gridsearch(X, y)
-        print(X[0])
         self.clf.fit(X, y)
         console.print(f"The Best parameter we got are {self.clf.best_params_}")
         console.print(f"score: {self.clf.best_score_}")
@@ -132,7 +131,6 @@ class SVMClassifier(IntentClassifier):
         x = self.get_features(message)
         if self.check_dense(x):
             x = self.ravel_vector(x)
-            x = self.pad_vector(x, self.element_config["max_length"])
             x = self.pad_vector(x, self.element_config["max_length"])
         else:
             x = x.toarray()

@@ -44,7 +44,7 @@ class Tokenizer(Element):
             word_offset = text.index(word, running_offset)
             word_len = len(word)
             running_offset = word_offset + word_len
-            tokens.append(Token(word, start=word_offset, end=running_offset))
+            tokens.append(Token(word.lower(), start=word_offset, end=running_offset))
 
         return tokens
 
