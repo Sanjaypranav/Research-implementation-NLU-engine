@@ -29,7 +29,7 @@ class SVMClassifier(IntentClassifier):
         "decision_function_shape": ["ovr"],
         "max_cross_validation_folds": 5,
         "scoring": "f1_weighted",
-        'max_length': 30000,
+        'max_length': 700,
     }
 
     def __init__(
@@ -87,6 +87,7 @@ class SVMClassifier(IntentClassifier):
         max_length = self.get_max_length(X)
         self.element_config['max_length'] = max_length
         if self.check_dense(X[0]):
+
             X = [self.ravel_vector(x) for x in X]
             X = [self.pad_vector(x, max_length) for x in X]
         y = self.encode_the_str_to_int(intents)
@@ -129,10 +130,12 @@ class SVMClassifier(IntentClassifier):
         return cls(meta, clf=clf, le=le)
 
     def parse(self, message: RuthData):
-        x = self.get_features(message).toarray()
+        x = self.get_features(message)
         if self.check_dense(x):
             x = self.ravel_vector(x)
             x = self.pad_vector(x,  self.element_config['max_length'])
+        else:
+            x = x.toarray()
         index, probabilities = self._predict(x)
 
         intents = self._change_int_to_text(index.flatten())
