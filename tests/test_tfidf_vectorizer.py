@@ -3,7 +3,8 @@ from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
 from ruth.nlu.registry import registered_classes
-from ruth.shared.nlu.ruth_elements import RuthData, TrainData
+from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 from tests.conftest import FEATURE
 

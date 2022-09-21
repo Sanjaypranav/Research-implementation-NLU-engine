@@ -26,7 +26,6 @@ element_classes = [
     HFClassifier,
     NaiveBayesClassifier,
     SVMClassifier,
-
 ]
 
 registered_classes: Dict[Text, Element] = {cls.name: cls for cls in element_classes}

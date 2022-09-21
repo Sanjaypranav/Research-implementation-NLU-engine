@@ -1,5 +1,4 @@
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
-from ruth.nlu.elements import Element
 from ruth.nlu.featurizers.featurizer import Featurizer
 
 

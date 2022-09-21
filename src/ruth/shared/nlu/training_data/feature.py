@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Text, Union
+from typing import Any, Dict, Text, Union
 
 import numpy as np
 from numpy import ndarray

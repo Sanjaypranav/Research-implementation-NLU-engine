@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Text
 
-from numpy import ndarray
-from ruth.shared.nlu.ruth_elements import Element
-from sklearn.preprocessing import LabelEncoder
 import numpy as np
+from numpy import ndarray
+from ruth.nlu.elements import Element
+from sklearn.preprocessing import LabelEncoder
 
 
 class IntentClassifier(Element):
@@ -24,7 +24,7 @@ class IntentClassifier(Element):
         return np.ravel(vector)
 
     @staticmethod
-    def pad_vector(vector: ndarray, max_length : int) -> ndarray:
+    def pad_vector(vector: ndarray, max_length: int) -> ndarray:
         if len(vector) < max_length:
             vector = np.pad(vector, (0, max_length - len(vector)), "constant")
         if len(vector) > max_length:

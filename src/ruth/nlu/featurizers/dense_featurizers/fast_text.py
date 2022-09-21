@@ -26,13 +26,13 @@ class FastTextFeaturizer(DenseFeaturizer):
 
     MODELS = {
         "wiki_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-                                          "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
+        "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
         "wiki_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-                                              "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
+        "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
         "crawl_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-                                           "fasttext/vectors-english/crawl-300d-2M.vec.zip",
+        "fasttext/vectors-english/crawl-300d-2M.vec.zip",
         "crawl_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
-                                               "fasttext/vectors-english/crawl-300d-2M-subword.zip",
+        "fasttext/vectors-english/crawl-300d-2M-subword.zip",
     }
 
     def __init__(self, element_config: Optional[Dict[Text, Any]]):

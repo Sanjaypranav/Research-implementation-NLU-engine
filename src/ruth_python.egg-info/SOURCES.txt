@@ -82,9 +82,7 @@ src/ruth/shared/utils.py
 src/ruth/shared/__pycache__/__init__.cpython-38.pyc
 src/ruth/shared/__pycache__/constants.cpython-38.pyc
 src/ruth/shared/nlu/__init__.py
-src/ruth/shared/nlu/ruth_elements.py
 src/ruth/shared/nlu/__pycache__/__init__.cpython-38.pyc
-src/ruth/shared/nlu/__pycache__/ruth_elements.cpython-38.pyc
 src/ruth/shared/nlu/training_data/__init__.py
 src/ruth/shared/nlu/training_data/collections.py
 src/ruth/shared/nlu/training_data/feature.py
