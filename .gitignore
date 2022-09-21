@@ -5,3 +5,5 @@ src/ruth_python.egg-info
 
 .venv
 venv
+
+*/__pycache__

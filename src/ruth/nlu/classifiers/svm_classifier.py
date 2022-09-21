@@ -80,6 +80,7 @@ class SVMClassifier(IntentClassifier):
             return
         X = [self.get_features(message) for message in training_data.intent_examples]
         if self.check_dense(X[0]):
+
             max_length = self.get_max_length(X)
             self.element_config["max_length"] = max_length
             X = [self.ravel_vector(x) for x in X]
@@ -128,10 +129,13 @@ class SVMClassifier(IntentClassifier):
         return cls(meta, clf=clf, le=le)
 
     def parse(self, message: RuthData):
-        x = self.get_features(message).toarray()
+        x = self.get_features(message)
         if self.check_dense(x):
             x = self.ravel_vector(x)
             x = self.pad_vector(x, self.element_config["max_length"])
+            x = self.pad_vector(x, self.element_config["max_length"])
+        else:
+            x = x.toarray()
         index, probabilities = self._predict(x)
 
         intents = self._change_int_to_text(index.flatten())
