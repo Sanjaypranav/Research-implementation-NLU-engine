@@ -19,19 +19,19 @@ pbar = None
 class FastTextFeaturizer(DenseFeaturizer):
     DO_LOWER_CASE = "do_lower_case"
 
-    defaults = {MODEL_NAME: "wiki_300dimension_word.vec.zip", DO_LOWER_CASE: True}
+    defaults = {MODEL_NAME: "wiki-news-300d-1M.vec.zip", DO_LOWER_CASE: True}
     DEFAULT_MODELS_DIR = os.path.join(
         os.path.expanduser("~"), ".cache", "ruth", "models"
     )
 
     MODELS = {
-        "wiki_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "wiki-news-300d-1M.vec.zip": "https://dl.fbaipublicfiles.com/"
         "fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
-        "wiki_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "wiki-news-300d-1M-subword.vec.zip": "https://dl.fbaipublicfiles.com/"
         "fasttext/vectors-english/wiki-news-300d-1M-subword.vec.zip",
-        "crawl_300dimension_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "crawl-300d-2M.vec.zip": "https://dl.fbaipublicfiles.com/"
         "fasttext/vectors-english/crawl-300d-2M.vec.zip",
-        "crawl_300dimension_sub_word.vec.zip": "https://dl.fbaipublicfiles.com/"
+        "crawl-300d-2M-subword.zip": "https://dl.fbaipublicfiles.com/"
         "fasttext/vectors-english/crawl-300d-2M-subword.zip",
     }
 
@@ -45,6 +45,7 @@ class FastTextFeaturizer(DenseFeaturizer):
                 "{}".format(list(self.MODELS.keys()))
             )
         self.file_path = self.download_models(self.element_config[MODEL_NAME])
+        print(self.file_path)
         self.dimension = 300
 
     def download_models(self, specific_models=None):
@@ -68,15 +69,15 @@ class FastTextFeaturizer(DenseFeaturizer):
                 continue
             model_path = os.path.join(self.DEFAULT_MODELS_DIR, model_name)
             if os.path.exists(model_path):
+                request.urlretrieve(url, model_path, show_progress)
+
+                import zipfile
+
+                with zipfile.ZipFile(model_path, "r") as zip_ref:
+                    zip_ref.extractall(self.DEFAULT_MODELS_DIR)
+
+                model_path = model_path[:-4]
                 return model_path
-
-            request.urlretrieve(url, model_path, show_progress)
-
-            import zipfile
-
-            with zipfile.ZipFile(model_path, "r") as zip_ref:
-                zip_ref.extractall(self.DEFAULT_MODELS_DIR)
-            return model_path
 
     def train(self, training_data: TrainData):
         self.featurizer = self._build_featurizer()
@@ -92,7 +93,6 @@ class FastTextFeaturizer(DenseFeaturizer):
             message.add_features(
                 Feature(vector, self.element_config[ELEMENT_UNIQUE_NAME])
             )
-            print(vector)
 
     def _build_featurizer(self):
 
