@@ -17,3 +17,4 @@ def test_hf_classifier(example_data_path: Path):
     message = RuthData(data={TEXT: "hello"})
     tokenizer.parse(message)
     classifier.parse(message)
+    # TODO: assertion in HF
