@@ -45,7 +45,6 @@ class FastTextFeaturizer(DenseFeaturizer):
                 "{}".format(list(self.MODELS.keys()))
             )
         self.file_path = self.download_models(self.element_config[MODEL_NAME])
-        print(self.file_path)
         self.dimension = 300
 
     def download_models(self, specific_models=None):
@@ -65,14 +64,11 @@ class FastTextFeaturizer(DenseFeaturizer):
                 pbar = None
 
         for model_name, url in self.MODELS.items():
-            print(specific_models)
-            print(model_name)
             if specific_models is not None and str(model_name) not in str(
                 specific_models
             ):
                 continue
             model_path = os.path.join(self.DEFAULT_MODELS_DIR, model_name)
-            print(model_path)
             if os.path.exists(model_path):
                 model_path = model_path[:-4]
                 return model_path
