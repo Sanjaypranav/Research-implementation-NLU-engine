@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple, Union
 
 import sklearn
-from numpy import argsort, fliplr, ndarray
+from numpy import argsort, fliplr, ndarray, reshape
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
@@ -90,7 +90,7 @@ class SVMClassifier(IntentClassifier):
 
         y = self.encode_the_str_to_int(intents)
 
-        # X = reshape(X, (len(X), -1))
+        X = reshape(X, (len(X), -1))
         self.clf = self._create_gridsearch(X, y)
         self.clf.fit(X, y)
         console.print(f"The Best parameter we got are {self.clf.best_params_}")

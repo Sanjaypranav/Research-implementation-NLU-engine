@@ -15,5 +15,4 @@ def test_fasttext_featurizer(example_data_path: Path):
     fasttext_vectorizer.train(training_data=training_data)
     message = RuthData(data={TEXT: "hello i am from coimbatore"})
     white_space_tokenizer.parse(message)
-    print('hi')
-    print(fasttext_vectorizer.parse(message))
+    fasttext_vectorizer.parse(message)

@@ -20,6 +20,8 @@ core_requirements = [
     "torch~=1.11.0",
     "regex",
     "scikit-learn~=1.0.2",
+    "matplotlib~=3.6.0",
+    "progressbar~="
 ]
 
 

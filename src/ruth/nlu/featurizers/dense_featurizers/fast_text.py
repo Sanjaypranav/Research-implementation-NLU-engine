@@ -65,19 +65,30 @@ class FastTextFeaturizer(DenseFeaturizer):
                 pbar = None
 
         for model_name, url in self.MODELS.items():
-            if specific_models is not None and model_name != specific_models:
+            print(specific_models)
+            print(model_name)
+            if specific_models is not None and str(model_name) not in str(
+                specific_models
+            ):
                 continue
             model_path = os.path.join(self.DEFAULT_MODELS_DIR, model_name)
+            print(model_path)
             if os.path.exists(model_path):
-                request.urlretrieve(url, model_path, show_progress)
-
-                import zipfile
-
-                with zipfile.ZipFile(model_path, "r") as zip_ref:
-                    zip_ref.extractall(self.DEFAULT_MODELS_DIR)
-
                 model_path = model_path[:-4]
                 return model_path
+
+            request.urlretrieve(url, model_path, show_progress)
+
+            import zipfile
+
+            with zipfile.ZipFile(model_path, "r") as zip_ref:
+                zip_ref.extractall(self.DEFAULT_MODELS_DIR)
+
+            model_path = model_path[:-4]
+            return model_path
+        raise f"""Given model {specific_models} not found.
+                Please check the documentation and give the
+                right Fastext model name """
 
     def train(self, training_data: TrainData):
         self.featurizer = self._build_featurizer()
@@ -121,4 +132,5 @@ class FastTextFeaturizer(DenseFeaturizer):
 
     def parse(self, message: RuthData):
         tokens = message.get_tokenized_data()
-        return self.get_vector_list(tokens)
+        vector = self.get_vector_list(tokens)
+        message.add_features(Feature(vector, self.element_config[ELEMENT_UNIQUE_NAME]))
