@@ -16,14 +16,14 @@ from ruth.nlu.tokenizer.whitespace_tokenizer import WhiteSpaceTokenizer
 element_classes = [
     # Tokenizer
     WhiteSpaceTokenizer,
+    HFTokenizer,
     # Featurizers
     CountVectorFeaturizer,
-    HFTokenizer,
-    HFClassifier,
     TfidfVectorFeaturizer,
     # Classifiers
     NaiveBayesClassifier,
     SVMClassifier,
+    HFClassifier,
 ]
 
 registered_classes: Dict[Text, Element] = {cls.name: cls for cls in element_classes}

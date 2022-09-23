@@ -105,7 +105,7 @@ class HFClassifier(IntentClassifier):
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-        print("device:", device, "is used")
+        logger.info("device: " + str(device) + " is used")
         self.model.to(device)
 
         params = self.get_params
