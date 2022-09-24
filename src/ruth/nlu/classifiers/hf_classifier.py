@@ -16,6 +16,7 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
 from sklearn.preprocessing import LabelEncoder
 from torch import nn
+from torch.nn import Module
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
@@ -30,13 +31,13 @@ console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {"epochs": 2, MODEL_NAME: "bert-base-uncased"}
+    defaults = {"epochs": 100, MODEL_NAME: "bert-base-uncased"}
 
     def __init__(
         self,
         element_config: Dict[Text, Any],
         le: LabelEncoder = None,
-        model: AutoModelForSequenceClassification = None,
+        model: Module = None,
     ):
         self.model = model
         super().__init__(element_config, le)
@@ -99,7 +100,7 @@ class HFClassifier(IntentClassifier):
         label_count = len(Counter(y).keys())
 
         loaded_data = HFDatasetLoader(X, y)
-        batched_data = DataLoader(loaded_data, batch_size=1, shuffle=True)
+        batched_data = DataLoader(loaded_data, batch_size=64, shuffle=True)
 
         self.model = self._build_model(label_count)
 
@@ -158,9 +159,11 @@ class HFClassifier(IntentClassifier):
         return sorted_index[0], predictions[:, sorted_index][0][0]
 
     def predict_probabilities(self, input_ids, attention_masks):
+        self.model.to(self.get_device())
         self.model.eval()
         probabilities = self.model(
-            torch.tensor(input_ids), attention_mask=torch.tensor(attention_masks)
+            torch.tensor(input_ids, device=self.get_device()),
+            attention_mask=torch.tensor(attention_masks, device=self.get_device()),
         )[0]
         probabilities = nn.functional.softmax(probabilities, dim=-1)
         probabilities = probabilities.to(torch.device("cpu"))
@@ -187,6 +190,7 @@ class HFClassifier(IntentClassifier):
             intent = {"name": None, "accuracy": 0.0}
             intent_rankings = []
         message.set(INTENT, intent)
+        print(intent_rankings)
         message.set(INTENT_RANKING, intent_rankings)
 
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ruth.constants import TEXT, INTENT
+from ruth.constants import INTENT, TEXT
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
@@ -17,4 +17,4 @@ def test_hf_classifier(example_data_path: Path):
     message = RuthData(data={TEXT: "away"})
     tokenizer.parse(message)
     classifier.parse(message)
-    assert training_data.training_examples[0].data[INTENT] == 'not greet'
+    assert training_data.training_examples[0].data[INTENT] == "not greet"
