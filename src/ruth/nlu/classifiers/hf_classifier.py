@@ -8,7 +8,7 @@ from numpy import argsort, fliplr
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME
+from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -16,24 +16,28 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import json_pickle, json_unpickle
 from sklearn.preprocessing import LabelEncoder
 from torch import nn
+from torch.nn import Module
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 from transformers import AutoModelForSequenceClassification
+from transformers import logging as transformer_logging
 
 torch.cuda.empty_cache()
 logger = logging.getLogger(__name__)
+transformer_logging.set_verbosity_error()
 
 console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {"epochs": 2, MODEL_NAME: "bert-base-uncased"}
+    defaults = {EPOCHS: 100, MODEL_NAME: "bert-base-uncased", BATCH_SIZE: 1}
 
     def __init__(
         self,
         element_config: Dict[Text, Any],
         le: LabelEncoder = None,
-        model: AutoModelForSequenceClassification = None,
+        model: Module = None,
     ):
         self.model = model
         super().__init__(element_config, le)
@@ -69,7 +73,10 @@ class HFClassifier(IntentClassifier):
 
     @property
     def get_params(self):
-        return {"epochs": self.element_config["epochs"]}
+        return {
+            EPOCHS: self.element_config[EPOCHS],
+            BATCH_SIZE: self.element_config[BATCH_SIZE],
+        }
 
     def train(self, training_data: TrainData):
         intents: List[Text] = [
@@ -95,21 +102,23 @@ class HFClassifier(IntentClassifier):
         y = self.encode_the_str_to_int(intents)
         label_count = len(Counter(y).keys())
 
+        params = self.get_params
+
         loaded_data = HFDatasetLoader(X, y)
-        batched_data = DataLoader(loaded_data, batch_size=1, shuffle=True)
+        batched_data = DataLoader(
+            loaded_data, batch_size=params[BATCH_SIZE], shuffle=True
+        )
 
         self.model = self._build_model(label_count)
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-        print("device:", device)
+        logger.info("device: " + str(device) + " is used")
         self.model.to(device)
-
-        params = self.get_params
 
         self.model.train()
         for epoch in range(params[EPOCHS]):
-            for batch in batched_data:
+            for batch in tqdm(batched_data, desc="epoch " + str(epoch)):
                 optimizer.zero_grad()
                 input_ids = batch["input_ids"].to(device)
                 attention_masks = batch["attention_masks"].to(device)
@@ -120,8 +129,6 @@ class HFClassifier(IntentClassifier):
                 loss = outputs[0]
                 loss.backward()
                 optimizer.step()
-
-        print("training_completed")
 
     def persist(self, file_name: Text, model_dir: Path):
         classifier_file_name = file_name + "_classifier"
@@ -157,9 +164,11 @@ class HFClassifier(IntentClassifier):
         return sorted_index[0], predictions[:, sorted_index][0][0]
 
     def predict_probabilities(self, input_ids, attention_masks):
+        self.model.to(self.get_device())
         self.model.eval()
         probabilities = self.model(
-            torch.tensor(input_ids), attention_mask=torch.tensor(attention_masks)
+            torch.tensor(input_ids, device=self.get_device()),
+            attention_mask=torch.tensor(attention_masks, device=self.get_device()),
         )[0]
         probabilities = nn.functional.softmax(probabilities, dim=-1)
         probabilities = probabilities.to(torch.device("cpu"))

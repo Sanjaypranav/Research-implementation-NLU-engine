@@ -87,7 +87,7 @@ test:
 # Run coverage
 .PHONY: coverage
 coverage:
-	PYTHONPATH='./src/' poetry run coverage run --concurrency=multiprocessing -m pytest tests/ -s
+	PYTHONPATH=./src poetry run coverage run --concurrency=multiprocessing -m pytest tests/ -s
 	poetry run coverage combine
 	poetry run coverage report -m
 

@@ -8,6 +8,7 @@ from ruth.nlu.tokenizer.tokenizer import Tokenizer
 from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
+from tqdm import tqdm
 from transformers import AutoTokenizer
 
 
@@ -37,7 +38,6 @@ class HFTokenizer(Tokenizer):
 
         input_ids = encoded["input_ids"]
         attention_masks = encoded["attention_mask"]
-        # return torch.cat(tokens, dim=0), torch.cat(attention_masks, dim=0)
         return input_ids, attention_masks
 
     def tokenize(self, training_data: TrainData):
@@ -49,8 +49,10 @@ class HFTokenizer(Tokenizer):
         input_ids: List[List[int]],
         attention_masks: List[List[int]],
     ):
-        for message, input_id, attention_mask in zip(
-            training_examples, input_ids, attention_masks
+        for message, input_id, attention_mask in tqdm(
+            zip(training_examples, input_ids, attention_masks),
+            desc="tokenization",
+            total=len(training_examples),
         ):
             message.set(INPUT_IDS, input_id)
             message.set(ATTENTION_MASKS, attention_mask)
@@ -61,7 +63,6 @@ class HFTokenizer(Tokenizer):
         self._add_tokens_to_data(
             training_data.training_examples, input_ids, attention_masks
         )
-        print("tokenizer_train completed")
 
     def persist(self, file_name: Text, model_dir: Path):
         tokenizer_file_name = file_name + "_tokenizer"
