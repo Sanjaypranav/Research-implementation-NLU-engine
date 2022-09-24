@@ -38,7 +38,6 @@ class HFTokenizer(Tokenizer):
 
         input_ids = encoded["input_ids"]
         attention_masks = encoded["attention_mask"]
-        # return torch.cat(tokens, dim=0), torch.cat(attention_masks, dim=0)
         return input_ids, attention_masks
 
     def tokenize(self, training_data: TrainData):

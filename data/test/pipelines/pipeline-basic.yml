@@ -3,4 +3,3 @@ pipeline:
   - name: WhiteSpaceTokenizer
   - name: FastTextFeaturizer
   - name: SVMClassifier
-

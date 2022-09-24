@@ -21,4 +21,4 @@ def test_ruth_data(example_data: List[Dict[Text, Any]]):
         break
 
     assert data.get(INTENT) == "greet"
-    assert data.get(TEXT) == "hi"
+    assert data.get(TEXT) == "Hello!"
