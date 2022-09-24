@@ -8,7 +8,7 @@ from numpy import argsort, fliplr
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
-from ruth.nlu.classifiers.constants import EPOCHS, MODEL_NAME
+from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -31,7 +31,7 @@ console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {"epochs": 100, MODEL_NAME: "bert-base-uncased"}
+    defaults = {EPOCHS: 100, MODEL_NAME: "bert-base-uncased", BATCH_SIZE: 1}
 
     def __init__(
         self,
@@ -73,7 +73,10 @@ class HFClassifier(IntentClassifier):
 
     @property
     def get_params(self):
-        return {"epochs": self.element_config["epochs"]}
+        return {
+            EPOCHS: self.element_config[EPOCHS],
+            BATCH_SIZE: self.element_config[BATCH_SIZE],
+        }
 
     def train(self, training_data: TrainData):
         intents: List[Text] = [
@@ -99,8 +102,12 @@ class HFClassifier(IntentClassifier):
         y = self.encode_the_str_to_int(intents)
         label_count = len(Counter(y).keys())
 
+        params = self.get_params
+
         loaded_data = HFDatasetLoader(X, y)
-        batched_data = DataLoader(loaded_data, batch_size=64, shuffle=True)
+        batched_data = DataLoader(
+            loaded_data, batch_size=params[BATCH_SIZE], shuffle=True
+        )
 
         self.model = self._build_model(label_count)
 
@@ -108,8 +115,6 @@ class HFClassifier(IntentClassifier):
         device = self.get_device()
         logger.info("device: " + str(device) + " is used")
         self.model.to(device)
-
-        params = self.get_params
 
         self.model.train()
         for epoch in range(params[EPOCHS]):
@@ -190,7 +195,6 @@ class HFClassifier(IntentClassifier):
             intent = {"name": None, "accuracy": 0.0}
             intent_rankings = []
         message.set(INTENT, intent)
-        print(intent_rankings)
         message.set(INTENT_RANKING, intent_rankings)
 
 
