@@ -30,7 +30,7 @@ console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {EPOCHS: 2, MODEL_NAME: "bert-base-uncased", BATCH_SIZE: 1}
+    defaults = {EPOCHS: 100, MODEL_NAME: "bert-base-uncased", BATCH_SIZE: 1}
 
     def __init__(
         self,
