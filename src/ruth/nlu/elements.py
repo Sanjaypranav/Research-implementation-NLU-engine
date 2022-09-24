@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict, Text
+from typing import Any, Dict, List, Text
 
 from ruth.shared.constants import ELEMENT_INDEX, KEY_NAME
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -49,3 +49,7 @@ class Element(metaclass=ElementMetaClass):
     @classmethod
     def load(cls, meta: Dict[Text, Any], model_dir: Path, **kwargs: Any):
         return cls(meta)
+
+    @staticmethod
+    def required_element() -> List[object]:
+        return []

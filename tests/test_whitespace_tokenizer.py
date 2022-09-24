@@ -18,5 +18,6 @@ def test_with_ham_spam_with_empty_training_data(whitespace_example: Dict[Text, A
     tokenizer.train(training_data)
     test_message = RuthData.build(text=whitespace_example[TEXT])
     tokenizer.parse(test_message)
-
+    _ = [print(token.text) for token in whitespace_example[TOKENS]]
+    _ = [print(token.text) for token in test_message.get(TOKENS)]
     assert whitespace_example[TOKENS] == test_message.get(TOKENS)

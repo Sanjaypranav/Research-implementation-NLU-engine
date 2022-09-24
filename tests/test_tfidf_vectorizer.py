@@ -3,7 +3,8 @@ from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
 from ruth.nlu.registry import registered_classes
-from ruth.shared.nlu.ruth_elements import RuthData, TrainData
+from ruth.shared.nlu.training_data.collections import TrainData
+from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 from tests.conftest import FEATURE
 
@@ -23,5 +24,5 @@ def test_tfidf_vectorizer(tfidf_featurizer_example: Dict[Text, Any]):
 
     assert (
         tfidf_featurizer_example[FEATURE]
-        == test_message.get_sparse_features().feature.toarray().tolist()
+        == test_message.get_features().feature.toarray().tolist()
     )

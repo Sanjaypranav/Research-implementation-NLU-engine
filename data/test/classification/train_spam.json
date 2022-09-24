@@ -1,50 +1,7 @@
 [
+
     {
-        "text": "Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...",
-        "intent": "ham"
-    },
-    {
-        "text": "Ok lar... Joking wif u oni...",
-        "intent": "ham"
-    },
-    {
-        "text": "U dun say so early hor... U c already then say...",
-        "intent": "ham"
-    },
-    {
-        "text": "Nah I don't think he goes to usf, he lives around here though",
-        "intent": "ham"
-    },
-    {
-        "text": "Even my brother is not like to speak with me. They treat me like aids patent.",
-        "intent": "ham"
-    },
-    {
-        "text": "As per your request 'Melle Melle (Oru Minnaminunginte Nurungu Vettam)' has been set as your callertune for all Callers. Press *9 to copy your friends Callertune",
-        "intent": "ham"
-    },
-    {
-        "text": "I'm gonna be home soon and i don't want to talk about this stuff anymore tonight, k? I've cried enough today.",
-        "intent": "ham"
-    },
-    {
-        "text": "I've been searching for the right words to thank you for this breather. I promise i wont take your help for granted and will fulfil my promise. You have been wonderful and a blessing at all times.",
-        "intent": "ham"
-    },
-    {
-        "text": "I HAVE A DATE ON SUNDAY WITH WILL!!",
-        "intent": "ham"
-    },
-    {
-        "text": "Oh k...i'm watching here:)",
-        "intent": "ham"
-    },
-    {
-        "text": "Eh u remember how 2 spell his name... Yes i did. He v naughty make until i v wet.",
-        "intent": "ham"
-    },
-    {
-        "text": "Fine if that\u00e5\u00d5s the way u feel. That\u00e5\u00d5s the way its gota b",
+        "text": "Fine if thats the way u feel. Thats the way its gota b",
         "intent": "ham"
     },
     {
@@ -52,11 +9,11 @@
         "intent": "ham"
     },
     {
-        "text": "I\u2030\u00db\u00f7m going to try for 2 months ha ha only joking",
+        "text": "Im going to try for 2 months ha ha only joking",
         "intent": "ham"
     },
     {
-        "text": "So \u00cc_ pay first lar... Then when is da stock comin...",
+        "text": "So pay first lar... Then when is da stock comin...",
         "intent": "ham"
     },
     {
@@ -68,11 +25,11 @@
         "intent": "spam"
     },
     {
-        "text": "FreeMsg Hey there darling it's been 3 week's now and no word back! I'd like some fun you up for it still? Tb ok! XxX std chgs to send, \u00e5\u00a31.50 to rcv",
+        "text": "FreeMsg Hey there darling it's been 3 week's now and no word back! I'd like some fun you up for it still? Tb ok! XxX std chgs to send, 1.50 to rcv",
         "intent": "spam"
     },
     {
-        "text": "WINNER!! As a valued network customer you have been selected to receivea \u00e5\u00a3900 prize reward! To claim call 09061701461. Claim code KL341. Valid 12 hours only.",
+        "text": "WINNER!! As a valued network customer you have been selected to receivea 900 prize reward! To claim call 09061701461. Claim code KL341. Valid 12 hours only.",
         "intent": "spam"
     },
     {
@@ -84,7 +41,7 @@
         "intent": "spam"
     },
     {
-        "text": "URGENT! You have won a 1 week FREE membership in our \u00e5\u00a3100,000 Prize Jackpot! Txt the word: CLAIM to No: 81010 T&C www.dbuk.net LCCLTD POBOX 4403LDNW1A7RW18",
+        "text": "URGENT! You have won a 1 week FREE membership in our 100,000 Prize Jackpot! Txt the word: CLAIM to No: 81010 T&C www.dbuk.net LCCLTD POBOX 4403LDNW1A7RW18",
         "intent": "spam"
     },
     {
@@ -92,11 +49,11 @@
         "intent": "spam"
     },
     {
-        "text": "England v Macedonia - dont miss the goals/team news. Txt ur national team to 87077 eg ENGLAND to 87077 Try:WALES, SCOTLAND 4txt/\u00cc\u00bc1.20 POBOXox36504W45WQ 16+",
+        "text": "England v Macedonia - dont miss the goals/team news. Txt ur national team to 87077 eg ENGLAND to 87077 Try:WALES, SCOTLAND 4txt 1.20 POBOXox36504W45WQ 16+",
         "intent": "spam"
     },
     {
-        "text": "Thanks for your subscription to Ringtone UK your mobile will be charged \u00e5\u00a35/month Please confirm by replying YES or NO. If you reply NO you will not be charged",
+        "text": "Thanks for your subscription to Ringtone UK your mobile will be charged month Please confirm by replying YES or NO. If you reply NO you will not be charged",
         "intent": "spam"
     },
     {
@@ -112,19 +69,19 @@
         "intent": "spam"
     },
     {
-        "text": "As a valued customer, I am pleased to advise you that following recent review of your Mob No. you are awarded with a \u00e5\u00a31500 Bonus Prize, call 09066364589",
+        "text": "As a valued customer, I am pleased to advise you that following recent review of your Mob No. you are awarded with a 1500 Bonus Prize, call 09066364589",
         "intent": "spam"
     },
     {
-        "text": "Urgent UR awarded a complimentary trip to EuroDisinc Trav, Aco&Entry41 Or \u00e5\u00a31000. To claim txt DIS to 87121 18+6*\u00e5\u00a31.50(moreFrmMob. ShrAcomOrSglSuplt)10, LS1 3AJ",
+        "text": "Urgent UR awarded a complimentary trip to EuroDisinc Trav, Aco&Entry41 Or. To claim txt DIS to 87121 18+6*1.50(moreFrmMob. ShrAcomOrSglSuplt)10, LS1 3AJ",
         "intent": "spam"
     },
     {
-        "text": "Did you hear about the new \\Divorce Barbie\\\"? It comes with all of Ken's stuff!\"",
+        "text": "Did you hear about the new ? It comes with all of Ken's stuff!",
         "intent": "spam"
     },
     {
-        "text": "Please call our customer service representative on 0800 169 6031 between 10am-9pm as you have WON a guaranteed \u00e5\u00a31000 cash or \u00e5\u00a35000 prize!",
+        "text": "Please call our customer service representative on 0800 169 6031 between 10am-9pm as you have WON a guaranteed 1000 cash or 5000 prize!",
         "intent": "spam"
     }
 ]

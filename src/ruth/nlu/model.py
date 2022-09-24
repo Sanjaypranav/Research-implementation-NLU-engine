@@ -10,7 +10,7 @@ from ruth.constants import INTENT, TEXT
 from ruth.nlu.constants import RUTH
 from ruth.nlu.elements import Element
 from ruth.nlu.registry import registered_classes
-from ruth.nlu.utils import module_path_from_object
+from ruth.nlu.utils import check_required_elements, module_path_from_object
 from ruth.shared.constants import INTENT_NAME_KEY, PREDICTED_CONFIDENCE_KEY
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
@@ -73,6 +73,17 @@ class Trainer:
             element_builder = ElementBuilder()
 
         self.pipeline = self._build_pipeline(config, element_builder)
+        self.validate_pipeline()
+
+    def validate_pipeline(self) -> None:
+        missing_element = []
+        for i, element in enumerate(self.pipeline):
+            for required_element in element.required_element():
+                if not check_required_elements(required_element, self.pipeline[:i]):
+                    missing_element.append(required_element)
+                    raise ValueError(
+                        f'Missing required elements {" ,".join(missing_element)}'
+                    )
 
     @staticmethod
     def _build_pipeline(config: RuthConfig, element_builder: ElementBuilder):
@@ -114,7 +125,7 @@ class Trainer:
             file_name = self.get_filename(index, name=element.name)
             custom_meta = element.persist(file_name, model_dir)
             element_meta = element.element_config
-            if element_meta:
+            if element_meta and custom_meta:
                 element_meta.update(custom_meta)
             element_meta["class"] = module_path_from_object(element)
 

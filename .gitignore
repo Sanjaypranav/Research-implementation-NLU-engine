@@ -1,3 +1,9 @@
 .idea/
 .idea/Research-implementation-NLU-engine.iml
 .idea/misc.xml
+src/ruth_python.egg-info
+
+.venv
+venv
+
+*/__pycache__/

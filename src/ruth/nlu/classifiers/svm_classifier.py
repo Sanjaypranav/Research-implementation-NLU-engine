@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Text, Tuple
+from typing import Any, Dict, List, Text, Tuple, Union
 
 import sklearn
 from numpy import argsort, fliplr, ndarray, reshape
@@ -28,6 +28,7 @@ class SVMClassifier(IntentClassifier):
         "decision_function_shape": ["ovr"],
         "max_cross_validation_folds": 5,
         "scoring": "f1_weighted",
+        "max_length": 30000,
     }
 
     def __init__(
@@ -40,8 +41,8 @@ class SVMClassifier(IntentClassifier):
         super().__init__(element_config, le)
 
     @staticmethod
-    def get_features(message: RuthData) -> sparse.spmatrix:
-        feature = message.get_sparse_features()
+    def get_features(message: RuthData) -> Union[sparse.spmatrix, ndarray]:
+        feature = message.get_features()
         if feature is not None:
             return feature.feature[0]
         raise ValueError("There is no sentence. Not able to train SVMClassifier")
@@ -64,7 +65,7 @@ class SVMClassifier(IntentClassifier):
             clf,
             param_grids,
             scoring=self.element_config["scoring"],
-            cv=self.element_config["max_cross_validation_folds"],
+            # cv=self.element_config["max_cross_validation_folds"],
         )
 
     def train(self, training_data: TrainData):
@@ -77,11 +78,16 @@ class SVMClassifier(IntentClassifier):
                 "At least two unique intent are needed to train the model"
             )
             return
+        X = [self.get_features(message) for message in training_data.intent_examples]
+        if self.check_dense(X[0]):
 
-        X = [
-            self.get_features(message).toarray()
-            for message in training_data.intent_examples
-        ]
+            max_length = self.get_max_length(X)
+            self.element_config["max_length"] = max_length
+            X = [self.ravel_vector(x) for x in X]
+            # X = [self.pad_vector(x, max_length) for x in X]
+        else:
+            X = [message.toarray() for message in X]
+
         y = self.encode_the_str_to_int(intents)
 
         X = reshape(X, (len(X), -1))
@@ -122,7 +128,12 @@ class SVMClassifier(IntentClassifier):
         return cls(meta, clf=clf, le=le)
 
     def parse(self, message: RuthData):
-        x = self.get_features(message).toarray()
+        x = self.get_features(message)
+        if self.check_dense(x):
+            x = self.ravel_vector(x)
+            x = self.pad_vector(x, self.element_config["max_length"])
+        else:
+            x = x.toarray()
         index, probabilities = self._predict(x)
 
         intents = self._change_int_to_text(index.flatten())

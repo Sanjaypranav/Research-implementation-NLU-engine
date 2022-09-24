@@ -1,8 +1,8 @@
 from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
-from ruth.nlu.elements import Element
+from ruth.nlu.featurizers.featurizer import Featurizer
 
 
-class DenseFeaturizer(Element):
+class DenseFeaturizer(Featurizer):
     def __init__(self, element_config):
         element_config = element_config or {}
         self.element_config = element_config

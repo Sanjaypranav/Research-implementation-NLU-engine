@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Text
 
 from ruth.constants import TEXT, TOKENS
+from ruth.nlu.constants import ELEMENT_UNIQUE_NAME
 from ruth.nlu.elements import Element
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
@@ -18,6 +19,12 @@ class Token:
 
 
 class Tokenizer(Element):
+    def __init__(self, element_config):
+        element_config = element_config or {}
+        self.element_config = element_config
+        element_config.setdefault(ELEMENT_UNIQUE_NAME, self.create_unique_name())
+        super().__init__(element_config)
+
     def train(self, training_data: TrainData):
         for data in training_data.training_examples:
             text = data.get(TEXT)
@@ -37,7 +44,7 @@ class Tokenizer(Element):
             word_offset = text.index(word, running_offset)
             word_len = len(word)
             running_offset = word_offset + word_len
-            tokens.append(Token(word, start=word_offset, end=running_offset))
+            tokens.append(Token(word.lower(), start=word_offset, end=running_offset))
 
         return tokens
 

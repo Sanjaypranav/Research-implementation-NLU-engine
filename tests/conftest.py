@@ -28,7 +28,7 @@ def whitespace_example() -> Dict[Text, Any]:
     return {
         TEXT: "I am a developer",
         TOKENS: [
-            Token("I", start=0, end=1),
+            Token("i", start=0, end=1),
             Token("am", start=2, end=4),
             Token("a", start=5, end=6),
             Token("developer", start=7, end=16),

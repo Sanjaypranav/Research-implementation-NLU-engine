@@ -1,10 +1,10 @@
 [
   {
-    "text": "Go until jurong point, crazy.. Available only in bugis n great world la e buffet... Cine there got amore wat...",
+    "text": "Go until jurong point, crazy.. Available only in bugis n great world la e buffet Cine there got amore wat",
     "intent": "ham"
   },
   {
-    "text": "Ok lar... Joking wif u oni...",
+    "text": "Ok lar Joking wif u oni",
     "intent": "ham"
   },
   {
@@ -12,7 +12,7 @@
     "intent": "spam"
   },
   {
-    "text": "U dun say so early hor... U c already then say...",
+    "text": "U dun say so early hor U c already then say",
     "intent": "ham"
   },
   {
@@ -64,11 +64,11 @@
     "intent": "spam"
   },
   {
-    "text": "Oh k...i'm watching here:)",
+    "text": "Oh ki'm watching here:)",
     "intent": "ham"
   },
   {
-    "text": "Eh u remember how 2 spell his name... Yes i did. He v naughty make until i v wet.",
+    "text": "Eh u remember how 2 spell his name Yes i did. He v naughty make until i v wet.",
     "intent": "ham"
   },
   {
@@ -88,7 +88,7 @@
     "intent": "ham"
   },
   {
-    "text": "So ü pay first lar... Then when is da stock comin...",
+    "text": "So ü pay first lar Then when is da stock comin",
     "intent": "ham"
   },
   {
@@ -140,7 +140,7 @@
     "intent": "spam"
   },
   {
-    "text": "Yup... Ok i go home look at the timings then i msg ü again... Xuhui going to learn on 2nd may too but her lesson is at 8am",
+    "text": "Yup Ok i go home look at the timings then i msg ü again Xuhui going to learn on 2nd may too but her lesson is at 8am",
     "intent": "ham"
   },
   {
@@ -152,7 +152,7 @@
     "intent": "ham"
   },
   {
-    "text": "Anything lor... U decide...",
+    "text": "Anything lor U decide",
     "intent": "ham"
   },
   {
@@ -164,7 +164,7 @@
     "intent": "ham"
   },
   {
-    "text": "Did I forget to tell you ? I want you , I need you, I crave you ... But most of all ... I love you my sweet Arabian steed ... Mmmmmm ... Yummy",
+    "text": "Did I forget to tell you ? I want you , I need you, I crave you  But most of all  I love you my sweet Arabian steed  Mmmmmm  Yummy",
     "intent": "ham"
   },
   {
@@ -176,7 +176,7 @@
     "intent": "ham"
   },
   {
-    "text": "Great! I hope you like your man well endowed. I am  &lt;#&gt;  inches...",
+    "text": "Great! I hope you like your man well endowed. I am  &lt;#&gt;  inches",
     "intent": "ham"
   },
   {
@@ -203,16 +203,9 @@
     "text": "What you thinked about me. First time you saw me in class.",
     "intent": "ham"
   },
-  {
-    "text": "A gram usually runs like  &lt;#&gt; , a half eighth is smarter though and gets you almost a whole second gram for  &lt;#&gt;",
-    "intent": "ham"
-  },
+
   {
     "text": "K fyi x has a ride early tomorrow morning but he's crashing at our place tonight",
-    "intent": "ham"
-  },
-  {
-    "text": "Wow. I never realized that you were so embarassed by your accomodations. I thought you liked it, since i was doing the best i could and you always seemed so happy about \"the cave\". I'm sorry I didn't and don't have more to give. I'm sorry i offered. I'm sorry your room was so embarassing.",
     "intent": "ham"
   },
   {
@@ -226,10 +219,6 @@
   {
     "text": "Congrats! 1 year special cinema pass for 2 is yours. call 09061209465 now! C Suprman V, Matrix3, StarWars3, etc all 4 FREE! bx420-ip4-5we. 150pm. Dont miss out!",
     "intent": "spam"
-  },
-  {
-    "text": "Sorry, I'll call later in meeting.",
-    "intent": "ham"
   },
   {
     "text": "Tell where you reached",
@@ -264,7 +253,7 @@
     "intent": "spam"
   },
   {
-    "text": "Today is \"song dedicated day..\" Which song will u dedicate for me? Send this to all ur valuable frnds but first rply me...",
+    "text": "Today is song dedicated day.. Which song will u dedicate for me? Send this to all ur valuable frnds but first rply me",
     "intent": "ham"
   },
   {
@@ -272,7 +261,7 @@
     "intent": "spam"
   },
   {
-    "text": "Did you hear about the new \"Divorce Barbie\"? It comes with all of Ken's stuff!",
+    "text": "Did you hear about the new Divorce Barbie? It comes with all of Ken's stuff!",
     "intent": "spam"
   },
   {
@@ -280,7 +269,7 @@
     "intent": "ham"
   },
   {
-    "text": "Wah lucky man... Then can save money... Hee...",
+    "text": "Wah lucky man Then can save money Hee",
     "intent": "ham"
   },
   {
@@ -296,7 +285,7 @@
     "intent": "ham"
   },
   {
-    "text": "U can call me now...",
+    "text": "U can call me now",
     "intent": "ham"
   },
   {
@@ -364,10 +353,6 @@
     "intent": "ham"
   },
   {
-    "text": "Sorry to be a pain. Is it ok if we meet another night? I spent late afternoon in casualty and that means i haven't done any of y stuff42moro and that includes all my time sheets and that. Sorry.",
-    "intent": "ham"
-  },
-  {
     "text": "Smile in Pleasure Smile in Pain Smile when trouble pours like Rain Smile when sum1 Hurts U Smile becoz SOMEONE still Loves to see u Smiling!!",
     "intent": "ham"
   },
@@ -380,7 +365,7 @@
     "intent": "ham"
   },
   {
-    "text": "Your free ringtone is waiting to be collected. Simply text the password \"MIX\" to 85069 to verify. Get Usher and Britney. FML, PO Box 5249, MK17 92H. 450Ppw 16",
+    "text": "Your free ringtone is waiting to be collected. Simply text the password MIX to 85069 to verify. Get Usher and Britney. FML, PO Box 5249, MK17 92H. 450Ppw 16",
     "intent": "spam"
   },
   {
@@ -392,7 +377,7 @@
     "intent": "ham"
   },
   {
-    "text": "Hi. Wk been ok - on hols now! Yes on for a bit of a run. Forgot that i have hairdressers appointment at four so need to get home n shower beforehand. Does that cause prob for u?\"",
+    "text": "Hi. Wk been ok - on hols now! Yes on for a bit of a run. Forgot that i have hairdressers appointment at four so need to get home n shower beforehand. Does that cause prob for u?",
     "intent": "ham"
   },
   {

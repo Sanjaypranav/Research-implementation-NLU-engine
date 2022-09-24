@@ -1,7 +1,7 @@
 import copy
 from typing import Any, Dict, List, Optional, Text
 
-from ruth.constants import INTENT, TEXT
+from ruth.constants import INTENT, TEXT, TOKENS
 from ruth.shared.nlu.training_data.feature import Feature
 
 
@@ -41,9 +41,18 @@ class RuthData:
                 combined_features.combine_with_features(feature)
         return combined_features
 
-    def get_sparse_features(self, featurizers: List[Text] = None) -> Feature:
+    def get_features(self, featurizers: List[Text] = None) -> Feature:
+        if not featurizers and self.features:
+            featurizers = [self.features[0].origin]
         combined_features = self._combine_features(self.features, featurizers)
         return combined_features
 
     def as_dict(self) -> Dict:
         return {key: value for key, value in self.data.items() if value is not None}
+
+    def get_tokenized_data(self) -> List[Text]:
+        if self.data.get(TOKENS):
+            tokens = [token.text for token in self.data[TOKENS]]
+            return tokens
+        else:
+            return []
