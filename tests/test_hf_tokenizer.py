@@ -11,7 +11,7 @@ def test_hf_tokenizer(example_data_path: Path):
     training_data = TrainData.build(example_data_path)
     tokenizer = registered_classes["HFTokenizer"].build({})
     tokenizer.train(training_data=training_data)
-    assert training_data.training_examples[0].data[INPUT_IDS] == [101, 7632, 102, 0]
-    assert training_data.training_examples[0].data[ATTENTION_MASKS] == [1, 1, 1, 0]
-    message = RuthData(data={TEXT: "hello"})
+    message = RuthData(data={TEXT: "hi"})
     tokenizer.parse(message)
+    assert message.data[INPUT_IDS] == [101, 7632, 102]
+    assert message.data[ATTENTION_MASKS] == [1, 1, 1]
