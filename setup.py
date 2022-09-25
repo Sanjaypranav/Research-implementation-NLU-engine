@@ -16,11 +16,12 @@ core_requirements = [
     "aiohttp~=3.6.3",
     "jsonpickle~=2.1.0",
     "pyyaml~=6.0",
-    "torch~=1.11.0",
+    "torch~=1.12.1",
     "regex",
     "scikit-learn~=1.0.2",
-    "matplotlib~=3.6.0",
-    "progressbar~=2.5"
+    "matplotlib~=3.5.3",
+    "progressbar~=2.5",
+    "transformers~=4.20.0",
 ]
 
 
