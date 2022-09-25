@@ -7,3 +7,5 @@ src/ruth_python.egg-info
 venv
 
 */__pycache__/
+
+nlu-research
