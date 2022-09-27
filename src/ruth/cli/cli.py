@@ -3,10 +3,10 @@ import os
 import re
 from pathlib import Path
 from typing import Text
+from rich import print as rprint
 
 import click
 import matplotlib.pyplot as plt
-from rich.console import Console
 from ruth import VERSION
 from ruth.cli.utills import (
     build_pipeline_from_metadata,
@@ -19,6 +19,7 @@ from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 from sklearn.metrics import confusion_matrix
+from rich.console import Console
 
 console = Console()
 
@@ -126,7 +127,7 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
 
     latest_model = models[-1]
 
-    console.print(f"Latest Model found {latest_model}")
+    console.print(f"[green] Latest Model found {latest_model}")
     metadata = get_metadata_from_model(latest_model.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
     interpreter = Interpreter(pipeline)
@@ -181,6 +182,6 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     final_file_path = folder_for_the_result / "confusion_matrix.png"
     plt.savefig(final_file_path)
 
-    print("accuracy: ", accuracy)
-    print("confusion matrix is created.")
-    print("results are stored here: ", folder_for_the_result)
+    rprint(" accuracy: ", accuracy)
+    rprint("[green] confusion matrix is created.")
+    rprint(" results are stored here: ", folder_for_the_result)
