@@ -6,7 +6,7 @@ authors = ["Prakash R <prakashr7d@gmail.com>, Kasi Viswanathan <vinithkac@gmail.
 
 
 [tool.poetry.dependencies]
-python = ">=3.8,<=3.10.6"
+python = ">=3.7,<=3.10.6"
 click = "^8.0.1"
 rich = "^12.0.0"
 PyYAML = "^6.0"
@@ -16,11 +16,8 @@ jsonpickle = "^2.1.0"
 transformers = "^4.20.0"
 matplotlib = "^3.5.3"
 progressbar = "^2.5"
-torch = [
-  {url = "https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp39-cp39-linux_x86_64.whl", markers = "sys_platform == 'linux'"},
-  {url = "https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp39-cp39-win_amd64.whl", markers = "sys_platform == 'win32'" },
-    {url = "https://download.pytorch.org/whl/cpu/torch-1.12.1-cp39-none-macosx_10_9_x86_64.whl", markers = "sys_platform == 'macos'"}
-]
+torch = "^1.12.1"
+
 
 [tool.poetry.dev-dependencies]
 isort = "^4.3.21"
