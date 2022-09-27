@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Text
 
 import yaml
-from ruth.nlu.model import ElementBuilder
+from pydantic import BaseModel
+from ruth.nlu.model import ElementBuilder, Interpreter
 
 
 def get_config(pipeline_path: Path) -> Dict[Text, Any]:
@@ -37,3 +38,13 @@ def get_metadata_from_model(model_path: Path) -> Dict[Text, Any]:
     metadata_file_path = model_path / "metadata.json"
     metadata = load_json_data(metadata_file_path)
     return metadata
+
+
+def get_interpreter_from_model_path(model_path: Path) -> Interpreter:
+    metadata = get_metadata_from_model(model_path.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_path)
+    return Interpreter(pipeline)
+
+
+class Item(BaseModel):
+    text: str
