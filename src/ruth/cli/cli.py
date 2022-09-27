@@ -6,7 +6,7 @@ from typing import Text
 
 import click
 import matplotlib.pyplot as plt
-import uvicorn
+import uvicorn as uvicorn
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from rich.console import Console
@@ -79,22 +79,26 @@ def train(data: Path, pipeline: Path):
     "-m",
     "--model_path",
     type=click.STRING,
-    default="models",
+    required=False,
     help="Directory where the model is stored",
 )
 def parse(text: Text, model_path: Text):
-    models = [
-        directory
-        for directory in Path(model_path).iterdir()
-        if directory.is_dir() and re.search("ruth", str(directory))
-    ]
-    models.sort()
+    if model_path:
+        model_file = model_path
+    else:
+        model_path = "models"
+        models = [
+            directory
+            for directory in Path(model_path).iterdir()
+            if directory.is_dir() and re.search("ruth", str(directory))
+        ]
+        models.sort()
 
-    latest_model = models[-1]
+        model_file = models[-1]
 
-    console.print(f"Latest Model found {latest_model}")
-    metadata = get_metadata_from_model(latest_model.absolute())
-    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
+    console.print(f"Latest Model found {model_file}")
+    metadata = get_metadata_from_model(model_file.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
     console.print(f"Predicted intent is {output.get(INTENT)}")
@@ -111,8 +115,8 @@ def parse(text: Text, model_path: Text):
 @click.option(
     "-m",
     "--model_path",
-    type=click.Path(exists=True),
-    default=Path("models"),
+    type=click.STRING,
+    required=False,
     help="Directory where the model is stored",
 )
 @click.option(
@@ -123,18 +127,22 @@ def parse(text: Text, model_path: Text):
     help="Directory where the results is stored",
 )
 def evaluate(data: Path, model_path: Text, output_folder: Text):
-    models = [
-        directory
-        for directory in Path(model_path).iterdir()
-        if directory.is_dir() and re.search("ruth", str(directory))
-    ]
-    models.sort()
+    if model_path:
+        model_file = model_path
+    else:
+        model_path = "models"
+        models = [
+            directory
+            for directory in Path(model_path).iterdir()
+            if directory.is_dir() and re.search("ruth", str(directory))
+        ]
+        models.sort()
 
-    latest_model = models[-1]
+        model_file = models[-1]
 
-    console.print(f"Latest Model found {latest_model}")
-    metadata = get_metadata_from_model(latest_model.absolute())
-    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
+    console.print(f"Latest Model found {model_file}")
+    metadata = get_metadata_from_model(model_file.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     with open(data, "r") as f:
         examples = json.load(f)
@@ -173,7 +181,7 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     result_path.mkdir(exist_ok=True)
     directories = os.listdir(str(result_path))
     indexes = []
-    model_name = str(latest_model).split("/")[-1]
+    model_name = str(model_file).split("/")[-1]
     for result in directories:
         if model_name in result:
             indexes.append(int(result.split("@")[-1]))
