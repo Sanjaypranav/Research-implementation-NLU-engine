@@ -6,19 +6,25 @@ from typing import Text
 
 import click
 import matplotlib.pyplot as plt
+import uvicorn
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from rich.console import Console
 from ruth import VERSION
 from ruth.cli.utills import (
+    Item,
     build_pipeline_from_metadata,
     get_config,
+    get_interpreter_from_model_path,
     get_metadata_from_model,
 )
-from ruth.constants import INTENT
+from ruth.constants import INTENT, INTENT_RANKING, TEXT
 from ruth.nlu.model import Interpreter
 from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 from sklearn.metrics import confusion_matrix
+from starlette.responses import JSONResponse
 
 console = Console()
 
@@ -184,3 +190,57 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     print("accuracy: ", accuracy)
     print("confusion matrix is created.")
     print("results are stored here: ", folder_for_the_result)
+
+
+@entrypoint.command(name="deploy")
+@click.option(
+    "-m",
+    "--model_path",
+    type=click.STRING,
+    required=False,
+    help="Directory where the model is stored",
+)
+@click.option(
+    "-p",
+    "--port",
+    type=click.INT,
+    default=5500,
+    help="Port where the application should run",
+)
+@click.option(
+    "-h",
+    "--host",
+    type=click.STRING,
+    default="localhost",
+    help="host where the application should run",
+)
+def deploy(model_path: Text, port: int, host: str):
+    app = FastAPI()
+
+    @app.on_event("startup")
+    def startup_event():
+        if model_path:
+            model_file = model_path
+        else:
+            model_folder = "models"
+            models = [
+                directory
+                for directory in Path(model_folder).iterdir()
+                if directory.is_dir() and re.search("ruth", str(directory))
+            ]
+            models.sort()
+
+            model_file = models[-1]
+
+        app.interpreter = get_interpreter_from_model_path(Path(model_file))
+
+    @app.get("/parse")
+    async def parse(item: Item):
+        output = app.interpreter.parse(item.text)
+        output = {
+            key: output[key] for key in output.keys() & {INTENT_RANKING, TEXT, INTENT}
+        }
+        json_compatible_item_data = jsonable_encoder(output)
+        return JSONResponse(content=json_compatible_item_data)
+
+    uvicorn.run(app, host=host, port=port)
