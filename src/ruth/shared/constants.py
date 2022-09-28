@@ -13,3 +13,4 @@ KEY_PIPELINE = "pipeline"
 KEY_LANGUAGE = "language"
 
 DEFAULT_ENCODING = "utf-8"
+DEVICE = "device"
