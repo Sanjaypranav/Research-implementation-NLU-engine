@@ -1,6 +1,5 @@
 import json
 import os
-import re
 from pathlib import Path
 from typing import Text
 
@@ -14,6 +13,7 @@ from ruth import VERSION
 from ruth.cli.utills import (
     Item,
     build_pipeline_from_metadata,
+    check_model_path,
     get_config,
     get_interpreter_from_model_path,
     get_metadata_from_model,
@@ -83,19 +83,7 @@ def train(data: Path, pipeline: Path):
     help="Directory where the model is stored",
 )
 def parse(text: Text, model_path: Text):
-    if model_path:
-        model_file = model_path
-    else:
-        model_path = "models"
-        models = [
-            directory
-            for directory in Path(model_path).iterdir()
-            if directory.is_dir() and re.search("ruth", str(directory))
-        ]
-        models.sort()
-
-        model_file = models[-1]
-
+    model_file = check_model_path(model_path)
     console.print(f"Latest Model found {model_file}")
     metadata = get_metadata_from_model(model_file.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
@@ -127,19 +115,7 @@ def parse(text: Text, model_path: Text):
     help="Directory where the results is stored",
 )
 def evaluate(data: Path, model_path: Text, output_folder: Text):
-    if model_path:
-        model_file = model_path
-    else:
-        model_path = "models"
-        models = [
-            directory
-            for directory in Path(model_path).iterdir()
-            if directory.is_dir() and re.search("ruth", str(directory))
-        ]
-        models.sort()
-
-        model_file = models[-1]
-
+    model_file = check_model_path(model_path)
     console.print(f"Latest Model found {model_file}")
     metadata = get_metadata_from_model(model_file.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
@@ -225,22 +201,7 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
 def deploy(model_path: Text, port: int, host: str):
     app = FastAPI()
 
-    @app.on_event("startup")
-    def startup_event():
-        if model_path:
-            model_file = model_path
-        else:
-            model_folder = "models"
-            models = [
-                directory
-                for directory in Path(model_folder).iterdir()
-                if directory.is_dir() and re.search("ruth", str(directory))
-            ]
-            models.sort()
-
-            model_file = models[-1]
-
-        app.interpreter = get_interpreter_from_model_path(Path(model_file))
+    app.interpreter = get_interpreter_from_model_path(model_path)
 
     @app.get("/parse")
     async def parse(item: Item):

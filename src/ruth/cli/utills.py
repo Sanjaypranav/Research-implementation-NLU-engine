@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Text
 
@@ -40,10 +41,37 @@ def get_metadata_from_model(model_path: Path) -> Dict[Text, Any]:
     return metadata
 
 
-def get_interpreter_from_model_path(model_path: Path) -> Interpreter:
+def get_interpreter_from_model_path(model_path: str) -> Interpreter:
+    model_path = check_model_path(model_path)
     metadata = get_metadata_from_model(model_path.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_path)
     return Interpreter(pipeline)
+
+
+def check_model_path(model_path: str) -> Path:
+    if model_path:
+        if Path.exists(Path(model_path)):
+            model_file = model_path
+        else:
+            raise FileNotFoundError(
+                "Model does not exist in the given path.\nTo train: ruth train"
+            )
+    else:
+        model_folder = "models"
+        models = [
+            directory
+            for directory in Path(model_folder).iterdir()
+            if directory.is_dir() and re.search("ruth", str(directory))
+        ]
+        if models:
+            models.sort()
+            model_file = models[-1]
+        else:
+            raise FileNotFoundError(
+                "No models found.\nTrain new models using: ruth train"
+            )
+
+    return Path(model_file)
 
 
 class Item(BaseModel):

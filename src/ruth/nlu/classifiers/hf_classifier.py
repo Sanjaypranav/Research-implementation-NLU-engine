@@ -117,7 +117,7 @@ class HFClassifier(IntentClassifier):
 
         optimizer = self.get_optimizer(self.model)
         device = self.get_device()
-        logger.info("device: " + str(device) + " is used")
+        console.print("device: " + str(device) + " is used")
         self.model.to(device)
 
         self.model.train()
@@ -191,9 +191,10 @@ class HFClassifier(IntentClassifier):
             ranking = list(zip(list(intents), list(probabilities)))[
                 :LABEL_RANKING_LIMIT
             ]
-            intent = {"name": intents[0], "accuracy": probabilities[0]}
+            intent = {"name": intents[0], "accuracy": float(probabilities[0])}
             intent_rankings = [
-                {"name": name, "accuracy": probability} for name, probability in ranking
+                {"name": name, "accuracy": float(probability)}
+                for name, probability in ranking
             ]
         else:
             intent = {"name": None, "accuracy": 0.0}
