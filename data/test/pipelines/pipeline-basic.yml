@@ -1,9 +1,6 @@
 task:
 pipeline:
-  - name: 'HFTokenizer'
-    model_name: 'bert-base-uncased'
-  - name: 'HFClassifier'
-    model_name: 'bert-base-uncased'
-    epochs: 2
-    batch_size: 10
+  - name: 'TfidfVectorFeaturizer'
+  - name: 'SVMClassifier'
+
 
