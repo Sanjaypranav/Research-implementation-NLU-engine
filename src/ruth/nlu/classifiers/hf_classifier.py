@@ -4,17 +4,17 @@ from pathlib import Path
 from typing import Any, Dict, List, Text, Tuple
 
 import torch
-from numpy import argsort, fliplr
+from numpy import argsort, fliplr, ndarray
 from rich.console import Console
 from ruth.constants import INTENT, INTENT_RANKING
 from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
-from ruth.shared.constants import ATTENTION_MASKS, INPUT_IDS
+from ruth.shared.constants import ATTENTION_MASKS, DEVICE, INPUT_IDS
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
-from ruth.shared.utils import json_pickle, json_unpickle
+from ruth.shared.utils import get_device, json_pickle, json_unpickle
 from sklearn.preprocessing import LabelEncoder
 from torch import nn
 from torch.nn import Module
@@ -32,7 +32,12 @@ console = Console()
 
 
 class HFClassifier(IntentClassifier):
-    defaults = {EPOCHS: 100, MODEL_NAME: "bert-base-uncased", BATCH_SIZE: 1}
+    defaults = {
+        EPOCHS: 100,
+        MODEL_NAME: "bert-base-uncased",
+        BATCH_SIZE: 1,
+        DEVICE: "cpu",
+    }
 
     def __init__(
         self,
@@ -40,8 +45,9 @@ class HFClassifier(IntentClassifier):
         le: LabelEncoder = None,
         model: Module = None,
     ):
-        self.model = model
         super().__init__(element_config, le)
+        self.model = model
+        self.device = get_device(self.element_config[DEVICE])
 
     def required_element(self):
         return [HFTokenizer]
@@ -68,12 +74,6 @@ class HFClassifier(IntentClassifier):
     @staticmethod
     def get_optimizer(model):
         return AdamW(model.parameters(), lr=5e-5)
-
-    @staticmethod
-    def get_device():
-        return (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
 
     @property
     def get_params(self):
@@ -116,17 +116,16 @@ class HFClassifier(IntentClassifier):
         self.model = self._build_model(label_count)
 
         optimizer = self.get_optimizer(self.model)
-        device = self.get_device()
-        console.print("device: " + str(device) + " is used")
-        self.model.to(device)
+        console.print("device: " + str(self.device) + " is used")
+        self.model.to(self.device)
 
         self.model.train()
         for epoch in range(params[EPOCHS]):
             for batch in tqdm(batched_data, desc="epoch " + str(epoch)):
                 optimizer.zero_grad()
-                input_ids = batch["input_ids"].to(device)
-                attention_masks = batch["attention_masks"].to(device)
-                labels = batch["labels"].to(device)
+                input_ids = batch["input_ids"].to(self.device)
+                attention_masks = batch["attention_masks"].to(self.device)
+                labels = batch["labels"].to(self.device)
                 outputs = self.model(
                     input_ids, attention_mask=attention_masks, labels=labels
                 )
@@ -151,7 +150,7 @@ class HFClassifier(IntentClassifier):
         return {"classifier": classifier_file_name, "encoder": encoder_file_name}
 
     @classmethod
-    def load(cls, meta: Dict[Text, Any], model_dir: Path):
+    def load(cls, meta: Dict[Text, Any], model_dir: Path, **kwargs):
         classifier_file_name = model_dir / meta["classifier"]
         encoder_file_name = model_dir / meta["encoder"]
 
@@ -162,17 +161,17 @@ class HFClassifier(IntentClassifier):
 
         return cls(meta, model=classifier, le=le)
 
-    def _predict(self, input_ids, attention_masks) -> Tuple[List[int], List[float]]:
+    def _predict(self, input_ids, attention_masks) -> Tuple[ndarray, ndarray]:
         predictions = self.predict_probabilities(input_ids, attention_masks)
         sorted_index = fliplr(argsort(predictions, axis=1))
         return sorted_index[0], predictions[:, sorted_index][0][0]
 
     def predict_probabilities(self, input_ids, attention_masks):
-        self.model.to(self.get_device())
+        self.model.to(self.device)
         self.model.eval()
         probabilities = self.model(
-            torch.tensor(input_ids, device=self.get_device()),
-            attention_mask=torch.tensor(attention_masks, device=self.get_device()),
+            torch.tensor(input_ids, device=self.device),
+            attention_mask=torch.tensor(attention_masks, device=self.device),
         )[0]
         probabilities = nn.functional.softmax(probabilities, dim=-1)
         probabilities = probabilities.to(torch.device("cpu"))

@@ -118,7 +118,7 @@ class SVMClassifier(IntentClassifier):
         return self.clf.predict_proba(x.reshape(1, -1))
 
     @classmethod
-    def load(cls, meta: Dict[Text, Any], model_dir: Path):
+    def load(cls, meta: Dict[Text, Any], model_dir: Path, **kwargs):
         classifier_file_name = model_dir / meta["classifier"]
         encoder_file_name = model_dir / meta["encoder"]
 
