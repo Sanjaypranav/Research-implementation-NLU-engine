@@ -1,6 +1,6 @@
-import json
 from typing import Any, Dict, Text
 
+import yaml
 from ruth.constants import PATH, TEXT
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -12,7 +12,7 @@ from tests.conftest import FEATURE
 def test_tfidf_vectorizer(tfidf_featurizer_example: Dict[Text, Any]):
     messages = []
     with open(tfidf_featurizer_example[PATH], "r") as f:
-        example_data = json.load(f)
+        example_data = yaml.safe_load(f)
     for data in example_data:
         messages.append(RuthData(data=data))
     training_data = TrainData(messages)

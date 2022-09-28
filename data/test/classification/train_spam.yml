@@ -1,0 +1,16 @@
+version: "0.1"
+nlu:
+- intent: ham
+  examples: |
+    - Fine if thats the way u feel. Thats the way its gota b
+    - Is that seriously how you spell his name?
+    - Im going to try for 2 months ha ha only joking
+    - So pay first lar... Then when is da stock comin...
+    - Aft i finish my lunch then i go str down lor. Ard 3 smth lor. U finish ur lunch already?
+- intent: spam
+  examples: |
+    - SIX chances to win CASH! From 100 to 20,000 pounds txt> CSH11 and send to 87575. Cost 150p/day, 6days, 16+ TsandCs apply Reply HL 4 info
+    - URGENT! You have won a 1 week FREE membership in our 100,000 Prize Jackpot! Txt the word: CLAIM to No: 81010 T&C www.dbuk.net LCCLTD POBOX 4403LDNW1A7RW18
+    - XXXMobileMovieClub: To use your credit, click the WAP link in the next txt message or click here>> http://wap. xxxmobilemovieclub.com?n=QJKGIGHJJGCBL
+    - England v Macedonia - dont miss the goals/team news. Txt ur national team to 87077 eg ENGLAND to 87077 Try:WALES, SCOTLAND 4txt 1.20 POBOXox36504W45WQ 16+
+    - Thanks for your subscription to Ringtone UK your mobile will be charged month Please confirm by replying YES or NO. If you reply NO you will not be charged
