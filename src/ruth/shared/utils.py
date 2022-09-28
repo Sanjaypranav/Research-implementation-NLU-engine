@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from typing import Any, Text, Union
 
+import torch
 import yaml
 from ruth.shared.constants import DEFAULT_ENCODING
 
@@ -24,6 +25,10 @@ def json_pickle(file_name: Union[Text, Path], obj: Any, indent: int = 2) -> None
     jsonpickle_numpy.register_handlers()
 
     write_text_file(jsonpickle.dumps(obj, indent=indent), file_name)
+
+
+def get_device(device: str) -> str:
+    return torch.device(device)
 
 
 def read_data(path: Path):
