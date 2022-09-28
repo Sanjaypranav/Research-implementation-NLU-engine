@@ -1,24 +1,30 @@
 import json
 import os
-import re
 from pathlib import Path
 from typing import Text
 
 import click
 import matplotlib.pyplot as plt
+import uvicorn as uvicorn
+from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from rich.console import Console
 from ruth import VERSION
 from ruth.cli.utills import (
+    Item,
     build_pipeline_from_metadata,
+    check_model_path,
     get_config,
+    get_interpreter_from_model_path,
     get_metadata_from_model,
 )
-from ruth.constants import INTENT
+from ruth.constants import INTENT, INTENT_RANKING, TEXT
 from ruth.nlu.model import Interpreter
 from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 from sklearn.metrics import confusion_matrix
+from starlette.responses import JSONResponse
 
 console = Console()
 
@@ -73,22 +79,14 @@ def train(data: Path, pipeline: Path):
     "-m",
     "--model_path",
     type=click.STRING,
-    default="models",
+    required=False,
     help="Directory where the model is stored",
 )
 def parse(text: Text, model_path: Text):
-    models = [
-        directory
-        for directory in Path(model_path).iterdir()
-        if directory.is_dir() and re.search("ruth", str(directory))
-    ]
-    models.sort()
-
-    latest_model = models[-1]
-
-    console.print(f"Latest Model found {latest_model}")
-    metadata = get_metadata_from_model(latest_model.absolute())
-    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
+    model_file = check_model_path(model_path)
+    console.print(f"Latest Model found {model_file}")
+    metadata = get_metadata_from_model(model_file.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
     console.print(f"Predicted intent is {output.get(INTENT)}")
@@ -105,8 +103,8 @@ def parse(text: Text, model_path: Text):
 @click.option(
     "-m",
     "--model_path",
-    type=click.Path(exists=True),
-    default=Path("models"),
+    type=click.STRING,
+    required=False,
     help="Directory where the model is stored",
 )
 @click.option(
@@ -117,18 +115,10 @@ def parse(text: Text, model_path: Text):
     help="Directory where the results is stored",
 )
 def evaluate(data: Path, model_path: Text, output_folder: Text):
-    models = [
-        directory
-        for directory in Path(model_path).iterdir()
-        if directory.is_dir() and re.search("ruth", str(directory))
-    ]
-    models.sort()
-
-    latest_model = models[-1]
-
-    console.print(f"Latest Model found {latest_model}")
-    metadata = get_metadata_from_model(latest_model.absolute())
-    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
+    model_file = check_model_path(model_path)
+    console.print(f"Latest Model found {model_file}")
+    metadata = get_metadata_from_model(model_file.absolute())
+    pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     with open(data, "r") as f:
         examples = json.load(f)
@@ -167,7 +157,7 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     result_path.mkdir(exist_ok=True)
     directories = os.listdir(str(result_path))
     indexes = []
-    model_name = str(latest_model).split("/")[-1]
+    model_name = str(model_file).split("/")[-1]
     for result in directories:
         if model_name in result:
             indexes.append(int(result.split("@")[-1]))
@@ -184,3 +174,42 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     print("accuracy: ", accuracy)
     print("confusion matrix is created.")
     print("results are stored here: ", folder_for_the_result)
+
+
+@entrypoint.command(name="deploy")
+@click.option(
+    "-m",
+    "--model_path",
+    type=click.STRING,
+    required=False,
+    help="Directory where the model is stored",
+)
+@click.option(
+    "-p",
+    "--port",
+    type=click.INT,
+    default=5500,
+    help="Port where the application should run",
+)
+@click.option(
+    "-h",
+    "--host",
+    type=click.STRING,
+    default="localhost",
+    help="host where the application should run",
+)
+def deploy(model_path: Text, port: int, host: str):
+    app = FastAPI()
+
+    app.interpreter = get_interpreter_from_model_path(model_path)
+
+    @app.get("/parse")
+    async def parse(item: Item):
+        output = app.interpreter.parse(item.text)
+        output = {
+            key: output[key] for key in output.keys() & {INTENT_RANKING, TEXT, INTENT}
+        }
+        json_compatible_item_data = jsonable_encoder(output)
+        return JSONResponse(content=json_compatible_item_data)
+
+    uvicorn.run(app, host=host, port=port)
