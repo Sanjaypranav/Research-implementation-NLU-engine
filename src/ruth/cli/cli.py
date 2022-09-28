@@ -3,10 +3,11 @@ import os
 import re
 from pathlib import Path
 from typing import Text
-from rich import print as rprint
 
 import click
 import matplotlib.pyplot as plt
+from rich import print as rprint
+from rich.console import Console
 from ruth import VERSION
 from ruth.cli.utills import (
     build_pipeline_from_metadata,
@@ -19,7 +20,6 @@ from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 from sklearn.metrics import confusion_matrix
-from rich.console import Console
 
 console = Console()
 
@@ -58,7 +58,8 @@ def train(data: Path, pipeline: Path):
     config = RuthConfig(config)
     model_absolute_dir = train_pipeline(config, training_data)
     console.print(
-        f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow]"
+        f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow] \n",
+        "\nTo evaluate model:[bold green] ruth evaluate[/bold green]",
     )
 
 
@@ -87,12 +88,12 @@ def parse(text: Text, model_path: Text):
 
     latest_model = models[-1]
 
-    console.print(f"Latest Model found {latest_model}")
+    console.print(f"[bright yellow] Latest Model found {latest_model}")
     metadata = get_metadata_from_model(latest_model.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=latest_model)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
-    console.print(f"Predicted intent is {output.get(INTENT)}")
+    console.print(f"Predicted intent is {output.get(INTENT)} \n ")
 
 
 @entrypoint.command(name="evaluate")
