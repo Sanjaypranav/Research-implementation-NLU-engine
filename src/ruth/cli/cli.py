@@ -65,7 +65,7 @@ def train(data: Path, pipeline: Path):
     model_absolute_dir = train_pipeline(config, training_data)
     console.print(
         f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow] \n",
-        "\nTo evaluate model:[bold green] ruth evaluate[/bold green]",
+        "\nTo evaluate model:[bold green] ruth parse[/bold green]",
     )
 
 
@@ -91,7 +91,9 @@ def parse(text: Text, model_path: Text):
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
-    console.print(f"Predicted intent is {output.get(INTENT)} \n ")
+    console.print(
+        f"Predicted intent is {output.get(INTENT)} \n\nTo deploy your model run: [bold green]ruth deploy[/bold green]"
+    )
 
 
 @entrypoint.command(name="evaluate")
