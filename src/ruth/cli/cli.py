@@ -176,6 +176,7 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     rprint(" accuracy: ", accuracy)
     rprint("[green] confusion matrix is created.")
     rprint(" results are stored here: ", folder_for_the_result)
+    rprint(" To deploy your model run: [bold green]ruth deploy[/bold green]")
 
 
 @entrypoint.command(name="deploy")
