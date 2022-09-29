@@ -19,7 +19,18 @@ from ruth.cli.utills import (
     get_interpreter_from_model_path,
     get_metadata_from_model,
 )
-from ruth.constants import INTENT, INTENT_RANKING, TEXT
+from ruth.constants import (
+    BOLD_GREEN,
+    BOLD_GREEN_CLOSE,
+    BOLD_YELLOW,
+    BOLD_YELLOW_CLOSE,
+    FOLDER,
+    INTENT,
+    INTENT_RANKING,
+    ROCKET,
+    TARGET,
+    TEXT,
+)
 from ruth.nlu.model import Interpreter
 from ruth.nlu.train import train_pipeline
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -32,6 +43,7 @@ console = Console()
 
 class RichGroup(click.Group):
     def format_help(self, ctx, formatter):
+        print_logo_and_description()
         # TODO: Want to write the help description whenever the user call the ruth --help
         ...
 
@@ -64,8 +76,9 @@ def train(data: Path, pipeline: Path):
     config = RuthConfig(config)
     model_absolute_dir = train_pipeline(config, training_data)
     console.print(
-        f"Training is completed and model is stored at [yellow]{model_absolute_dir}[/yellow] \n",
-        "\nTo evaluate model:[bold green] ruth parse[/bold green]",
+        f"Training is completed {ROCKET}{ROCKET}... and model is stored "
+        f"at {FOLDER} {BOLD_YELLOW} {model_absolute_dir} {BOLD_YELLOW_CLOSE} \n",
+        f"\nTo evaluate model:{BOLD_GREEN} ruth parse {BOLD_GREEN_CLOSE}",
     )
 
 
@@ -86,13 +99,14 @@ def train(data: Path, pipeline: Path):
 )
 def parse(text: Text, model_path: Text):
     model_file = check_model_path(model_path)
-    console.print(f"Latest Model found {model_file}")
+    console.print(f"Latest Model found {FOLDER}  {model_file}")
     metadata = get_metadata_from_model(model_file.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
     output = interpreter.parse(text)
     console.print(
-        f"Predicted intent is {output.get(INTENT)} \n\nTo deploy your model run: [bold green]ruth deploy[/bold green]"
+        f"{TARGET} Predicted intent is {output.get(INTENT)} \n",
+        f"\nTo deploy your model run: {BOLD_GREEN}ruth deploy{BOLD_GREEN_CLOSE}",
     )
 
 
@@ -120,7 +134,7 @@ def parse(text: Text, model_path: Text):
 )
 def evaluate(data: Path, model_path: Text, output_folder: Text):
     model_file = check_model_path(model_path)
-    console.print(f"Latest Model found {model_file}")
+    console.print(f"Latest Model found {FOLDER} {model_file}")
     metadata = get_metadata_from_model(model_file.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
@@ -175,10 +189,10 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     final_file_path = folder_for_the_result / "confusion_matrix.png"
     plt.savefig(final_file_path)
 
-    rprint(" accuracy: ", accuracy)
-    rprint("[green] confusion matrix is created.")
+    rprint(f"{TARGET} accuracy: ", accuracy)
+    rprint(f"{BOLD_GREEN} confusion matrix is created.{BOLD_GREEN_CLOSE}")
     rprint(" results are stored here: ", folder_for_the_result)
-    rprint(" To deploy your model run: [bold green]ruth deploy[/bold green]")
+    rprint(f" To deploy your model run: {BOLD_GREEN}ruth deploy{BOLD_GREEN_CLOSE}")
 
 
 @entrypoint.command(name="deploy")
@@ -218,3 +232,17 @@ def deploy(model_path: Text, port: int, host: str):
         return JSONResponse(content=json_compatible_item_data)
 
     uvicorn.run(app, host=host, port=port)
+
+
+def print_logo_and_description():
+    console.print(f"[bold]{ROCKET}[/bold]", style="#c47900")
+    console.print(
+        "[bold magenta]Website: [/bold magenta][link]https://neuralspace.ai[/link]"
+    )
+    console.print(
+        "[bold magenta]Docs: [/bold magenta][link]https://docs.neuralspace.ai[/link]"
+    )
+    console.print(
+        "[bold magenta]Platform Login: [/bold magenta][link]https://platform.neuralspace.ai[/link]"
+    )
+    console.print("[bold magenta]Commands: [/bold magenta]")
