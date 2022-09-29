@@ -41,6 +41,20 @@ from starlette.responses import JSONResponse
 console = Console()
 
 
+def print_logo_and_description():
+    console.print(f"[bold]{ROCKET}[/bold]", style="#c47900")
+    console.print(
+        "[bold magenta]Website: [/bold magenta][link]https://neuralspace.ai[/link]"
+    )
+    console.print(
+        "[bold magenta]Docs: [/bold magenta][link]https://docs.neuralspace.ai[/link]"
+    )
+    console.print(
+        "[bold magenta]Platform Login: [/bold magenta][link]https://platform.neuralspace.ai[/link]"
+    )
+    console.print("[bold magenta]Commands: [/bold magenta]")
+
+
 class RichGroup(click.Group):
     def format_help(self, ctx, formatter):
         print_logo_and_description()
@@ -48,7 +62,7 @@ class RichGroup(click.Group):
         ...
 
 
-@click.group(cls=RichGroup)
+@click.group(cls=RichGroup, invoke_without_command=True)
 @click.version_option(VERSION)
 def entrypoint():
     pass
@@ -232,17 +246,3 @@ def deploy(model_path: Text, port: int, host: str):
         return JSONResponse(content=json_compatible_item_data)
 
     uvicorn.run(app, host=host, port=port)
-
-
-def print_logo_and_description():
-    console.print(f"[bold]{ROCKET}[/bold]", style="#c47900")
-    console.print(
-        "[bold magenta]Website: [/bold magenta][link]https://neuralspace.ai[/link]"
-    )
-    console.print(
-        "[bold magenta]Docs: [/bold magenta][link]https://docs.neuralspace.ai[/link]"
-    )
-    console.print(
-        "[bold magenta]Platform Login: [/bold magenta][link]https://platform.neuralspace.ai[/link]"
-    )
-    console.print("[bold magenta]Commands: [/bold magenta]")
