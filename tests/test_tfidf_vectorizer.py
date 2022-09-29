@@ -1,4 +1,3 @@
-import json
 from typing import Any, Dict, Text
 
 from ruth.constants import PATH, TEXT
@@ -10,19 +9,12 @@ from tests.conftest import FEATURE
 
 
 def test_tfidf_vectorizer(tfidf_featurizer_example: Dict[Text, Any]):
-    messages = []
-    with open(tfidf_featurizer_example[PATH], "r") as f:
-        example_data = json.load(f)
-    for data in example_data:
-        messages.append(RuthData(data=data))
-    training_data = TrainData(messages)
-
+    training_data = TrainData.build(tfidf_featurizer_example[PATH])
     featurizer = registered_classes["TfidfVectorFeaturizer"].build({})
     featurizer.train(training_data)
-    test_message = RuthData.build(text=tfidf_featurizer_example[TEXT])
-    featurizer.parse(test_message)
-
+    message = RuthData.build(text=tfidf_featurizer_example[TEXT])
+    featurizer.parse(message)
     assert (
         tfidf_featurizer_example[FEATURE]
-        == test_message.get_features().feature.toarray().tolist()
+        == message.get_features().feature.toarray().tolist()
     )

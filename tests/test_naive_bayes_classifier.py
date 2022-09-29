@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 
 import pytest
@@ -10,12 +9,7 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 @pytest.fixture
 def classifier_data(example_classifier_data: Path) -> TrainData:
-    with open(example_classifier_data, "r") as f:
-        examples = json.load(f)
-
-    training_data = TrainData()
-    for value in examples:
-        training_data.add_example(RuthData(value))
+    training_data = TrainData.build(example_classifier_data)
 
     return training_data
 

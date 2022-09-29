@@ -1,23 +1,21 @@
-import json
 from pathlib import Path
-from typing import Any, Dict, List, Text
 
 import pytest
 from ruth.constants import INTENT, TEXT
+from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 @pytest.fixture
-def example_data(example_data_path: Path) -> List[Dict[Text, Any]]:
-    with open(example_data_path, "r") as file_pointer:
-        return json.load(file_pointer)
+def example_data(example_data_path: Path) -> TrainData:
+    return TrainData.build(example_data_path)
 
 
-def test_ruth_data(example_data: List[Dict[Text, Any]]):
-
+def test_ruth_data(example_data: TrainData):
     data = ""
-    for example in example_data:
-        data = RuthData.build(intent=example[INTENT], text=example[TEXT])
+
+    for example in example_data.training_examples:
+        data = RuthData.build(intent=example.get(INTENT), text=example.get(TEXT))
         break
 
     assert data.get(INTENT) == "greet"
