@@ -15,6 +15,17 @@ from rich.console import Console
 from rich.prompt import Confirm
 from rich.table import Table
 from ruth import VERSION
+from ruth.cli.constants import (
+    BOLD_GREEN,
+    BOLD_GREEN_CLOSE,
+    BOLD_RED,
+    BOLD_RED_CLOSE,
+    BOLD_YELLOW,
+    BOLD_YELLOW_CLOSE,
+    FOLDER,
+    ROCKET,
+    TARGET,
+)
 from ruth.cli.utills import (
     Item,
     build_pipeline_from_metadata,
@@ -25,18 +36,7 @@ from ruth.cli.utills import (
     local_example_path,
     local_pipeline_path,
 )
-from ruth.constants import (
-    BOLD_GREEN,
-    BOLD_GREEN_CLOSE,
-    BOLD_YELLOW,
-    BOLD_YELLOW_CLOSE,
-    FOLDER,
-    INTENT,
-    INTENT_RANKING,
-    ROCKET,
-    TARGET,
-    TEXT,
-)
+from ruth.constants import INTENT, INTENT_RANKING, TEXT
 from ruth.nlu.model import Interpreter
 from ruth.nlu.train import train_pipeline
 from ruth.shared.constants import DATA_PATH, PIPELINE_PATH, RAW_GITHUB_URL
@@ -127,7 +127,7 @@ def train(data: Path, pipeline: Path):
     console.print(
         f"Training completed {ROCKET}..."
         f"\nModel is stored at {FOLDER} {BOLD_YELLOW} {model_absolute_dir} {BOLD_YELLOW_CLOSE} \n",
-        f"\nTo evaluate model:{BOLD_GREEN} ruth parse {BOLD_GREEN_CLOSE}",
+        f"\nTo evaluate model:{BOLD_GREEN} ruth parse --help{BOLD_GREEN_CLOSE}",
     )
 
 
@@ -155,7 +155,7 @@ def parse(text: Text, model_path: Text):
     output = interpreter.parse(text)
     console.print(
         f"{TARGET} Predicted intent is {output.get(INTENT)} \n",
-        f"\nTo deploy your model run: {BOLD_GREEN}ruth deploy{BOLD_GREEN_CLOSE}",
+        f"\nTo deploy your model run: {BOLD_GREEN}ruth deploy --help{BOLD_GREEN_CLOSE}",
     )
 
 
@@ -241,7 +241,9 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     rprint(f"{TARGET} accuracy: ", accuracy)
     rprint(f"{BOLD_GREEN} confusion matrix is created.{BOLD_GREEN_CLOSE}")
     rprint(" results are stored here: ", folder_for_the_result)
-    rprint(f" To deploy your model run: {BOLD_GREEN}ruth deploy{BOLD_GREEN_CLOSE}")
+    rprint(
+        f" To deploy your model run: {BOLD_GREEN}ruth deploy --help{BOLD_GREEN_CLOSE}"
+    )
 
 
 @entrypoint.command(name="deploy")
@@ -319,14 +321,18 @@ def init(output_path: Text):
 
     if files_in_dir:
         override_changes = Confirm.ask(
-            "You already have project in the current directory. Do you still want to "
-            "create new project?"
+            f"{BOLD_RED}You already have project in the current directory. "
+            f"Do you still want to create new project?{BOLD_RED_CLOSE}"
         )
         if not override_changes:
             return None
+    rprint(f"{BOLD_GREEN}Downloading pipeline.yml {BOLD_GREEN_CLOSE}")
     request.urlretrieve(
         str(pipeline_path), str(local_pipeline_path(output_path)), show_progress
     )
+    rprint(f"{BOLD_GREEN}Downloading data.yml{BOLD_GREEN_CLOSE}")
     request.urlretrieve(
         str(data_path), str(local_example_path(output_path)), show_progress
     )
+    rprint(f"{BOLD_GREEN}Project is Successfully build{ROCKET}{BOLD_GREEN_CLOSE}")
+    rprint(f" To train your model run: {BOLD_GREEN}ruth train --help{BOLD_GREEN_CLOSE}")
