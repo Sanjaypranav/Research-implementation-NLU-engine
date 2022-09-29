@@ -20,7 +20,7 @@ class TrainData:
         with open(data_path, "r") as f:
             yml = yaml.safe_load(f)
         for intent_ex in yml[NLU]:
-            for value in intent_ex[EXAMPLES][0:-2].split("\n")[0:5]:
+            for value in intent_ex[EXAMPLES][0:-2].split("\n"):
                 training_examples.append(
                     RuthData.build(
                         intent=intent_ex["intent"], text=value.replace("- ", "")
