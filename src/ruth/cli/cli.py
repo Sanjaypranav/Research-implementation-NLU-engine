@@ -44,25 +44,17 @@ console = Console()
 def print_logo_and_description():
     console.print(f"[bold]{ROCKET}[/bold]", style="#c47900")
     console.print(
-        "[bold magenta]Website: [/bold magenta][link]https://neuralspace.ai[/link]"
+        "[bold magenta]Website: [/bold magenta][link]https://puretalk.ai[/link]"
     )
-    console.print(
-        "[bold magenta]Docs: [/bold magenta][link]https://docs.neuralspace.ai[/link]"
-    )
-    console.print(
-        "[bold magenta]Platform Login: [/bold magenta][link]https://platform.neuralspace.ai[/link]"
-    )
-    console.print("[bold magenta]Commands: [/bold magenta]")
 
 
 class RichGroup(click.Group):
     def format_help(self, ctx, formatter):
         print_logo_and_description()
         # TODO: Want to write the help description whenever the user call the ruth --help
-        ...
 
 
-@click.group(cls=RichGroup, invoke_without_command=True)
+@click.group(cls=RichGroup)
 @click.version_option(VERSION)
 def entrypoint():
     pass
