@@ -1,21 +1,17 @@
 from pathlib import Path
 
 import pytest
-import yaml
 from ruth.constants import INTENT, TEXT
 from ruth.nlu.registry import registered_classes
+from ruth.shared.constants import INTENT_NAME_KEY
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 
 
 @pytest.fixture
 def classifier_data(example_classifier_data: Path) -> TrainData:
-    with open(example_classifier_data, "r") as f:
-        examples = yaml.safe_load(f)
 
-    training_data = TrainData()
-    for value in examples:
-        training_data.add_example(RuthData(value))
+    training_data = TrainData.build(example_classifier_data)
 
     return training_data
 
@@ -28,10 +24,10 @@ def test_svm_classifier(
 
     classifier = registered_classes["SVMClassifier"].build({})
     classifier.train(training_data=classifier_data)
-    message = RuthData({TEXT: "hello"})
+    message = RuthData({TEXT: "hello bro, how are you"})
     ftr.parse(message)
     classifier.parse(message)
-    assert message.get(INTENT)["name"] == "ham"
+    assert message.get(INTENT)[INTENT_NAME_KEY] == "ham"
 
     message = RuthData(
         {

@@ -11,7 +11,13 @@ from ruth.nlu.classifiers import LABEL_RANKING_LIMIT
 from ruth.nlu.classifiers.constants import BATCH_SIZE, EPOCHS, MODEL_NAME
 from ruth.nlu.classifiers.ruth_classifier import IntentClassifier
 from ruth.nlu.tokenizer.hf_tokenizer import HFTokenizer
-from ruth.shared.constants import ATTENTION_MASKS, DEVICE, INPUT_IDS
+from ruth.shared.constants import (
+    ATTENTION_MASKS,
+    DEVICE,
+    INPUT_IDS,
+    INTENT_NAME_KEY,
+    PREDICTED_CONFIDENCE_KEY,
+)
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_data import RuthData
 from ruth.shared.utils import get_device, json_pickle, json_unpickle
@@ -35,8 +41,8 @@ class HFClassifier(IntentClassifier):
     defaults = {
         EPOCHS: 100,
         MODEL_NAME: "bert-base-uncased",
-        BATCH_SIZE: 1,
-        DEVICE: "cpu",
+        BATCH_SIZE: 4,
+        DEVICE: "cuda" if torch.cuda.is_available() else "cpu",
     }
 
     def __init__(
@@ -190,13 +196,16 @@ class HFClassifier(IntentClassifier):
             ranking = list(zip(list(intents), list(probabilities)))[
                 :LABEL_RANKING_LIMIT
             ]
-            intent = {"name": intents[0], "accuracy": float(probabilities[0])}
+            intent = {
+                INTENT_NAME_KEY: intents[0],
+                PREDICTED_CONFIDENCE_KEY: float(probabilities[0]),
+            }
             intent_rankings = [
-                {"name": name, "accuracy": float(probability)}
+                {INTENT_NAME_KEY: name, PREDICTED_CONFIDENCE_KEY: float(probability)}
                 for name, probability in ranking
             ]
         else:
-            intent = {"name": None, "accuracy": 0.0}
+            intent = {INTENT_NAME_KEY: None, PREDICTED_CONFIDENCE_KEY: 0.0}
             intent_rankings = []
         message.set(INTENT, intent)
         message.set(INTENT_RANKING, intent_rankings)

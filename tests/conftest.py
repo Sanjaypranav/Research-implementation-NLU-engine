@@ -47,7 +47,7 @@ def example_classifier_data() -> Path:
 @pytest.fixture
 def bert_tokenizer_example() -> Dict[Text, Any]:
     return {
-        TEXT: "He lived HapPily",
+        TEXT: "He lived Happily",
         TOKEN: [[0, 0, 0]],
         PATH: Path("data/test/ruth_example_data/training_example.yml"),
     }

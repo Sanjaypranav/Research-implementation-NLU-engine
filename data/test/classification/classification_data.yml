@@ -2,6 +2,9 @@ version: "0.1"
 nlu:
 - intent: ham
   examples: |
+    - hello bro, how are you
+    - Hey, how are you
+    - Hello, how are you!
     - WHO ARE YOU SEEING?
     - Great! I hope you like your man well endowed. I am  &lt;#&gt;  inches
     - Didn't you get hep b immunisation in nigeria.

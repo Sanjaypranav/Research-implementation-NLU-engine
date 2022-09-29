@@ -27,7 +27,7 @@ def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
 
 
 def test_count_vectorizer_by_registry(count_featurizer_example: Dict[Text, Any]):
-    training_data = TrainData(count_featurizer_example[PATH])
+    training_data = TrainData.build(count_featurizer_example[PATH])
 
     featurizer = registered_classes["CountVectorFeaturizer"].build({})
     featurizer.train(training_data)
