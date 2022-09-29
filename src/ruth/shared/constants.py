@@ -23,5 +23,5 @@ RAW_GITHUB_URL = (
 )
 
 # GITHUB_DATA_PATH
-PIPELINE_PATH = Path("init/data/example_data/pipeline.yml")
-DATA_PATH = Path("init/data/example_data/data/examples.yml")
+PIPELINE_PATH = Path("main/data/example_data/pipeline.yml")
+DATA_PATH = Path("main/data/example_data/data/examples.yml")
