@@ -107,8 +107,8 @@ def parse(text: Text, model_path: Text):
 @click.option(
     "-m",
     "--model_path",
-    type=click.Path(exists=True),
-    default=Path("models"),
+    type=click.STRING,
+    required=False,
     help="Directory where the model is stored",
 )
 @click.option(

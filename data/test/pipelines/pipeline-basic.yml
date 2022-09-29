@@ -1,6 +1,11 @@
 task:
 pipeline:
-  - name: 'TfidfVectorFeaturizer'
-  - name: 'SVMClassifier'
+  - name: 'HFTokenizer'
+    model_name: "bert-base-uncased"
+  - name: 'HFClassifier'
+    model_name: "bert-base-uncased"
+    batch_size: 32
+    device: cuda
+
 
 
