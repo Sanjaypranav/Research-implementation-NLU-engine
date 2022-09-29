@@ -58,6 +58,10 @@ def check_model_path(model_path: str) -> Path:
             )
     else:
         model_folder = "models"
+        if not Path(model_folder).exists():
+            raise FileNotFoundError(
+                "No models found.\nTrain new models using: ruth train"
+            )
         models = [
             directory
             for directory in Path(model_folder).iterdir()

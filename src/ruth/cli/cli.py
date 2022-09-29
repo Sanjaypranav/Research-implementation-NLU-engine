@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 from typing import Text
@@ -187,24 +186,22 @@ def evaluate(data: Path, model_path: Text, output_folder: Text):
     metadata = get_metadata_from_model(model_file.absolute())
     pipeline = build_pipeline_from_metadata(metadata=metadata, model_dir=model_file)
     interpreter = Interpreter(pipeline)
-    with open(data, "r") as f:
-        examples = json.load(f)
+    training_data = TrainData.build(data)
 
     correct_predictions = 0
     y_pred = []
     y_actual = []
-    for example in examples:
-        output = interpreter.parse(example["text"])
+    for example in training_data.training_examples:
+        output = interpreter.parse(example.get("text"))
 
         y_pred.append(output.get(INTENT).get("name"))
-        y_actual.append(example["intent"])
+        y_actual.append(example.get("intent"))
 
-        if output.get(INTENT).get("name") == example["intent"]:
+        if output.get(INTENT).get("name") == example.get("intent"):
             correct_predictions += 1
 
-    accuracy = correct_predictions / len(examples)
+    accuracy = correct_predictions / len(training_data)
     conf_matrix = confusion_matrix(y_true=y_actual, y_pred=y_pred)
-
     fig, ax = plt.subplots(figsize=(7.5, 7.5))
     ax.matshow(conf_matrix, cmap=plt.cm.Blues, alpha=0.3)
     for i in range(conf_matrix.shape[0]):
