@@ -2,14 +2,17 @@ import json
 import os
 from pathlib import Path
 from typing import Text
+from urllib import request
 
 import click
 import matplotlib.pyplot as plt
 import uvicorn as uvicorn
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
+from progressbar import progressbar
 from rich import print as rprint
 from rich.console import Console
+from rich.prompt import Confirm
 from rich.table import Table
 from ruth import VERSION
 from ruth.cli.utills import (
@@ -19,6 +22,8 @@ from ruth.cli.utills import (
     get_config,
     get_interpreter_from_model_path,
     get_metadata_from_model,
+    local_example_path,
+    local_pipeline_path,
 )
 from ruth.constants import (
     BOLD_GREEN,
@@ -34,6 +39,7 @@ from ruth.constants import (
 )
 from ruth.nlu.model import Interpreter
 from ruth.nlu.train import train_pipeline
+from ruth.shared.constants import DATA_PATH, PIPELINE_PATH, RAW_GITHUB_URL
 from ruth.shared.nlu.training_data.collections import TrainData
 from ruth.shared.nlu.training_data.ruth_config import RuthConfig
 from sklearn.metrics import confusion_matrix
@@ -277,6 +283,23 @@ def deploy(model_path: Text, port: int, host: str):
     uvicorn.run(app, host=host, port=port)
 
 
+pbar = None
+
+
+def show_progress(block_num, block_size, total_size):
+    global pbar
+    if pbar is None:
+        pbar = progressbar.ProgressBar(maxval=total_size)
+        pbar.start()
+
+    downloaded = block_num * block_size
+    if downloaded < total_size:
+        pbar.update(downloaded)
+    else:
+        pbar.finish()
+        pbar = None
+
+
 @entrypoint.command(name="init")
 @click.option(
     "-o",
@@ -286,8 +309,24 @@ def deploy(model_path: Text, port: int, host: str):
     help="Directory where the model is stored",
 )
 def init(output_path: Text):
-    # pipeline_path = Path(GITHUB_URL) / PIPELINE_PATH
-    # data_path = Path(GITHUB_URL) / DATA_PATH
-    ...
-    # if Path.
-    # request.urlretrieve(url, model_path, show_progress)
+    global pbar
+    pipeline_path = f"{RAW_GITHUB_URL}/{PIPELINE_PATH}"
+    data_path = f"{RAW_GITHUB_URL}/{DATA_PATH}"
+
+    files_in_dir = 0
+    for _ in Path().absolute().iterdir():
+        files_in_dir += 1
+
+    if files_in_dir:
+        override_changes = Confirm.ask(
+            "You already have project in the current directory. Do you still want to "
+            "create new project?"
+        )
+        if not override_changes:
+            return None
+    request.urlretrieve(
+        str(pipeline_path), str(local_pipeline_path(output_path)), show_progress
+    )
+    request.urlretrieve(
+        str(data_path), str(local_example_path(output_path)), show_progress
+    )

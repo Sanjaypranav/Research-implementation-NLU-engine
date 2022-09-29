@@ -18,8 +18,10 @@ DEFAULT_ENCODING = "utf-8"
 DEVICE = "device"
 
 # GITHUB
-GITHUB_URL = "https://github.com/prakashr7d/Research-implementation-NLU-engine"
+RAW_GITHUB_URL = (
+    "https://raw.githubusercontent.com/prakashr7d/Research-implementation-NLU-engine"
+)
 
 # GITHUB_DATA_PATH
-PIPELINE_PATH = Path("tree/main/data/example_data/pipeline.yml")
-DATA_PATH = Path("tree/main/data/example_data/data/examples.yml")
+PIPELINE_PATH = Path("init/data/example_data/pipeline.yml")
+DATA_PATH = Path("init/data/example_data/data/examples.yml")
