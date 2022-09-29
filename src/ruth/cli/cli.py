@@ -224,4 +224,8 @@ def deploy(model_path: Text, port: int, host: str):
     help="Directory where the model is stored",
 )
 def init(output_path: Text):
-    pass
+    # pipeline_path = Path(GITHUB_URL) / PIPELINE_PATH
+    # data_path = Path(GITHUB_URL) / DATA_PATH
+    ...
+    # if Path.
+    # request.urlretrieve(url, model_path, show_progress)
