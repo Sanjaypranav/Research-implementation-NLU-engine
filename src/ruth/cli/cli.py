@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from rich import print as rprint
 from rich.console import Console
+from rich.table import Table
 from ruth import VERSION
 from ruth.cli.utills import (
     Item,
@@ -41,11 +42,47 @@ from starlette.responses import JSONResponse
 console = Console()
 
 
+def get_logo():
+    logo_path = (Path(os.path.realpath(__file__))).parent / "data" / "banner.txt"
+    return f"{logo_path.read_text()}"
+
+
+def add_heading_to_description_table(table: Table) -> Table:
+    table.add_column("Command", style="#c47900")
+    table.add_column("Arguments ", style="#c47900")
+    table.add_column("Description", style="#c47900")
+    return table
+
+
 def print_logo_and_description():
-    console.print(f"[bold]{ROCKET}[/bold]", style="#c47900")
+    console.print(f"[bold purple]{get_logo()}[/bold purple]", style="#6E1CF3")
     console.print(
         "[bold magenta]Website: [/bold magenta][link]https://puretalk.ai[/link]"
     )
+    console.print("[bold magenta]Commands: [/bold magenta]")
+    table = Table(show_header=True, header_style="bold #c47900", show_lines=True)
+    table = add_heading_to_description_table(table)
+    table.add_row(
+        "[bold]train[/bold]",
+        "-p [bold red]Pipeline_file[/bold red], -d [bold red]Data_file[/bold red]",
+        "[green]Train a model with the given pipeline and data[/green]",
+    )
+    table.add_row(
+        "[bold]parse[/bold]",
+        "-m [bold red]Model_file[/bold red], -t [bold red]Text[/bold red]",
+        "[green]Classify intend for a sentence from a trained model[/green]",
+    )
+    table.add_row(
+        "[bold]evaluate[/bold]",
+        "-m [bold red]Model_file[/bold red], -d [bold red]Data_file[/bold red]",
+        "[green]Evaluates trained model for a test dataset[/green]",
+    )
+    table.add_row(
+        "[bold]deploy[/bold]",
+        "-m [bold red]Model_file[/bold red], -p [bold red]Port[/bold red], -h [bold red]Host[/bold red]",
+        "[green]Trained models can be served using deploy command[/green]",
+    )
+    console.print(table)
 
 
 class RichGroup(click.Group):
@@ -82,8 +119,8 @@ def train(data: Path, pipeline: Path):
     config = RuthConfig(config)
     model_absolute_dir = train_pipeline(config, training_data)
     console.print(
-        f"Training is completed {ROCKET}{ROCKET}... and model is stored "
-        f"at {FOLDER} {BOLD_YELLOW} {model_absolute_dir} {BOLD_YELLOW_CLOSE} \n",
+        f"Training completed {ROCKET}..."
+        f"\nModel is stored at {FOLDER} {BOLD_YELLOW} {model_absolute_dir} {BOLD_YELLOW_CLOSE} \n",
         f"\nTo evaluate model:{BOLD_GREEN} ruth parse {BOLD_GREEN_CLOSE}",
     )
 
