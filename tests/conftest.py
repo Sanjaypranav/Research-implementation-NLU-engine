@@ -17,8 +17,8 @@ def example_data_path() -> Path:
 @pytest.fixture
 def count_featurizer_example() -> Dict[Text, Any]:
     return {
-        TEXT: "I am a developer",
-        FEATURE: [[0, 0, 0]],
+        TEXT: "What is your name?",
+        FEATURE: [[0, 1, 0, 1, 1]],
         PATH: Path("data/test/ruth_example_data/training_example.yml"),
     }
 
@@ -54,7 +54,9 @@ def bert_tokenizer_example() -> Dict[Text, Any]:
 @pytest.fixture
 def tfidf_featurizer_example() -> Dict[Text, Any]:
     return {
-        TEXT: "I am a developer",
-        FEATURE: [[0, 0, 0]],
+        TEXT: "What is your name?",
+        FEATURE: [
+            [0.0, 0.5773502691896257, 0.0, 0.5773502691896257, 0.5773502691896257]
+        ],
         PATH: Path("data/test/ruth_example_data/training_example.yml"),
     }

@@ -1,6 +1,5 @@
 from typing import Any, Dict, Text
 
-import yaml
 from ruth.constants import PATH, TEXT
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
@@ -13,38 +12,29 @@ from tests.conftest import FEATURE
 
 
 def test_count_vectorizer(count_featurizer_example: Dict[Text, Any]):
-    messages = []
-    with open(count_featurizer_example[PATH], "r") as f:
-        example_data = yaml.safe_load(f)
-    for data in example_data:
-        messages.append(RuthData(data=data))
-    training_data = TrainData(messages)
+    training_data = TrainData.build(count_featurizer_example[PATH])
+    print(training_data)
 
     featurizer = CountVectorFeaturizer({})
     featurizer.train(training_data)
-    test_message = RuthData.build(text=count_featurizer_example[TEXT])
-    featurizer.parse(test_message)
+    message = RuthData.build(text=count_featurizer_example[TEXT])
+    featurizer.parse(message)
 
     assert (
         count_featurizer_example[FEATURE]
-        == test_message.get_features().feature.toarray().tolist()
+        == message.get_features().feature.toarray().tolist()
     )
 
 
 def test_count_vectorizer_by_registry(count_featurizer_example: Dict[Text, Any]):
-    messages = []
-    with open(count_featurizer_example[PATH], "r") as f:
-        example_data = yaml.safe_load(f)
-    for data in example_data:
-        messages.append(RuthData(data=data))
-    training_data = TrainData(messages)
+    training_data = TrainData(count_featurizer_example[PATH])
 
     featurizer = registered_classes["CountVectorFeaturizer"].build({})
     featurizer.train(training_data)
-    test_message = RuthData.build(text=count_featurizer_example[TEXT])
-    featurizer.parse(test_message)
+    message = RuthData.build(text=count_featurizer_example[TEXT])
+    featurizer.parse(message)
 
     assert (
         count_featurizer_example[FEATURE]
-        == test_message.get_features().feature.toarray().tolist()
+        == message.get_features().feature.toarray().tolist()
     )
