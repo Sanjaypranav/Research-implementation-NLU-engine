@@ -1,0 +1,63 @@
+version: "2.0"
+nlu:
+- intent: greet
+  examples: |
+    - Hello!
+    - Hey
+    - Hello, how's it going
+    - heyyy
+    - hallo
+    - howdy
+    - Hey ruth
+    - Hey bot
+    - Heya
+    - Heylo
+    - Hi
+    - Hi there
+    - Hi!
+- intent: ask_name
+  examples: |
+    - What is your name?
+    - what's your names
+    - and your name is?
+    - May I know your name?
+    - What do people call you?
+    - Do you have a name for yourself
+    - what is your name
+    - Who is this? Who am I talking to?
+    - Pretty good. Who is this?
+- intent: thankyou
+  examples: |
+    - Cool. Thanks
+    - Great, thanks
+    - Thank you
+    - Thank you Sara
+    - Thank you so much
+    - Thank's!
+    - Thanks
+    - Thanks bot
+    - Thanks for thatthat
+    - Thanks!
+    - amazing, thanks
+    - cheers
+    - cheers bro
+    - cool thank you
+- intent: affirm
+  examples: |
+    - yes
+    - yes i do
+    - i have both
+    - i have the red white and blue card
+    - yup  
+    - that card, yes
+    - i do
+    - i think so
+- intent: wait_time
+  examples: |
+    - how long is this going to take
+    - is this going to take a long time
+    - i don't have much time right now.
+    - how long do i have to wait on the line for
+    - will it take a lot time
+    - what's the timeframe
+    - what is the wait time

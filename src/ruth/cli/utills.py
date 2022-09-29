@@ -58,6 +58,10 @@ def check_model_path(model_path: str) -> Path:
             )
     else:
         model_folder = "models"
+        if not Path(model_folder).exists():
+            raise FileNotFoundError(
+                "No models found.\nTrain new models using: ruth train"
+            )
         models = [
             directory
             for directory in Path(model_folder).iterdir()
@@ -72,6 +76,24 @@ def check_model_path(model_path: str) -> Path:
             )
 
     return Path(model_file)
+
+
+def local_example_path(output_path: Text) -> Path:
+    if output_path:
+        return Path(output_path) / "data" / "example.yml"
+    else:
+        data_path = Path().absolute() / "data"
+        data_path.mkdir(exist_ok=True)
+        data_path = data_path / "example.yml"
+        return data_path
+
+
+def local_pipeline_path(output_path: Text) -> Path:
+    if output_path:
+        return Path(output_path)
+    else:
+        pipeline_path = Path().absolute() / "pipeline.yml"
+        return pipeline_path
 
 
 class Item(BaseModel):
