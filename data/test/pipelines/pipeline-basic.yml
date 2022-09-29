@@ -1,8 +1,11 @@
 task:
 pipeline:
-  - name: HFTokenizer
+  - name: 'HFTokenizer'
     model_name: "bert-base-uncased"
-  - name: HFClassifier
+  - name: 'HFClassifier'
     model_name: "bert-base-uncased"
-    epochs: 1
-    
+    batch_size: 32
+    device: cuda
+
+
+

@@ -18,21 +18,21 @@ install-system-deps-user:
 ## To install system level dependencies
 .PHONY: bootstrap
 bootstrap: install-system-deps
-	curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 
 ## Install system dependencies in user dir (Linux)
 .PHONY: bootstrap-user
 bootstrap-user: check-py3 install-system-deps-user
-	curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 
 .PHONY: bootstrap-mac
 bootstrap-mac: install-system-deps
-	brew install azure-cli
+
 
 ## Install system dependencies in user dir (Linux)
 .PHONY: bootstrap-user-mac
 bootstrap-user-mac: check-py3 install-system-deps-user
-	brew install azure-cli
+
 
 ## Setup poetry
 .PHONY: poetry-setup
