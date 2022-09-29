@@ -1,7 +1,7 @@
-import json
 from pathlib import Path
 
 import pytest
+import yaml
 from ruth.constants import INTENT, TEXT
 from ruth.nlu.registry import registered_classes
 from ruth.shared.nlu.training_data.collections import TrainData
@@ -11,7 +11,7 @@ from ruth.shared.nlu.training_data.ruth_data import RuthData
 @pytest.fixture
 def classifier_data(example_classifier_data: Path) -> TrainData:
     with open(example_classifier_data, "r") as f:
-        examples = json.load(f)
+        examples = yaml.safe_load(f)
 
     training_data = TrainData()
     for value in examples:

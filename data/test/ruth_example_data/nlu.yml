@@ -1,0 +1,182 @@
+version: "0.1"
+nlu:
+- intent: greet
+  examples: |
+    - Hello!
+    - Hey
+    - Hello, how's it going
+    - heyyy
+    - hallo
+- intent: ask_name
+  examples: |
+    - What is your name?
+    - what's your names
+    - and your name is?
+    - May I know your name?
+    - What do people call you?
+- intent: how_are_you
+  examples: |
+    - Ahoy matey how are you?
+    - Are you ok?
+    - How's it going?
+    - how's it going
+    - what's going on
+- intent: thankyou
+  examples: |
+    - Cool. Thanks
+    - Great, thanks
+    - Thank you
+    - Thank you Sara
+    - Thank you so much
+- intent: where_did_you_get_number
+  examples: |
+    - How did you get my number?
+    - how did you get my number
+    - where did you get my number
+    - how did you find my number
+    - how are you calling my phone
+- intent: affirm
+  examples: |
+    - yes
+    - yes i do
+    - i have both
+    - i have the red white and blue card
+    - yup
+- intent: why_are_you_calling
+  examples: |
+    - why are you calling me
+    - why do you keep calling here
+    - you need to stop calling me
+    - please let me know what this is about
+    - why do you keep calling me so much?
+- intent: i_dont_want_to_change
+  examples: |
+    - i don't think i want to change my plan
+    - i don't want to change my current plan
+    - i'm not sure i want to change
+    - i think i'm fine with this plan
+    - am okay with this plan
+- intent: i_dont_have_time
+  examples: |
+    - i can't talk right now
+    - am busy
+    - cant talk at the moment
+    - call me back later
+    - could you call me back later
+- intent: wait_time
+  examples: |
+    - how long is this going to take
+    - is this going to take a long time
+    - i don't have much time right now.
+    - how long do i have to wait on the line for
+    - will it take a lot time
+- intent: how_long_to_transfer
+  examples: |
+    - i hope it's not long
+    - how long is this going to take
+    - is this going to take a long time
+    - i don't have much time right now.
+    - how long do i have to wait on the line for
+- intent: out_of_scope
+  examples: |
+    - what technology is this made of?
+    - i immediately need help with implementing the coolest bot you can imagine
+    - i m looking for job
+    - i told you already
+    - what are you going to do for me anyway
+- intent: transfer
+  examples: |
+    - you can transfer me
+    - no problem
+    - ok, transfer me
+    - why do you have to transfer me
+    - but i like talking to you
+- intent: deny
+  examples: |
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+- intent: hungup
+  examples: |
+    - stop it, i do not care!!!
+    - please hungup the phone
+    - can you please cut the call
+    - I don't wanna talk to you
+    - you fucking idiot
+- intent: say_income
+  examples: |
+    - 100 dollars
+    - 1000 dollars
+    - i am producing thousand dollors
+    - i am earning 500 dollors
+    - I have an income of $100
+    - I have an income of $100.
+- intent: are_you_there
+  examples: |
+    - Hey gabby are you there
+    - are you there
+    - where are you
+    - anybody on the other side?
+    - hey man, i can't hear you.
+- intent: where_are_you_from
+  examples: |
+    - where are you from
+    - what is your origin
+    - can you say where you was located
+    - where are talking from.
+    - which branch you are
+- intent: no_questions
+  examples: |
+    - Did you got vacinated
+    - have your vaccnines are done
+    - what about your vaccine situation in you
+    - how many shots you got.
+- intent: hold_for_one_second
+  examples: |
+    - can you hold for one second.
+    - please wait for one second
+    - just a minute
+    - sorry just a minute
+    - please one second
+    - wait for me.
+- intent: voice_mail
+  examples: |
+    - you have reached the voice mail
+    - voice mail inbox is full
+    - User is busy you can leave a voice mail after a beep.
+    - Number you have reached. 402-296-2447 is not in service.
+    - Please record your message when you have finished recording, you may hang up or press one for more options.
+- intent: how_am_i
+  examples: |
+    - amayzing
+    - amazing!
+    - awesome
+    - awesome!
+    - i am good
+    - never before
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+- intent: is_it_free
+  examples: |
+    - is it free?
+    - this is free nah
+    - Is this a free policy
+    - is obama care is free
+    - is care for Obama is free
+- intent: fallback
+  examples: |
+    - What is, what is Healthcare Enrollment Center? What is that?
+- intent: repeat
+  examples: |
+    - I can't understand you. Can you repeat that?
+    - Wait, I didn't hear you. Can you repeat that?
+    - Can you repeat that?
+    - With what did you say?
+    - repeat
+    - I beg your pardon.
