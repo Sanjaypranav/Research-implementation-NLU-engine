@@ -213,3 +213,15 @@ def deploy(model_path: Text, port: int, host: str):
         return JSONResponse(content=json_compatible_item_data)
 
     uvicorn.run(app, host=host, port=port)
+
+
+@entrypoint.command(name="init")
+@click.option(
+    "-o",
+    "--output-path",
+    type=click.STRING,
+    required=False,
+    help="Directory where the model is stored",
+)
+def init(output_path: Text):
+    pass

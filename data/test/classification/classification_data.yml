@@ -2,6 +2,7 @@ version: "0.1"
 nlu:
 - intent: ham
   examples: |
+    - hello
     - hello bro, how are you
     - Hey, how are you
     - Hello, how are you!
@@ -12,6 +13,7 @@ nlu:
     - Yeah hopefully, if tyler can't do it I could maybe ask around a bit
 - intent: spam
   examples: |
+    - WINNER!! As a valued network customer you have been
     - Did you hear about the new Divorce Barbie? It comes with all of Ken's stuff!
     - I plane to give on this month end.
     - Wah lucky man Then can save money Hee
