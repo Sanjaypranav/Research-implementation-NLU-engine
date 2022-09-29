@@ -59,8 +59,8 @@ then finally to install package run the following bash command
 
 
 
- <div align="center">Documentation </div>
----
+# <div align="center">Documentation </div>
+
 
  Getting Started
 ----
@@ -81,8 +81,8 @@ Project will be initialized with below structure
 ```
 Project will be created with example data and pipeline   
 
-<div >CLI </div>
-----
+## <div >CLI </div>
+
 RUTH has a CLI interface to train and test the model, to get started with the CLI interface, run the following command
 
     $ ruth --help
@@ -91,9 +91,8 @@ for example, to train the model, run the following command
 
     usage: $ ruth [-h] [-v] {train,test} ...
 
-### <div >Training </div>
+## <div >Training </div>
 
-----
 
 To train the model, run the following command
 
@@ -163,8 +162,8 @@ pipeline:
     model_name: 'bert-base-uncased'
 
 ``` 
-<div >Parsing </div>
-----
+## <div >Parsing </div>
+
 To parse the text, run the following command
 
     $ ruth parse -m path/to/model_dir 
@@ -178,8 +177,8 @@ Parameters
 
 If model path is not provided, Parse function will use the latest model in the model directory as a default model.
 
-<div >Testing </div>
-----
+## <div >Testing </div>
+
 To test the model performance, run the following command
 
     $ ruth evaluate -p path/to/pipeline-basic.yml 
