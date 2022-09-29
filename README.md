@@ -212,8 +212,8 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://localhost:5500 (Press CTRL+C to quit)
 ```
 
-<div >API </div>
-----
+## <div >API </div>
+
 Once the model is deployed, you can use the following API to parse the text
 
     POST /parse
