@@ -7,6 +7,8 @@ from ruth.nlu.tokenizer.tokenizer import Token
 
 FEATURE = "feature"
 TOKEN = "token"
+INPUT_ID = "input_id"
+ATTENTION_MASK = "attention_mask"
 
 
 @pytest.fixture
@@ -58,5 +60,15 @@ def tfidf_featurizer_example() -> Dict[Text, Any]:
         FEATURE: [
             [0.0, 0.5773502691896257, 0.0, 0.5773502691896257, 0.5773502691896257]
         ],
+        PATH: Path("data/test/ruth_example_data/training_example.yml"),
+    }
+
+
+@pytest.fixture
+def hf_tokenizer_example() -> Dict[Text, Any]:
+    return {
+        TEXT: "hello",
+        INPUT_ID: [101, 7592, 102],
+        ATTENTION_MASK: [1, 1, 1],
         PATH: Path("data/test/ruth_example_data/training_example.yml"),
     }
