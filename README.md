@@ -7,14 +7,14 @@
  <a href="https://medium.com/@Sanjaypranav/ruth-a-natural-language-understanding-framework-developed-by-puretalk-ai-5f229aacbf2a"><img src="https://img.shields.io/badge/read-medium-lightgrey?style=flat&logo=medium"></a>
  </div>
 
-<img src="data/img/Puretalk.png" height= 200px>
+<img src="https://www.puretalk.ai/static/assets/Puretalk.png" height= 200px>
  
 Ruth Natural Language Understanding
 ---
 Welcome to the RUTH NLU documentation. RUTH is a open sourced Natural Language Understanding (NLU) framework developed by [puretalk.ai](https://puretalk.ai/). It is a Python module that allows you to parse natural language sentences and extract information from them.
 
 RUTH is cli based tool that can be used to train and test models. 
-<!--should ask vinith  --> 
+
 
 # <div align="center">Installation </div>
 
