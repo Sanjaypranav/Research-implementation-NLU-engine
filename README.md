@@ -7,7 +7,7 @@
  <a href="https://medium.com/@Sanjaypranav/ruth-a-natural-language-understanding-framework-developed-by-puretalk-ai-5f229aacbf2a"><img src="https://img.shields.io/badge/read-medium-lightgrey?style=flat&logo=medium"></a>
  </div>
 
-<img src="data/img/Puretalk.png" height= 200px>
+<img src="https://www.puretalk.ai/static/assets/Puretalk.png" height= 200px>
  
 Ruth Natural Language Understanding
 ---
