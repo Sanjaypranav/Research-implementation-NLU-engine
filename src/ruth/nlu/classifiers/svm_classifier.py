@@ -65,7 +65,7 @@ class SVMClassifier(IntentClassifier):
             clf,
             param_grids,
             scoring=self.element_config["scoring"],
-            # cv=self.element_config["max_cross_validation_folds"],
+            cv=self.element_config["max_cross_validation_folds"],
         )
 
     def train(self, training_data: TrainData):
