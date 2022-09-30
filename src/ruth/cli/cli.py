@@ -68,23 +68,28 @@ def print_logo_and_description():
     table = Table(show_header=True, header_style="bold #c47900", show_lines=True)
     table = add_heading_to_description_table(table)
     table.add_row(
+        "[bold]init[/bold]",
+        "-o [bold red]output_file[/bold red]",
+        "[green]Initialize new project with default pipeline and default dataset[/green]",
+    )
+    table.add_row(
         "[bold]train[/bold]",
-        "-p [bold red]Pipeline_file[/bold red], -d [bold red]Data_file[/bold red]",
+        "-p [bold red]pipeline_file[/bold red], -d [bold red]data_file[/bold red]",
         "[green]Train a model with the given pipeline and data[/green]",
     )
     table.add_row(
         "[bold]parse[/bold]",
-        "-m [bold red]Model_file[/bold red], -t [bold red]Text[/bold red]",
+        "-m [bold red]model_file[/bold red], -t [bold red]text[/bold red]",
         "[green]Classify intend for a sentence from a trained model[/green]",
     )
     table.add_row(
         "[bold]evaluate[/bold]",
-        "-m [bold red]Model_file[/bold red], -d [bold red]Data_file[/bold red]",
+        "-m [bold red]model_file[/bold red], -d [bold red]data_file[/bold red]",
         "[green]Evaluates trained model for a test dataset[/green]",
     )
     table.add_row(
         "[bold]deploy[/bold]",
-        "-m [bold red]Model_file[/bold red], -p [bold red]Port[/bold red], -h [bold red]Host[/bold red]",
+        "-m [bold red]model_file[/bold red], -p [bold red]port[/bold red], -h [bold red]host[/bold red]",
         "[green]Trained models can be served using deploy command[/green]",
     )
     console.print(table)
