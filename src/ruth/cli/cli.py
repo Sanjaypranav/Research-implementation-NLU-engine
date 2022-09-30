@@ -69,7 +69,7 @@ def print_logo_and_description():
     table = add_heading_to_description_table(table)
     table.add_row(
         "[bold]init[/bold]",
-        "-o [bold red][/bold red],
+        "-o [bold red]output_file[/bold red]",
         "[green]Initialize new project with default pipeline and default dataset[/green]",
     )
     table.add_row(
