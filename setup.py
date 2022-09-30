@@ -22,6 +22,8 @@ core_requirements = [
     "matplotlib~=3.5.3",
     "progressbar~=2.5",
     "transformers~=4.20.0",
+    "uvicorn~=0.18.3",
+    "fastapi~=0.85.0"
 ]
 
 
