@@ -13,7 +13,6 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 core_requirements = [
     "click~=8.0.1",
     "rich~=12.0.0",
-    "aiohttp~=3.6.3",
     "jsonpickle~=2.1.0",
     "pyyaml~=6.0",
     "torch~=1.12.1",
@@ -28,7 +27,7 @@ core_requirements = [
 
 
 setuptools.setup(
-    name='ruth-python',
+    name='ruth-nlu',
     description="A Python CLI for Ruth NLP",
     long_description=long_description,
     long_description_content_type='text/markdown',
