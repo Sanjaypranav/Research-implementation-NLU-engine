@@ -4,7 +4,6 @@ from ruth.nlu.classifiers.hf_classifier import HFClassifier
 from ruth.nlu.classifiers.naive_bayes_classifier import NaiveBayesClassifier
 from ruth.nlu.classifiers.svm_classifier import SVMClassifier
 from ruth.nlu.elements import Element
-from ruth.nlu.featurizers.dense_featurizers.fast_text import FastTextFeaturizer
 from ruth.nlu.featurizers.sparse_featurizers.count_vector_featurizer import (
     CountVectorFeaturizer,
 )
@@ -20,7 +19,6 @@ element_classes = [
     HFTokenizer,
     # Featurizers
     CountVectorFeaturizer,
-    FastTextFeaturizer,
     TfidfVectorFeaturizer,
     # Classifiers
     HFClassifier,
