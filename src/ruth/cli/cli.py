@@ -310,7 +310,7 @@ def show_progress(block_num, block_size, total_size):
     "--output-path",
     type=click.STRING,
     required=False,
-    help="Directory where the model is stored",
+    help="Directory where the files should be stored",
 )
 def init(output_path: Text):
     global pbar
@@ -318,8 +318,14 @@ def init(output_path: Text):
     data_path = f"{RAW_GITHUB_URL}/{DATA_PATH}"
 
     files_in_dir = 0
-    for _ in Path().absolute().iterdir():
-        files_in_dir += 1
+    if output_path:
+        Path(output_path).mkdir(exist_ok=True)
+        for _ in Path(output_path).absolute().iterdir():
+            files_in_dir += 1
+    else:
+        output_path = Path().absolute()
+        for _ in Path().absolute().iterdir():
+            files_in_dir += 1
 
     if files_in_dir:
         override_changes = Confirm.ask(
