@@ -1,8 +1,9 @@
 task:
 pipeline:
-  - name: HFTokenizer
+  - name: FasttextFeaturizer
     model_name: "bert-base-uncased"
   - name: HFClassifier
     model_name: "bert-base-uncased"
     epochs: 10
     batch_size: 8
+
