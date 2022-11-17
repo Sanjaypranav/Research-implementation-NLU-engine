@@ -30,7 +30,7 @@ class ElementBuilder:
     @staticmethod
     def create_element(name: Text, element_config: Dict[Text, Any]):
         if name not in registered_classes:
-            logger.error(
+            raise ModuleNotFoundError(
                 f"Given {name} element is not an registered element. We won't support custom element as of now."
             )
         else:
@@ -40,7 +40,7 @@ class ElementBuilder:
     @staticmethod
     def load_element(name: Text, element_config: Dict[Text, Any], model_dir: Path):
         if name not in registered_classes:
-            logger.error(
+            raise ModuleNotFoundError(
                 f"Given {name} element is not an registered element. We won't support custom element now."
             )
         else:
