@@ -4,6 +4,6 @@ pipeline:
     model_name: "bert-base-uncased"
   - name: HFClassifier
     model_name: "bert-base-uncased"
-    epochs: 1
-    batch_size: 1
+    epochs: 10
+    batch_size: 8
 
